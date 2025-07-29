@@ -1,7 +1,7 @@
 # ───── Java / Maven build artifacts ───────────────────────────
-target/                       # Maven’s build output
-*.class                       # Compiled bytecode
-dependency-reduced-pom.xml    # Shade plugin temp file
+target/
+*.class
+dependency-reduced-pom.xml
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -34,16 +34,16 @@ out/
 /.nb-gradle/
 
 # ───── OS-specific junk ───────────────────────────────────────
-.DS_Store          # macOS Finder
-Thumbs.db          # Windows image cache
+.DS_Store
+Thumbs.db
 ehthumbs.db
-Icon?              # resource fork files
-._*                # macOS extra files
+Icon?
+._*
 
 # ───── Logs & runtime files ───────────────────────────────────
 *.log
-hs_err_pid*        # JVM crash logs
-replay_pid*        # JRebel / HotSwap
+hs_err_pid*
+replay_pid*
 
 # ───── Misc tools ─────────────────────────────────────────────
 # Spotless, Checkstyle temp
