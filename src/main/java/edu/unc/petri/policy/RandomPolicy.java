@@ -1,4 +1,4 @@
-package edu.youruni.petri.policy;
+package edu.unc.petri.policy;
 
 /**
  * RandomPolicy is a policy that randomly chooses an enabled transition. It implements the IPolicy

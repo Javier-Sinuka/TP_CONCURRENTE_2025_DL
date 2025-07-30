@@ -1,4 +1,4 @@
-package edu.youruni.petri.policy;
+package edu.unc.petri.policy;
 
 /**
  * The interface for a policy that determines which transition to fire. This interface defines a

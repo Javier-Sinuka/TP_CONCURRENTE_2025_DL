@@ -1,8 +1,8 @@
-package edu.youruni.petri.monitor;
+package edu.unc.petri.monitor;
 
-import edu.youruni.petri.core.PetriNet;
-import edu.youruni.petri.policy.PolicyInterface;
-import edu.youruni.petri.util.Log;
+import edu.unc.petri.core.PetriNet;
+import edu.unc.petri.policy.PolicyInterface;
+import edu.unc.petri.util.Log;
 import java.util.concurrent.Semaphore;
 
 /**

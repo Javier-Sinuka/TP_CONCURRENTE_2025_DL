@@ -1,4 +1,4 @@
-package edu.youruni.petri.core;
+package edu.unc.petri.core;
 
 /**
  * The EnableVector class represents a vector of enabled transitions in a Petri net simulation. It

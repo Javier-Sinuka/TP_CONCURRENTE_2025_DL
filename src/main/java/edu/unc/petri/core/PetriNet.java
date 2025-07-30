@@ -1,4 +1,4 @@
-package edu.youruni.petri.core;
+package edu.unc.petri.core;
 
 /**
  * The PetriNet class represents a Petri net. It contains the incidence matrix, current marking, and

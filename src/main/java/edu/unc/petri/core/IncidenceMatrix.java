@@ -1,4 +1,4 @@
-package edu.youruni.petri.core;
+package edu.unc.petri.core;
 
 import java.nio.file.Path;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package edu.youruni.petri.util;
+package edu.unc.petri.util;
 
 /**
  * The Log class is logs the events in the Petri net simulation. It is used to keep track of the

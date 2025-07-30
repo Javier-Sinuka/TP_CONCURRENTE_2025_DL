@@ -1,4 +1,4 @@
-package edu.youruni.petri.cli;
+package edu.unc.petri.cli;
 
 /**
  * Main class for the Petri-net simulator. This class serves as the entry point for the application.

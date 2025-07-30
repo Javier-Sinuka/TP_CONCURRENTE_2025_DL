@@ -1,4 +1,4 @@
-package edu.youruni.petri.policy;
+package edu.unc.petri.policy;
 
 /**
  * The PriorityPolicy class implements a policy for choosing the next transition. It is designed to
