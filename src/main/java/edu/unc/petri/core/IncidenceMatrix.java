@@ -1,6 +1,5 @@
 package edu.unc.petri.core;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 /**
@@ -26,13 +25,12 @@ public class IncidenceMatrix {
    * Constructs an IncidenceMatrix from a given path. The matrix is initialized with the number of
    * places and transitions defined in the path.
    *
-   * @param path The path to initialize the matrix from.
+   * @param matrix A 2D byte array representing the incidence matrix of the Petri net.
    */
-  public IncidenceMatrix(Path path) {
-    // TODO: Implement logic to parse the path and initialize the incidence matrix.
-    throw new UnsupportedOperationException(
-        "Constructor logic to parse the path and initialize the incidence matrix is not implemented"
-            + " yet.");
+  public IncidenceMatrix(byte[][] matrix) {
+    this.matrix = matrix;
+    this.places = matrix.length; // Number of places is the number of rows
+    this.transitions = matrix[0].length; // Number of transitions is the number of columns
   }
 
   /**
@@ -69,8 +67,13 @@ public class IncidenceMatrix {
    * @return The row as a byte array.
    */
   public byte[] getRow(int row) {
-    // Placeholder for row retrieval logic
-    throw new UnsupportedOperationException("Row retrieval logic is not implemented yet.");
+    byte[] rowData = new byte[getPlaces()];
+
+    for (int i = 0; i < getPlaces(); i++) {
+      rowData[i] = matrix[row][i];
+    }
+
+    return rowData;
   }
 
   /**
@@ -80,8 +83,13 @@ public class IncidenceMatrix {
    * @return The column as a byte array.
    */
   public byte[] getColumn(int column) {
-    // Placeholder for column retrieval logic
-    throw new UnsupportedOperationException("Column retrieval logic is not implemented yet.");
+    byte[] columnData = new byte[getTransitions()];
+
+    for (int i = 0; i < getTransitions(); i++) {
+      columnData[i] = matrix[i][column];
+    }
+
+    return columnData;
   }
 
   /**
@@ -92,8 +100,7 @@ public class IncidenceMatrix {
    * @return The element at the specified row and column as a byte.
    */
   public byte getElement(int row, int column) {
-    // Placeholder for element retrieval logic
-    throw new UnsupportedOperationException("Element retrieval logic is not implemented yet.");
+    return matrix[row][column];
   }
 
   /**
@@ -104,10 +111,15 @@ public class IncidenceMatrix {
    *     edge to the specified place.
    */
   public ArrayList<Integer> getInTransitionsForPlace(int place) {
-    // Placeholder for logic to retrieve indices of transitions with an incoming edge to the
-    // specified place
-    throw new UnsupportedOperationException(
-        "Logic to retrieve in-transitions for a place is not implemented yet.");
+    ArrayList<Integer> inTransitions = new ArrayList<>();
+
+    for (int i = 0; i < transitions; i++) {
+      if (matrix[place][i] > 0) { // Positive value indicates an incoming edge from a transition
+        inTransitions.add(i);
+      }
+    }
+
+    return inTransitions;
   }
 
   /**
@@ -118,10 +130,15 @@ public class IncidenceMatrix {
    *     edge from the specified place.
    */
   public ArrayList<Integer> getOutTransitionsForPlace(int place) {
-    // Placeholder for logic to retrieve indices of transitions with an outgoing edge from the
-    // specified place
-    throw new UnsupportedOperationException(
-        "Logic to retrieve out-transitions for a place is not implemented yet.");
+    ArrayList<Integer> outTransitions = new ArrayList<>();
+
+    for (int i = 0; i < transitions; i++) {
+      if (matrix[place][i] < 0) { // Negative value indicates an outgoing edge from a place
+        outTransitions.add(i);
+      }
+    }
+
+    return outTransitions;
   }
 
   /**
@@ -132,10 +149,15 @@ public class IncidenceMatrix {
    *     to the specified transition.
    */
   public ArrayList<Integer> getInPlacesForTransition(int transition) {
-    // Placeholder for logic to retrieve indices of places with an incoming edge to the specified
-    // transition
-    throw new UnsupportedOperationException(
-        "Logic to retrieve in-places for a transition is not implemented yet.");
+    ArrayList<Integer> inPlaces = new ArrayList<>();
+
+    for (int i = 0; i < places; i++) {
+      if (matrix[i][transition] < 0) { // Negative value indicates an incoming edge from a place
+        inPlaces.add(i);
+      }
+    }
+
+    return inPlaces;
   }
 
   /**
@@ -146,9 +168,15 @@ public class IncidenceMatrix {
    *     from the specified transition.
    */
   public ArrayList<Integer> getOutPlacesForTransition(int transition) {
-    // Placeholder for logic to retrieve indices of places with an outgoing edge from the specified
-    // transition
-    throw new UnsupportedOperationException(
-        "Logic to retrieve out-places for a transition is not implemented yet.");
+    ArrayList<Integer> outPlaces = new ArrayList<>();
+
+    for (int i = 0; i < places; i++) {
+      if (matrix[i][transition]
+          > 0) { // Positive value indicates an outgoing edge from a transition
+        outPlaces.add(i);
+      }
+    }
+
+    return outPlaces;
   }
 }

@@ -1,7 +1,5 @@
 package edu.unc.petri.core;
 
-import java.nio.file.Path;
-
 /**
  * The TimeRangeMatrix class represents a matrix of time ranges for each transition in a Petri net.
  * It is used to determine if a transition is within its defined time range.
@@ -20,7 +18,7 @@ public class TimeRangeMatrix {
    *
    * @param path The path to initialize the matrix from.
    */
-  public TimeRangeMatrix(Path path) {
+  public TimeRangeMatrix(long[][] timeRangeMatrix) {
     // TODO: Implement the initialization of the matrix with the number of transitions
     throw new UnsupportedOperationException("Initialization logic not implemented yet.");
   }
