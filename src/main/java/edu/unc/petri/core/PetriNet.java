@@ -59,6 +59,10 @@ public class PetriNet {
       return false; // Transition is not enabled
     }
 
+    if (!timeRangeMatrix.isInsideTimeRange(transitionIndex)) {
+      return false; // Transition is not within its time range
+    }
+    
     // Calculate the next marking based on the current marking and the incidence
     // matrix
     currentMarking.setMarking(calculateStateEquation(transitionIndex));
