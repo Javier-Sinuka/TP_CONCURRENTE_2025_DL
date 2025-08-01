@@ -18,6 +18,9 @@ public class PetriNet {
   /** The current marking of the Petri net, representing the number of tokens in each place. */
   private CurrentMarking currentMarking;
 
+  /** The time range matrix of the Petri net, representing the time ranges for each transition. */
+  private TimeRangeMatrix timeRangeMatrix;
+
   /** The enable vector of the Petri net, indicating which transitions are currently enabled. */
   private EnableVector enableVector;
 
@@ -29,9 +32,13 @@ public class PetriNet {
    * @param enableVector the enable vector of the Petri net
    */
   public PetriNet(
-      IncidenceMatrix incidenceMatrix, CurrentMarking currentMarking, EnableVector enableVector) {
+      IncidenceMatrix incidenceMatrix,
+      CurrentMarking currentMarking,
+      TimeRangeMatrix timeRangeMatrix,
+      EnableVector enableVector) {
     this.incidenceMatrix = incidenceMatrix;
     this.currentMarking = currentMarking;
+    this.timeRangeMatrix = timeRangeMatrix;
     this.enableVector = enableVector;
   }
 
