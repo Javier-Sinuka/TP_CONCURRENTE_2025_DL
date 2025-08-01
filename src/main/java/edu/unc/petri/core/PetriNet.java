@@ -54,13 +54,13 @@ public class PetriNet {
       throw new IllegalArgumentException("Invalid transition index: " + transitionIndex);
     }
 
-    boolean[] enabledTransitions = enableVector.getEnableVector();
+    if (!enableVector.isTransitionEnabled(transitionIndex)) {
 
-    if (!enabledTransitions[transitionIndex]) {
       return false; // Transition is not enabled
     }
 
-    // Calculate the next marking based on the current marking and the incidence matrix
+    // Calculate the next marking based on the current marking and the incidence
+    // matrix
     currentMarking.setMarking(calculateStateEquation(transitionIndex));
 
     enableVector.updateEnableVector(incidenceMatrix, currentMarking);
@@ -78,6 +78,16 @@ public class PetriNet {
     return enableVector.getEnableVector();
   }
 
+  /**
+   * Calculates the next marking of the Petri net after firing a given transition.
+   *
+   * <p>This method computes the state equation for the specified transition by adding the
+   * corresponding column of the incidence matrix to the current marking. The result is the marking
+   * that would result from firing the transition.
+   *
+   * @param transition the index of the transition to fire
+   * @return an array representing the next marking of the Petri net
+   */
   private int[] calculateStateEquation(int transition) {
     byte[] transitionColumn = incidenceMatrix.getColumn(transition);
     int[] currentMarkingArray = currentMarking.getMarking();
