@@ -1,8 +1,10 @@
 package edu.unc.petri.core;
 
 /**
- * The EnableVector class represents a vector of enabled transitions in a Petri net simulation. It
- * is used to manage the state of transitions, indicating which transitions are enabled and when
+ * The EnableVector class represents a vector of enabled transitions in a Petri
+ * net simulation. It
+ * is used to manage the state of transitions, indicating which transitions are
+ * enabled and when
  * they were enabled.
  *
  * @author Der Landsknecht
@@ -10,10 +12,16 @@ package edu.unc.petri.core;
  * @since 2025-29-07
  */
 public class EnableVector {
-  /** The vector of enabled transitions, where each index corresponds to a transition. */
+  /**
+   * The vector of enabled transitions, where each index corresponds to a
+   * transition.
+   */
   private boolean[] enabledTransitions;
 
-  /** The times when each transition was enabled, corresponding to the enabledTransitions vector. */
+  /**
+   * The times when each transition was enabled, corresponding to the
+   * enabledTransitions vector.
+   */
   private long[] enabledTransitionTimes;
 
   /**
@@ -29,20 +37,27 @@ public class EnableVector {
   /**
    * Sets the enabled transitions vector to a new vector.
    *
-   * @param newEnabledTransitions The new vector of enabled transitions.
+   * @param incidenceMatrix The incidence matrix
+   * @param currentMarking  The current marking of the net
    */
   void updateEnableVector(IncidenceMatrix incidenceMatrix, CurrentMarking currentMarking) {
     // TODO: Implement logic to update the enabled transitions vector
-  }
-
-  /**
-   * Enables a specific transition at a given time.
-   *
-   * @param transitionIndex The index of the transition to enable.
-   * @param time The time at which the transition is enabled.
-   */
-  void enableTransition(int transitionIndex, long time) {
-    // TODO: Add logic to enable the transition and update the enabledTransitionTimes
+    if (incidenceMatrix == null || currentMarking == null) {
+      throw new IllegalArgumentException("The parameter is null");
+    }
+    if (incidenceMatrix.getPlaces() == 0 || incidenceMatrix.getTransitions() == 0
+        || currentMarking.getMarking().length == 0) {
+      throw new IllegalArgumentException("Parameters size cannot be 0");
+    }
+    for (int i = 0; i < incidenceMatrix.getTransitions(); i++) {
+      enabledTransitions[i] = false;
+    }
+    for (int i = 0; i < incidenceMatrix.getTransitions(); i++) {
+      if (checkMarking(calculateStateEquation(i, incidenceMatrix, currentMarking))) {
+        enabledTransitions[i] = true;
+        enabledTransitionTimes[i] = System.currentTimeMillis();
+      }
+    }
   }
 
   /**
@@ -61,7 +76,7 @@ public class EnableVector {
    * @return true if the transition is enabled, false otherwise.
    */
   public boolean isTransitionEnabled(int transitionIndex) {
-    // TODO: Implement logic to check if a specific transition is enabled
+
     return enabledTransitions[transitionIndex];
   }
 
@@ -72,7 +87,50 @@ public class EnableVector {
    * @return The time when the transition was enabled.
    */
   public long getEnableTransitionTime(int transitionIndex) {
-    // TODO: Add logic to handle cases where the transition index is invalid
+
     return enabledTransitionTimes[transitionIndex];
+  }
+
+  /**
+   * Calculates the next marking (state equation) of a Petri net after firing a
+   * given transition.
+   * 
+   * The method computes the new marking by adding the incidence matrix column
+   * corresponding
+   * to the specified transition to the current marking vector.
+   * 
+   *
+   * @param transition      the index of the transition to fire
+   * @param incidenceMatrix the incidence matrix representing the Petri net
+   * @param currentMarking  the current marking of the Petri net
+   * @return an array representing the next marking after firing the transition
+   */
+  private int[] calculateStateEquation(int transition, IncidenceMatrix incidenceMatrix, CurrentMarking currentMarking) {
+    byte[] transitionColumn = incidenceMatrix.getColumn(transition);
+    int[] currentMarkingArray = currentMarking.getMarking();
+    int[] nextMarking = new int[currentMarkingArray.length];
+
+    for (int i = 0; i < transitionColumn.length; i++) {
+      nextMarking[i] = currentMarkingArray[i] + transitionColumn[i];
+    }
+
+    return nextMarking;
+  }
+
+  /**
+   * Checks if the given marking is valid, meaning all places have non-negative
+   * tokens.
+   *
+   * @param marking The marking to check.
+   * @return true if the marking is valid, false otherwise.
+   */
+  private boolean checkMarking(int[] marking) {
+
+    for (int i = 0; i < marking.length; i++) {
+      if (marking[i] < 0) {
+        return false;
+      }
+    }
+    return true;
   }
 }
