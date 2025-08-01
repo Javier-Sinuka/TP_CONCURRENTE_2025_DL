@@ -18,6 +18,9 @@ public class PetriNet {
   /** The current marking of the Petri net, representing the number of tokens in each place. */
   private CurrentMarking currentMarking;
 
+  /** The time range matrix of the Petri net, representing the time ranges for each transition. */
+  private TimeRangeMatrix timeRangeMatrix;
+
   /** The enable vector of the Petri net, indicating which transitions are currently enabled. */
   private EnableVector enableVector;
 
@@ -29,23 +32,40 @@ public class PetriNet {
    * @param enableVector the enable vector of the Petri net
    */
   public PetriNet(
-      IncidenceMatrix incidenceMatrix, CurrentMarking currentMarking, EnableVector enableVector) {
+      IncidenceMatrix incidenceMatrix,
+      CurrentMarking currentMarking,
+      TimeRangeMatrix timeRangeMatrix,
+      EnableVector enableVector) {
     this.incidenceMatrix = incidenceMatrix;
     this.currentMarking = currentMarking;
+    this.timeRangeMatrix = timeRangeMatrix;
     this.enableVector = enableVector;
   }
 
   /**
-   * Fires a transition in the Petri net.
+   * Fires a transition in the Petri net. It checks if the transition is enabled and updates the
+   * current marking and enable vector
    *
    * @param transitionIndex the index of the transition to fire
    * @return true if the transition was successfully fired, false otherwise
    */
   public boolean fire(int transitionIndex) {
-    // TODO: Implement the logic to check if the transition can be fired,
-    // update the current marking and enable vector if it can,
-    // and return false otherwise.
-    return false; // Placeholder return statement
+    if (transitionIndex < 0 || transitionIndex >= incidenceMatrix.getTransitions()) {
+      throw new IllegalArgumentException("Invalid transition index: " + transitionIndex);
+    }
+
+    boolean[] enabledTransitions = enableVector.getEnableVector();
+
+    if (!enabledTransitions[transitionIndex]) {
+      return false; // Transition is not enabled
+    }
+
+    // Calculate the next marking based on the current marking and the incidence matrix
+    currentMarking.setMarking(calculateStateEquation(transitionIndex));
+
+    enableVector.updateEnableVector(incidenceMatrix, currentMarking);
+
+    return true;
   }
 
   /**
@@ -55,7 +75,18 @@ public class PetriNet {
    *     that the transition is enabled.
    */
   public boolean[] getEnableTransitions() {
-    // TODO: Implement logic to determine which transitions are enabled
     return enableVector.getEnableVector();
+  }
+
+  private int[] calculateStateEquation(int transition) {
+    byte[] transitionColumn = incidenceMatrix.getColumn(transition);
+    int[] currentMarkingArray = currentMarking.getMarking();
+    int[] nextMarking = new int[currentMarkingArray.length];
+
+    for (int i = 0; i < transitionColumn.length; i++) {
+      nextMarking[i] = currentMarkingArray[i] + transitionColumn[i];
+    }
+
+    return nextMarking;
   }
 }

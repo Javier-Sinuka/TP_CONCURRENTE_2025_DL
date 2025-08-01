@@ -31,9 +31,8 @@ public class EnableVector {
    *
    * @param newEnabledTransitions The new vector of enabled transitions.
    */
-  void setEnableTransitionVector(boolean[] newEnabledTransitions) {
+  void updateEnableVector(IncidenceMatrix incidenceMatrix, CurrentMarking currentMarking) {
     // TODO: Implement logic to update the enabled transitions vector
-    this.enabledTransitions = newEnabledTransitions;
   }
 
   /**
