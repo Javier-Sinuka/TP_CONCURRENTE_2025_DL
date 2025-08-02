@@ -102,4 +102,3 @@ public class EnableVector {
     return true;
   }
 }
-
