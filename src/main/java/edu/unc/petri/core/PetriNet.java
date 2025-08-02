@@ -1,5 +1,7 @@
 package edu.unc.petri.core;
 
+import edu.unc.petri.util.StateEquationUtils;
+
 /**
  * The PetriNet class represents a Petri net. It contains the incidence matrix, current marking, and
  * enable vector. It provides methods to fire transitions and check enabled transitions.
@@ -62,10 +64,12 @@ public class PetriNet {
     if (!timeRangeMatrix.isInsideTimeRange(transitionIndex)) {
       return false; // Transition is not within its time range
     }
-    
+
     // Calculate the next marking based on the current marking and the incidence
     // matrix
-    currentMarking.setMarking(calculateStateEquation(transitionIndex));
+    currentMarking.setMarking(
+        StateEquationUtils.calculateStateEquation(
+            transitionIndex, incidenceMatrix, currentMarking));
 
     enableVector.updateEnableVector(incidenceMatrix, currentMarking);
 
@@ -80,27 +84,5 @@ public class PetriNet {
    */
   public boolean[] getEnableTransitions() {
     return enableVector.getEnableVector();
-  }
-
-  /**
-   * Calculates the next marking of the Petri net after firing a given transition.
-   *
-   * <p>This method computes the state equation for the specified transition by adding the
-   * corresponding column of the incidence matrix to the current marking. The result is the marking
-   * that would result from firing the transition.
-   *
-   * @param transition the index of the transition to fire
-   * @return an array representing the next marking of the Petri net
-   */
-  private int[] calculateStateEquation(int transition) {
-    byte[] transitionColumn = incidenceMatrix.getColumn(transition);
-    int[] currentMarkingArray = currentMarking.getMarking();
-    int[] nextMarking = new int[currentMarkingArray.length];
-
-    for (int i = 0; i < transitionColumn.length; i++) {
-      nextMarking[i] = currentMarkingArray[i] + transitionColumn[i];
-    }
-
-    return nextMarking;
   }
 }
