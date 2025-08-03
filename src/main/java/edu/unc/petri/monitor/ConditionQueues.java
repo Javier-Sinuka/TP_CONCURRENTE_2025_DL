@@ -15,9 +15,13 @@ public class ConditionQueues {
   /** Condition queues for each transition in the Petri net. */
   private final ArrayList<Transition> queues;
 
+  /** Number of transitions there can be */
   private final int transitionsNumber;
 
-  /** Constructor to initialize the condition queues for a given number of transitions. */
+  /** Constructor to initialize the condition queues for a given number of transitions.
+   *
+   * @param transitionsNumber of the petri net model
+   * */
   public ConditionQueues(int transitionsNumber) {
     queues = new ArrayList<>();
     this.transitionsNumber = transitionsNumber;
