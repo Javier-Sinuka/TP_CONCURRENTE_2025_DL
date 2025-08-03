@@ -1,7 +1,6 @@
 package edu.unc.petri.monitor;
 
 import java.util.ArrayList;
-import java.util.concurrent.Semaphore;
 
 /**
  * The ConditionQueues class manages condition queues for transitions in a Petri net. It allows
@@ -14,42 +13,68 @@ import java.util.concurrent.Semaphore;
 public class ConditionQueues {
 
   /** Condition queues for each transition in the Petri net. */
-  private ArrayList<Semaphore> queues;
+  private final ArrayList<Transition> queues;
 
-  /**
-   * Constructor to initialize the condition queues for a given number of transitions.
-   *
-   * @param numTransitions the number of transitions in the Petri net
-   */
-  public ConditionQueues(int numTransitions) {
-    // TODO: Replace this constructor with the required implementation logic
+  private final int transitionsNumber;
+
+  /** Constructor to initialize the condition queues for a given number of transitions. */
+  public ConditionQueues(int transitionsNumber) {
+    queues = new ArrayList<>();
+    this.transitionsNumber = transitionsNumber;
   }
 
   /**
-   * Queues a thread into a the transition's condition queue.
+   * Queues a thread into a transition's condition queue.
    *
-   * @param transition the transition for which the thread is queued
+   * @param transitionNumber the transition for which the thread is queued
    */
-  void waitForTransition(int transition) {
-    // TODO: Implement logic to wait for the specified transition to be signaled
+  void waitForTransition(int transitionNumber) {
+    Transition transition = new Transition();
+    transition.setTransitionNumber(transitionNumber);
+
+    queues.add(transition);
+
+    try {
+      transition.getCondition().acquire();
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**
    * Wakes up a thread waiting for a specific transition.
    *
-   * @param transition the transition for which the waiting thread is woken up
+   * @param transitionNumber the transition for which the waiting thread is woken up
    */
-  void wakeUpThread(int transition) {
-    // TODO: Implement logic to wake up a thread waiting for the specified transition
+  void wakeUpThread(int transitionNumber) {
+    Transition transition = null;
+
+    for (Transition t : queues) {
+      if (t.getTransitionNumber() == transitionNumber) {
+        transition = t;
+        break;
+      }
+    }
+
+    if (transition != null) {
+      queues.remove(transition);
+      transition.getCondition().release();
+    }
   }
 
   /**
    * Checks if there are any threads waiting in the condition queues.
    *
-   * @return true if there are waiting threads, false otherwise
+   * @return int[] with the number of threads waiting for each transition
    */
-  boolean areThereWaintingThreads() {
-    // TODO: Implement logic to check if there are any threads waiting in the condition queues
-    return false; // Placeholder return value
+  int[] areThereWaintingThreads() {
+    int[] waitingThreads = new int[transitionsNumber];
+
+    for (Transition transition : queues) {
+      int transitionNumber = transition.getTransitionNumber();
+      waitingThreads[transitionNumber]++;
+    }
+
+    return waitingThreads;
   }
 }
