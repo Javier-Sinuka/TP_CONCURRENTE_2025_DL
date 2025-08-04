@@ -7,7 +7,7 @@ import java.util.concurrent.Semaphore;
  *
  * @author Der Landsknecht
  * @version 1.0
- * @since 2025-29-07
+ * @since 2025-03-08
  */
 public class Transition {
   /** Transition identifier number. */
@@ -41,8 +41,8 @@ public class Transition {
 
   /** This method is what the thread uses to wait for the transition.
    *
-   * @return an instance of Semaphore class.
-   * */
+   * @return an instance of Semaphore class. 
+   */
   public Semaphore getCondition() {
     return condition;
   }
