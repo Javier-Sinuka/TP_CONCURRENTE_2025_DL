@@ -104,11 +104,9 @@ public class Log {
    * Clear content file, make that before to start write the new content.
    */
   public void clearLog() {
-    try {
-      FileWriter fileWriter = new FileWriter(filePath, true);
-      BufferedWriter w = new BufferedWriter(fileWriter);
-    } catch (IOException e) {
-      System.out.println("Error while clearing the file: " + e.getMessage());
-    }
+      try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
+      } catch (IOException e) {
+          System.out.println("Error while clearing the file: " + e.getMessage());
+      }
   }
 }
