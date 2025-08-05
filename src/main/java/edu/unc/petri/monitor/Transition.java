@@ -15,15 +15,14 @@ public class Transition {
   /** Place where the thread waits for the condition */
   private final Semaphore condition;
 
-  /**
-   * Constructor of the Transition class.
-   */
+  /** Constructor of the Transition class. */
   public Transition() {
     int PERMITS = 0;
     condition = new Semaphore(PERMITS);
   }
 
-  /** Obtains the identifier for this transition.
+  /**
+   * Obtains the identifier for this transition.
    *
    * @return Obtains the identifier for this transition.
    */
@@ -31,7 +30,8 @@ public class Transition {
     return transitionNumber;
   }
 
-  /** Set the identifier number of this transition.
+  /**
+   * Set the identifier number of this transition.
    *
    * @param transitionNumber for this transition.
    */
@@ -39,9 +39,10 @@ public class Transition {
     this.transitionNumber = transitionNumber;
   }
 
-  /** This method is what the thread uses to wait for the transition.
+  /**
+   * This method is what the thread uses to wait for the transition.
    *
-   * @return an instance of Semaphore class. 
+   * @return an instance of Semaphore class.
    */
   public Semaphore getCondition() {
     return condition;
