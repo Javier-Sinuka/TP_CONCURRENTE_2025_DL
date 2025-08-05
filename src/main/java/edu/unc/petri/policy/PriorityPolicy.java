@@ -1,4 +1,6 @@
 package edu.unc.petri.policy;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * The PriorityPolicy class implements a policy for choosing the next transition. It is designed to
@@ -6,9 +8,24 @@ package edu.unc.petri.policy;
  *
  * @author Der Landsknecht
  * @version 1.0
- * @since 2025-29-07
+ * @since 2025-05-08
  */
 public class PriorityPolicy implements PolicyInterface {
+
+  private final Map<Integer, Integer> weightTransitions;
+  private final Random random;
+
+  /**
+   * Constructor that receives a HashMap with the weights referring to the
+   * transitions, referencing the "key" as the transition to which you want
+   * to assign its weight (the weight being the "value" of said key)
+   *
+   * @param weightTransitions
+   */
+  public PriorityPolicy(Map<Integer, Integer> weightTransitions) {
+    random = new Random();
+    this.weightTransitions = weightTransitions;
+  }
 
   /**
    * Chooses a transition based on its priority.
@@ -19,7 +36,25 @@ public class PriorityPolicy implements PolicyInterface {
    */
   @Override
   public int choose(int[] n) {
-    // TODO: Implement logic to select a transition based on its priority
-    return 0;
+    int initialMaxValue = weightTransitions.get(n[0]);
+    int index = 0;
+    boolean randomFlag = true;
+
+    if (n == null || n.length == 0) {
+      throw new IllegalArgumentException("The given array is null or empty");
+    } else {
+      for (int i = 0; i < n.length; i++) {
+        int newValue = weightTransitions.get(n[i]);
+        if (initialMaxValue < newValue) {
+          initialMaxValue = newValue;
+          index = i;
+          randomFlag = false;
+        }
+      }
+      if (randomFlag) {
+        index = random.nextInt(n.length);
+      }
+    }
+    return n[index];
   }
 }
