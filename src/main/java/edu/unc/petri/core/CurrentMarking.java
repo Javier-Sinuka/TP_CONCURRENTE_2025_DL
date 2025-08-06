@@ -1,7 +1,5 @@
 package edu.unc.petri.core;
 
-import java.nio.file.Path;
-
 /**
  * The CurrentMarking class represents the current marking of a Petri net. It holds the number of
  * tokens in each place and provides methods to manipulate and retrieve the marking.
@@ -22,10 +20,14 @@ public class CurrentMarking {
    * Constructs a CurrentMarking from a given path. The marking is initialized with the number of
    * tokens in each place defined in the path.
    *
-   * @param path The path to initialize the marking from.
+   * @param initialMarking An array of integers representing the initial marking of the Petri net.
    */
-  public CurrentMarking(Path path) {
-    // TODO: Initialize the current marking based on the path
+  public CurrentMarking(int[] initialMarking) {
+
+    if (initialMarking == null || initialMarking.length == 0) {
+      throw new IllegalArgumentException("The initial marking cannot be null");
+    }
+    tokens = initialMarking;
   }
 
   /**
@@ -44,7 +46,14 @@ public class CurrentMarking {
    * @param tokenCount The number of tokens to set in the specified place.
    */
   void setPlaceMarking(int placeIndex, int tokenCount) {
-    // TODO: Implement logic to set the number of tokens in the specified place
+
+    if (placeIndex < 0) {
+      throw new IndexOutOfBoundsException("Invalid index " + placeIndex);
+    }
+    if (tokenCount < 0) {
+      throw new IllegalArgumentException("Tokens cannot be negative");
+    }
+    tokens[placeIndex] = tokenCount;
   }
 
   /**
@@ -63,7 +72,10 @@ public class CurrentMarking {
    * @return The number of tokens in the specified place.
    */
   public int getPlaceMarking(int placeIndex) {
-    // TODO: Add validation and error handling for invalid placeIndex
+
+    if (placeIndex < 0) {
+      throw new IndexOutOfBoundsException("Index out of range " + placeIndex);
+    }
     return tokens[placeIndex];
   }
 }

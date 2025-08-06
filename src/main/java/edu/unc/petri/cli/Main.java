@@ -17,6 +17,6 @@ public final class Main {
    * @param args command line arguments (not used)
    */
   public static void main(String[] args) {
-    System.out.println("Petri-net simulator – skeleton running");
+    System.out.println("Petri-net simulator skeleton is running...");
   }
 }

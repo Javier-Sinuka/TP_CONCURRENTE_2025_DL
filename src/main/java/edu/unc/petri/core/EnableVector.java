@@ -1,5 +1,7 @@
 package edu.unc.petri.core;
 
+import edu.unc.petri.util.StateEquationUtils;
+
 /**
  * The EnableVector class represents a vector of enabled transitions in a Petri net simulation. It
  * is used to manage the state of transitions, indicating which transitions are enabled and when
@@ -29,21 +31,28 @@ public class EnableVector {
   /**
    * Sets the enabled transitions vector to a new vector.
    *
-   * @param newEnabledTransitions The new vector of enabled transitions.
+   * @param incidenceMatrix The incidence matrix
+   * @param currentMarking The current marking of the net
    */
-  void setEnableTransitionVector(boolean[] newEnabledTransitions) {
-    // TODO: Implement logic to update the enabled transitions vector
-    this.enabledTransitions = newEnabledTransitions;
-  }
-
-  /**
-   * Enables a specific transition at a given time.
-   *
-   * @param transitionIndex The index of the transition to enable.
-   * @param time The time at which the transition is enabled.
-   */
-  void enableTransition(int transitionIndex, long time) {
-    // TODO: Add logic to enable the transition and update the enabledTransitionTimes
+  void updateEnableVector(IncidenceMatrix incidenceMatrix, CurrentMarking currentMarking) {
+    if (incidenceMatrix == null || currentMarking == null) {
+      throw new IllegalArgumentException("The parameter is null");
+    }
+    if (incidenceMatrix.getPlaces() == 0
+        || incidenceMatrix.getTransitions() == 0
+        || currentMarking.getMarking().length == 0) {
+      throw new IllegalArgumentException("Parameters size cannot be 0");
+    }
+    for (int i = 0; i < incidenceMatrix.getTransitions(); i++) {
+      enabledTransitions[i] = false;
+    }
+    for (int i = 0; i < incidenceMatrix.getTransitions(); i++) {
+      if (checkMarking(
+          StateEquationUtils.calculateStateEquation(i, incidenceMatrix, currentMarking))) {
+        enabledTransitions[i] = true;
+        enabledTransitionTimes[i] = System.currentTimeMillis();
+      }
+    }
   }
 
   /**
@@ -62,7 +71,7 @@ public class EnableVector {
    * @return true if the transition is enabled, false otherwise.
    */
   public boolean isTransitionEnabled(int transitionIndex) {
-    // TODO: Implement logic to check if a specific transition is enabled
+
     return enabledTransitions[transitionIndex];
   }
 
@@ -73,7 +82,23 @@ public class EnableVector {
    * @return The time when the transition was enabled.
    */
   public long getEnableTransitionTime(int transitionIndex) {
-    // TODO: Add logic to handle cases where the transition index is invalid
+
     return enabledTransitionTimes[transitionIndex];
+  }
+
+  /**
+   * Checks if the given marking is valid, meaning all places have non-negative tokens.
+   *
+   * @param marking The marking to check.
+   * @return true if the marking is valid, false otherwise.
+   */
+  private boolean checkMarking(int[] marking) {
+
+    for (int i = 0; i < marking.length; i++) {
+      if (marking[i] < 0) {
+        return false;
+      }
+    }
+    return true;
   }
 }
