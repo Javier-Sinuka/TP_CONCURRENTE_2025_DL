@@ -1,7 +1,5 @@
 package edu.unc.petri.monitor;
 
-import com.sun.org.apache.xpath.internal.objects.XBoolean;
-
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 
@@ -17,8 +15,6 @@ public class ConditionQueues {
 
   /** Condition queues for each transition in the Petri net. */
   private final ArrayList<Semaphore> queues;
-
-  /** Number of transitions there can be */
 
   /**
    * Constructor to initialize the condition queues for a given number of transitions.
@@ -58,9 +54,9 @@ public class ConditionQueues {
   /**
    * Checks if there are any threads waiting in the condition queues.
    *
-   * @return int[] with the number of threads waiting for each transition
+   * @return boolean[] with a representative flag in the transition place waiting
    */
-  boolean[] areThereWaintingThreads() {
+  boolean[] areThereWaitingThreads() {
     boolean[] waitingThreads = new boolean[queues.size()];
 
     for(int i  = 0; i < waitingThreads.length; i++){
