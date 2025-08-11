@@ -1,6 +1,7 @@
 package edu.unc.petri.monitor;
 
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 
 /**
  * The ConditionQueues class manages condition queues for transitions in a Petri net. It allows
@@ -13,10 +14,7 @@ import java.util.ArrayList;
 public class ConditionQueues {
 
   /** Condition queues for each transition in the Petri net. */
-  private final ArrayList<Transition> queues;
-
-  /** Number of transitions there can be */
-  private final int transitionsNumber;
+  private final ArrayList<Semaphore> queues;
 
   /**
    * Constructor to initialize the condition queues for a given number of transitions.
@@ -25,7 +23,10 @@ public class ConditionQueues {
    */
   public ConditionQueues(int transitionsNumber) {
     queues = new ArrayList<>();
-    this.transitionsNumber = transitionsNumber;
+
+    for(int i = 0; i < transitionsNumber; i++){
+      queues.add(new Semaphore(0));
+    }
   }
 
   /**
@@ -34,13 +35,8 @@ public class ConditionQueues {
    * @param transitionNumber the transition for which the thread is queued
    */
   void waitForTransition(int transitionNumber) {
-    Transition transition = new Transition();
-    transition.setTransitionNumber(transitionNumber);
-
-    queues.add(transition);
-
     try {
-      transition.getCondition().acquire();
+      queues.get(transitionNumber).acquire();
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
@@ -52,32 +48,19 @@ public class ConditionQueues {
    * @param transitionNumber the transition for which the waiting thread is woken up
    */
   void wakeUpThread(int transitionNumber) {
-    Transition transition = null;
-
-    for (Transition t : queues) {
-      if (t.getTransitionNumber() == transitionNumber) {
-        transition = t;
-        break;
-      }
-    }
-
-    if (transition != null) {
-      queues.remove(transition);
-      transition.getCondition().release();
-    }
+    queues.get(transitionNumber).release();
   }
 
   /**
    * Checks if there are any threads waiting in the condition queues.
    *
-   * @return int[] with the number of threads waiting for each transition
+   * @return boolean[] with a representative flag in the transition place waiting
    */
-  int[] areThereWaintingThreads() {
-    int[] waitingThreads = new int[transitionsNumber];
+  boolean[] areThereWaitingThreads() {
+    boolean[] waitingThreads = new boolean[queues.size()];
 
-    for (Transition transition : queues) {
-      int transitionNumber = transition.getTransitionNumber();
-      waitingThreads[transitionNumber]++;
+    for(int i  = 0; i < waitingThreads.length; i++){
+      waitingThreads[i] = queues.get(i).hasQueuedThreads();
     }
 
     return waitingThreads;
