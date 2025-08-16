@@ -1,4 +1,5 @@
 package edu.unc.petri.util;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -36,14 +37,12 @@ public class Log {
   }
 
   /**
-   * Method that stores a string of the format "[T *transitionNumber*]"
+   * Method that stores a string of the format "[T *transitionNumber*]".
    *
    * @param transitionNumber number of trasition
    */
   public void logTransition(int transitionNumber) {
-    try {
-      FileWriter fileWriter = new FileWriter(filePath, true);
-      BufferedWriter w = new BufferedWriter(fileWriter);
+    try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, false))) {
       w.write("[T" + transitionNumber + "]");
       w.newLine();
     } catch (IOException e) {
@@ -52,15 +51,13 @@ public class Log {
   }
 
   /**
-   * Method that stores a string of the format "[Th-N: *threadName* T*transitionNumber*]"
+   * Method that stores a string of the format "[Th-N: *threadName* T*transitionNumber*]".
    *
-   * @param transitionNumber
-   * @param threadName
+   * @param transitionNumber The number of the transition being logged.
+   * @param threadName The name of the thread associated with the transition.
    */
   public void logTransition(int transitionNumber, String threadName) {
-    try {
-      FileWriter fileWriter = new FileWriter(filePath, true);
-      BufferedWriter w = new BufferedWriter(fileWriter);
+    try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, false))) {
       w.write("[Th-N: " + threadName + " T" + transitionNumber + "]");
       w.newLine();
     } catch (IOException e) {
@@ -69,14 +66,12 @@ public class Log {
   }
 
   /**
-   * Method that stores a string of the format "[LOG] *message*"
+   * Method that stores a string of the format "[LOG] *message*".
    *
-   * @param message
+   * @param message the message to be logged
    */
   public void logMessage(String message) {
-    try {
-      FileWriter fileWriter = new FileWriter(filePath, true);
-      BufferedWriter w = new BufferedWriter(fileWriter);
+    try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, false))) {
       w.write("[LOG] " + message);
       w.newLine();
     } catch (IOException e) {
@@ -85,14 +80,12 @@ public class Log {
   }
 
   /**
-   * Method that stores a string of the format "=== *title.UpperCase* ==="
+   * Method that stores a string of the format "=== *title.UpperCase* ===".
    *
-   * @param title
+   * @param title The title to be logged as a header.
    */
   public void logHeader(String title) {
-    try {
-      FileWriter fileWriter = new FileWriter(filePath, true);
-      BufferedWriter w = new BufferedWriter(fileWriter);
+    try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, false))) {
       w.write("=== " + title.toUpperCase() + " ===");
       w.newLine();
     } catch (IOException e) {
@@ -100,13 +93,11 @@ public class Log {
     }
   }
 
-  /**
-   * Clear content file, make that before to start write the new content.
-   */
+  /** Clear content file, make that before to start write the new content. */
   public void clearLog() {
-      try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
-      } catch (IOException e) {
-          System.out.println("Error while clearing the file: " + e.getMessage());
-      }
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
+    } catch (IOException e) {
+      System.out.println("Error while clearing the file: " + e.getMessage());
+    }
   }
 }
