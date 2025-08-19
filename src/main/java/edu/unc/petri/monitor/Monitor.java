@@ -55,6 +55,8 @@ public class Monitor implements MonitorInterface {
   @Override
   public boolean fireTransition(int t) {
     // TODO: Implement the logic for firing a transition based on the policy
+    log.logTransition(t, Thread.currentThread().getName());
+    petriNet.fire(t);
     return true;
   }
 }
