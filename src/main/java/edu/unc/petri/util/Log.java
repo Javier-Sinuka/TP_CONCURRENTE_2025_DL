@@ -42,7 +42,7 @@ public class Log {
    * @param transitionNumber number of trasition
    */
   public void logTransition(int transitionNumber) {
-    try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, false))) {
+    try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, true))) {
       w.write("[T" + transitionNumber + "]");
       w.newLine();
     } catch (IOException e) {
@@ -57,7 +57,7 @@ public class Log {
    * @param threadName The name of the thread associated with the transition.
    */
   public void logTransition(int transitionNumber, String threadName) {
-    try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, false))) {
+    try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, true))) {
       w.write("[Th-N: " + threadName + " T" + transitionNumber + "]");
       w.newLine();
     } catch (IOException e) {
@@ -71,7 +71,7 @@ public class Log {
    * @param message the message to be logged
    */
   public void logMessage(String message) {
-    try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, false))) {
+    try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, true))) {
       w.write("[LOG] " + message);
       w.newLine();
     } catch (IOException e) {
