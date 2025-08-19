@@ -44,6 +44,7 @@ Icon?
 *.log
 hs_err_pid*
 replay_pid*
+*.txt
 
 # ───── Misc tools ─────────────────────────────────────────────
 # Spotless, Checkstyle temp
@@ -51,3 +52,4 @@ spotless.*.backup
 
 # Coverage (JaCoCo) — keep even if not used yet; harmless
 jacoco*.exec
+
