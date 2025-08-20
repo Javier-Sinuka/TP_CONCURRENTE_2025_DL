@@ -24,7 +24,7 @@ public class ConditionQueues {
   public ConditionQueues(int transitionsNumber) {
     queues = new ArrayList<>();
 
-    for(int i = 0; i < transitionsNumber; i++){
+    for (int i = 0; i < transitionsNumber; i++) {
       queues.add(new Semaphore(0));
     }
   }
@@ -59,7 +59,7 @@ public class ConditionQueues {
   boolean[] areThereWaitingThreads() {
     boolean[] waitingThreads = new boolean[queues.size()];
 
-    for(int i  = 0; i < waitingThreads.length; i++){
+    for (int i = 0; i < waitingThreads.length; i++) {
       waitingThreads[i] = queues.get(i).hasQueuedThreads();
     }
 
