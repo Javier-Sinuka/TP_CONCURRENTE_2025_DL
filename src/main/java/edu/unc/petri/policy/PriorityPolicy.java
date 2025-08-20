@@ -19,9 +19,10 @@ public class PriorityPolicy implements PolicyInterface {
   /**
    * Constructor that receives a HashMap with the weights referring to the transitions, referencing
    * the "key" as the transition to which you want to assign its weight (the weight being the
-   * "value" of said key)
+   * "value" of said key).
    *
-   * @param weightTransitions
+   * @param weightTransitions a Map where the key is the transition number and the value is its
+   *     weight
    */
   public PriorityPolicy(Map<Integer, Integer> weightTransitions) {
     random = new Random();

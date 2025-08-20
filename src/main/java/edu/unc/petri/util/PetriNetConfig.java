@@ -3,6 +3,7 @@ package edu.unc.petri.util;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The PetriNetConfig class represents the configuration of a Petri Net. It contains the initial
@@ -36,6 +37,12 @@ public final class PetriNetConfig {
   public final List<Segment> segments;
 
   /**
+   * The weights for each transition in the Petri Net. Represents the cost or priority of each
+   * transition.
+   */
+  public final Map<Integer, Integer> transitionWeights;
+
+  /**
    * Constructs a PetriNetConfig object with the specified initial marking, incidence matrix, and
    * time ranges.
    *
@@ -43,6 +50,7 @@ public final class PetriNetConfig {
    * @param incidence The incidence matrix of the Petri Net.
    * @param timeRanges The time ranges for each transition.
    * @param segments The segments of the Petri net.
+   * @param transitionWeights The weights for each transition.
    */
   @JsonCreator
   public PetriNetConfig(
@@ -50,10 +58,12 @@ public final class PetriNetConfig {
       @JsonProperty("incidence") byte[][] incidence,
       @JsonProperty("timeRanges") long[][] timeRanges,
       @JsonProperty("segments") List<Segment> segments) {
+      @JsonProperty("transitionWeights") Map<Integer, Integer> transitionWeights) {
 
     this.initialMarking = initialMarking;
     this.incidence = incidence;
     this.timeRanges = timeRanges;
     this.segments = segments;
+    this.transitionWeights = transitionWeights;
   }
 }
