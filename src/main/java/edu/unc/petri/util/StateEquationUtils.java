@@ -24,6 +24,17 @@ public class StateEquationUtils {
    */
   public static int[] calculateStateEquation(
       int transition, IncidenceMatrix incidenceMatrix, CurrentMarking currentMarking) {
+    if (incidenceMatrix == null || currentMarking == null) {
+      throw new IllegalArgumentException("The parameter is null");
+    }
+    if (transition < 0 || transition >= incidenceMatrix.getTransitions()) {
+      throw new IllegalArgumentException("Transition index is out of bounds");
+    }
+    if (incidenceMatrix.getPlaces() == 0
+        || incidenceMatrix.getTransitions() == 0
+        || currentMarking.getMarking().length == 0) {
+      throw new IllegalArgumentException("Parameters size cannot be 0");
+    }
     byte[] transitionColumn = incidenceMatrix.getColumn(transition);
     int[] currentMarkingArray = currentMarking.getMarking();
     int[] nextMarking = new int[currentMarkingArray.length];
