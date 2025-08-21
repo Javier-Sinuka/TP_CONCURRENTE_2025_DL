@@ -25,6 +25,9 @@ public class PriorityPolicy implements PolicyInterface {
    *     weight
    */
   public PriorityPolicy(Map<Integer, Integer> weightTransitions) {
+    if (weightTransitions == null || weightTransitions.isEmpty()) {
+      throw new IllegalArgumentException("The weightTransitions map cannot be null or empty");
+    }
     random = new Random();
     this.weightTransitions = weightTransitions;
   }
@@ -38,6 +41,11 @@ public class PriorityPolicy implements PolicyInterface {
    */
   @Override
   public int choose(int[] n) {
+
+    if (n == null || n.length == 0) {
+      throw new IllegalArgumentException("The given array is null or empty");
+    }
+
     int initialMaxValue = weightTransitions.get(n[0]);
     int index = 0;
     boolean randomFlag = true;
