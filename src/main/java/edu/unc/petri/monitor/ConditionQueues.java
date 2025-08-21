@@ -22,6 +22,10 @@ public class ConditionQueues {
    * @param transitionsNumber of the petri net model
    */
   public ConditionQueues(int transitionsNumber) {
+    if (transitionsNumber <= 0) {
+      throw new IllegalArgumentException("Number of transitions must be greater than 0");
+    }
+
     queues = new ArrayList<>();
 
     for (int i = 0; i < transitionsNumber; i++) {
@@ -35,6 +39,10 @@ public class ConditionQueues {
    * @param transitionNumber the transition for which the thread is queued
    */
   void waitForTransition(int transitionNumber) {
+    if (transitionNumber < 0 || transitionNumber >= queues.size()) {
+      throw new IllegalArgumentException("Transition number is out of bounds");
+    }
+
     try {
       queues.get(transitionNumber).acquire();
     } catch (InterruptedException e) {
@@ -48,6 +56,9 @@ public class ConditionQueues {
    * @param transitionNumber the transition for which the waiting thread is woken up
    */
   void wakeUpThread(int transitionNumber) {
+    if (transitionNumber < 0 || transitionNumber >= queues.size()) {
+      throw new IllegalArgumentException("Transition number is out of bounds");
+    }
     queues.get(transitionNumber).release();
   }
 
