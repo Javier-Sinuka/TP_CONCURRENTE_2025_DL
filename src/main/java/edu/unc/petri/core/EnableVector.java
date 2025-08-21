@@ -24,8 +24,16 @@ public class EnableVector {
    * @param numberOfTransitions The number of transitions in the Petri net.
    */
   public EnableVector(int numberOfTransitions) {
+    if (numberOfTransitions <= 0) {
+      throw new IllegalArgumentException("Number of transitions must be greater than 0");
+    }
     this.enabledTransitions = new boolean[numberOfTransitions];
     this.enabledTransitionTimes = new long[numberOfTransitions];
+
+    for (int i = 0; i < numberOfTransitions; i++) {
+      enabledTransitions[i] = false;
+      enabledTransitionTimes[i] = 0;
+    }
   }
 
   /**
@@ -43,14 +51,18 @@ public class EnableVector {
         || currentMarking.getMarking().length == 0) {
       throw new IllegalArgumentException("Parameters size cannot be 0");
     }
+
+    // Set all transitions as disabled
     for (int i = 0; i < incidenceMatrix.getTransitions(); i++) {
       enabledTransitions[i] = false;
     }
+
+    // Check which transitions are enabled
     for (int i = 0; i < incidenceMatrix.getTransitions(); i++) {
       if (checkMarking(
           StateEquationUtils.calculateStateEquation(i, incidenceMatrix, currentMarking))) {
-        enabledTransitions[i] = true;
-        enabledTransitionTimes[i] = System.currentTimeMillis();
+        enabledTransitions[i] = true; // Enable transition
+        enabledTransitionTimes[i] = System.currentTimeMillis(); // Store enable time
       }
     }
   }
@@ -71,7 +83,6 @@ public class EnableVector {
    * @return true if the transition is enabled, false otherwise.
    */
   public boolean isTransitionEnabled(int transitionIndex) {
-
     return enabledTransitions[transitionIndex];
   }
 
@@ -82,7 +93,6 @@ public class EnableVector {
    * @return The time when the transition was enabled.
    */
   public long getEnableTransitionTime(int transitionIndex) {
-
     return enabledTransitionTimes[transitionIndex];
   }
 
