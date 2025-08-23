@@ -19,7 +19,7 @@ public class TimeRangeMatrix {
    * Constructs a TimeRangeMatrix from a given config file. The matrix is initialized with the
    * number of transitions in the path.
    *
-   * @param path The path to initialize the matrix from.
+   * @param timeRangeMatrix A 2D long array representing the time ranges for each transition.
    */
   public TimeRangeMatrix(long[][] timeRangeMatrix) {
     this.timeRangeMatrix = timeRangeMatrix;
