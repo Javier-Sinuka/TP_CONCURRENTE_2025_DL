@@ -16,6 +16,8 @@ import java.util.concurrent.Semaphore;
  */
 public class Monitor implements MonitorInterface {
 
+    private final int PERMITS = 1;
+
   /** The Petri net being monitored. */
   private PetriNet petriNet;
 
@@ -41,7 +43,7 @@ public class Monitor implements MonitorInterface {
   public Monitor(PetriNet petriNet, PolicyInterface policy, Log log) {
     this.petriNet = petriNet;
     this.policy = policy;
-    this.mutex = mutex;
+    this.mutex = new Semaphore(PERMITS);
     this.log = log;
   }
 
@@ -54,16 +56,51 @@ public class Monitor implements MonitorInterface {
    */
   @Override
   public boolean fireTransition(int t) {
-    // TODO: Implement the logic for firing a transition based on the policy
-    boolean fired = false;
-    fired = petriNet.fire(t);
 
-    if (!fired) {
-      return false; // Transition could not be fired
-    }
+      try {
+          mutex.acquire();
+          while (true) {
+              if(petriNet.fire(t)){
+                  boolean[] waitingThreads = conditionQueues.areThereWaitingThreads();
+                  boolean[] enableTransitions = petriNet.getEnableTransitions();
 
-    log.logTransition(t, Thread.currentThread().getName());
+                  int[] transitions = getNextTransitionsCouldFire(waitingThreads, enableTransitions);
 
-    return true;
+                  if(transitions.length != 0){
+                      int transition = policy.choose(transitions);
+
+                      conditionQueues.wakeUpThread(transition);
+
+                      log.logTransition(t, Thread.currentThread().getName());
+                      return true;
+                  }
+                  else {
+                      break;
+                  }
+              }
+              else {
+                  mutex.release();
+                  conditionQueues.waitForTransition(t);
+              }
+          }
+
+          mutex.release();
+          return true;
+      } catch (InterruptedException e) {
+          return  false;
+      }
+  }
+
+  private int[] getNextTransitionsCouldFire(boolean[] waitingThreads, boolean[] enableTransitions) {
+      int numberOfTransitions = waitingThreads.length;
+      int[] transitions = new int[numberOfTransitions];
+
+      for (int i = 0; i < numberOfTransitions; i++) {
+          if(waitingThreads[i] && enableTransitions[i]){
+              transitions[i] = i;
+          }
+      }
+
+    return transitions;
   }
 }

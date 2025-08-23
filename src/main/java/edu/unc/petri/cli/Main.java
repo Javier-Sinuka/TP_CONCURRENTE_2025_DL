@@ -5,6 +5,7 @@ import edu.unc.petri.core.EnableVector;
 import edu.unc.petri.core.IncidenceMatrix;
 import edu.unc.petri.core.PetriNet;
 import edu.unc.petri.core.TimeRangeMatrix;
+import edu.unc.petri.monitor.ConditionQueues;
 import edu.unc.petri.monitor.Monitor;
 import edu.unc.petri.policy.RandomPolicy;
 import edu.unc.petri.util.ConfigLoader;
@@ -43,6 +44,7 @@ public final class Main {
       CurrentMarking currentMarking = new CurrentMarking(config.initialMarking);
       TimeRangeMatrix timeRangeMatrix = new TimeRangeMatrix(config.timeRanges);
       EnableVector enableVector = new EnableVector(incidenceMatrix.getTransitions());
+      ConditionQueues conditionQueues = new ConditionQueues(incidenceMatrix.getTransitions());
 
       // Instantiate the Petri net with all configurations
       PetriNet petriNet =
