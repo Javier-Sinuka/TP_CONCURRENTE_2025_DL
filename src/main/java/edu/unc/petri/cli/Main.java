@@ -37,7 +37,9 @@ public final class Main {
   public static void main(String[] args) {
     try {
       // Load the Petri net configuration from the specified JSON file
-      PetriNetConfig config = ConfigLoader.load(Paths.get("config.json"));
+      // Check if a file path is passed as an argument, otherwise default to "config.json"
+      String configFilePath = args.length > 0 ? args[0] : "config_default.json";
+      PetriNetConfig config = ConfigLoader.load(Paths.get(configFilePath));
 
       // Initialize the core components of the Petri net
       IncidenceMatrix incidenceMatrix = new IncidenceMatrix(config.incidence);

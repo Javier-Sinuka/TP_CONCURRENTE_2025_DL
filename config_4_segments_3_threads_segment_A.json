@@ -1,4 +1,5 @@
 {
+  "logPath": "log_4_segments_3_threads_segment_A.txt",
   "initialMarking": [3, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
   "incidence": [
     [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -30,24 +31,24 @@
   ],
   "segments": [
     {
-      "name": "Segment A",
+      "name": "Segment-A",
+      "threadQuantity": 1,
+      "transitions": [0, 1, 11]
+    },
+    {
+      "name": "Segment-B",
       "threadQuantity": 1,
       "transitions": [2, 3, 4]
     },
     {
-      "name": "Segment B",
+      "name": "Segment-C",
       "threadQuantity": 1,
       "transitions": [5, 6]
     },
     {
-      "name": "Segment C",
+      "name": "Segment-D",
       "threadQuantity": 1,
       "transitions": [7, 8, 9, 10]
-    },
-    {
-      "name": "Segment D",
-      "threadQuantity": 1,
-      "transitions": [0, 1, 11]
     }
   ],
   "transitionWeights": {
