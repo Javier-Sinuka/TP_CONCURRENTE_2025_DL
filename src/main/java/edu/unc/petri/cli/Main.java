@@ -44,16 +44,15 @@ public final class Main {
       // Initialize the core components of the Petri net
       IncidenceMatrix incidenceMatrix = new IncidenceMatrix(config.incidence);
       CurrentMarking currentMarking = new CurrentMarking(config.initialMarking);
-      TimeRangeMatrix timeRangeMatrix = new TimeRangeMatrix(config.timeRanges);
       EnableVector enableVector = new EnableVector(incidenceMatrix.getTransitions());
-      ConditionQueues conditionQueues = new ConditionQueues(incidenceMatrix.getTransitions());
+      TimeRangeMatrix timeRangeMatrix = new TimeRangeMatrix(config.timeRanges, enableVector);
 
       // Instantiate the Petri net with all configurations
       PetriNet petriNet =
           new PetriNet(incidenceMatrix, currentMarking, timeRangeMatrix, enableVector);
 
       // Initialize the logger to record simulation events
-      Log log = new Log("log.txt");
+      Log log = new Log(config.logPath);
 
       // Create a monitor to manage the Petri net using a random policy
       Monitor monitor = new Monitor(petriNet, new RandomPolicy(), log);
@@ -63,7 +62,7 @@ public final class Main {
       for (Segment segment : config.segments) {
         for (int i = 0; i < segment.threadQuantity; i++) {
           // Add a worker thread for each segment
-          threads.add(new Worker(monitor, segment));
+          threads.add(new Worker(monitor, segment, i + 1));
         }
       }
 
