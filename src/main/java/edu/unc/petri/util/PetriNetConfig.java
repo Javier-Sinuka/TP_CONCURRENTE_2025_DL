@@ -15,6 +15,9 @@ import java.util.Map;
  */
 public final class PetriNetConfig {
 
+  /** The path to the log file where execution details will be recorded. */
+  public final String logPath;
+
   /**
    * The initial marking of the Petri Net. Represents the number of tokens in each place at the
    * start.
@@ -54,12 +57,14 @@ public final class PetriNetConfig {
    */
   @JsonCreator
   public PetriNetConfig(
+      @JsonProperty("logPath") String logPath,
       @JsonProperty("initialMarking") int[] initialMarking,
       @JsonProperty("incidence") byte[][] incidence,
       @JsonProperty("timeRanges") long[][] timeRanges,
       @JsonProperty("segments") List<Segment> segments,
       @JsonProperty("transitionWeights") Map<Integer, Integer> transitionWeights) {
 
+    this.logPath = logPath;
     this.initialMarking = initialMarking;
     this.incidence = incidence;
     this.timeRanges = timeRanges;
