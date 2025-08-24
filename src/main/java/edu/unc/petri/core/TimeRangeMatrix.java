@@ -21,8 +21,9 @@ public class TimeRangeMatrix {
    *
    * @param timeRangeMatrix A 2D long array representing the time ranges for each transition.
    */
-  public TimeRangeMatrix(long[][] timeRangeMatrix) {
+  public TimeRangeMatrix(long[][] timeRangeMatrix, EnableVector enableVector) {
     this.timeRangeMatrix = timeRangeMatrix;
+    this.enableVector = enableVector;
   }
 
   /**

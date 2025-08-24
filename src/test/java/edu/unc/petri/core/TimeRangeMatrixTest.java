@@ -25,7 +25,10 @@ class TimeRangeMatrixTest {
       {200, 300}, // T1
       {0, 50} // T2
     };
-    timeRangeMatrix = new TimeRangeMatrix(ranges);
+
+    EnableVector enableVector = new EnableVector(3);
+
+    timeRangeMatrix = new TimeRangeMatrix(ranges, enableVector);
 
     try {
       java.lang.reflect.Field field = TimeRangeMatrix.class.getDeclaredField("enableVector");
