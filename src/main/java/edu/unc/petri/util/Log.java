@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * The Log class is logs the events in the Petri net simulation. It is used to keep track of the
@@ -83,13 +85,50 @@ public class Log {
   }
 
   /**
-   * Method that stores a string of the format "=== *title.UpperCase* ===".
+   * Logs a formatted header containing the provided title, description, and the current timestamp.
+   * The header is displayed in a visually structured format with aligned content inside a box.
    *
-   * @param title The title to be logged as a header.
+   * @param title The title to be displayed prominently in uppercase.
+   * @param description A description to be displayed below the title with additional file context.
    */
-  public void logHeader(String title) {
-    try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, false))) {
-      w.write("=== " + title.toUpperCase() + " ===");
+  public void logHeader(String title, String description) {
+    try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, true))) {
+      // Prepare content
+      String headerTitle = title.toUpperCase();
+      String headerDesc = "File: " + description;
+      String headerTime =
+          "Time: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+      // Compute inner width based on the longest content line
+      int innerWidth =
+          Math.max(Math.max(headerTitle.length(), headerDesc.length()), headerTime.length());
+
+      int minWidth = 40;
+      int maxWidth = 120;
+      innerWidth = Math.max(innerWidth, minWidth);
+      innerWidth = Math.min(innerWidth, maxWidth);
+
+      // Build lines
+      String top = "╔" + repeat("═", innerWidth + 2) + "╗";
+      String blank = "║ " + repeat(" ", innerWidth) + " ║";
+      String lineTitle = "║ " + center(headerTitle, innerWidth) + " ║";
+      String lineDesc = "║ " + padRight(headerDesc, innerWidth) + " ║";
+      String lineTime = "║ " + padRight(headerTime, innerWidth) + " ║";
+      String bot = "╚" + repeat("═", innerWidth + 2) + "╝";
+
+      // Write
+      w.write(top);
+      w.newLine();
+      w.write(lineTitle);
+      w.newLine();
+      w.write(blank);
+      w.newLine();
+      w.write(lineDesc);
+      w.newLine();
+      w.write(lineTime);
+      w.newLine();
+      w.write(bot);
+      w.newLine();
       w.newLine();
     } catch (IOException e) {
       System.out.println("Error while writing to the file: " + e.getMessage());
@@ -102,5 +141,47 @@ public class Log {
     } catch (IOException e) {
       System.out.println("Error while clearing the file: " + e.getMessage());
     }
+  }
+
+  /* ----------------- Helpers  ----------------- */
+
+  private String repeat(String s, int n) {
+    if (n <= 0) {
+      return "";
+    }
+    StringBuilder sb = new StringBuilder(s.length() * n);
+    for (int i = 0; i < n; i++) {
+      sb.append(s);
+    }
+    return sb.toString();
+  }
+
+  private String padRight(String s, int width) {
+    if (s.length() >= width) {
+      return s;
+    }
+    StringBuilder sb = new StringBuilder(width);
+    sb.append(s);
+    for (int i = s.length(); i < width; i++) {
+      sb.append(' ');
+    }
+    return sb.toString();
+  }
+
+  private String center(String s, int width) {
+    if (s.length() >= width) {
+      return s;
+    }
+    int left = (width - s.length()) / 2;
+    int right = width - s.length() - left;
+    StringBuilder sb = new StringBuilder(width);
+    for (int i = 0; i < left; i++) {
+      sb.append(' ');
+    }
+    sb.append(s);
+    for (int i = 0; i < right; i++) {
+      sb.append(' ');
+    }
+    return sb.toString();
   }
 }

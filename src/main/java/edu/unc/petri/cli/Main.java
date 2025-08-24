@@ -53,6 +53,7 @@ public final class Main {
 
       // Initialize the logger to record simulation events
       Log log = new Log(config.logPath);
+      log.logHeader("Petri Net Simulation Log", configFilePath);
 
       // Create condition queues for managing thread synchronization
       ConditionQueues conditionQueues = new ConditionQueues(incidenceMatrix.getTransitions());
