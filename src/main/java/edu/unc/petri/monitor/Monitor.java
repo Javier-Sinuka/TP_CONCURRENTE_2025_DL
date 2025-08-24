@@ -3,6 +3,7 @@ package edu.unc.petri.monitor;
 import edu.unc.petri.core.PetriNet;
 import edu.unc.petri.policy.PolicyInterface;
 import edu.unc.petri.util.Log;
+import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -16,7 +17,7 @@ import java.util.concurrent.Semaphore;
  */
 public class Monitor implements MonitorInterface {
 
-    private final int PERMITS = 1;
+  private final int PERMITS = 1;
 
   /** The Petri net being monitored. */
   private PetriNet petriNet;
@@ -59,49 +60,52 @@ public class Monitor implements MonitorInterface {
   @Override
   public boolean fireTransition(int t) {
 
-      try {
-          mutex.acquire();
-          while (true) {
-              if(petriNet.fire(t)){
-                  boolean[] waitingThreads = conditionQueues.areThereWaitingThreads();
-                  boolean[] enableTransitions = petriNet.getEnableTransitions();
+    try {
+      mutex.acquire();
+      while (true) {
+        if (petriNet.fire(t)) {
+          log.logTransition(t, Thread.currentThread().getName());
+          boolean[] waitingThreads = conditionQueues.areThereWaitingThreads();
+          boolean[] enableTransitions = petriNet.getEnableTransitions();
 
-                  int[] transitions = getNextTransitionsCouldFire(waitingThreads, enableTransitions);
+          ArrayList<Integer> transitionsThatCouldBeFired =
+              getTransitionsThatCouldBeFired(waitingThreads, enableTransitions);
 
-                  if(transitions.length != 0){
-                      int transition = policy.choose(transitions);
+          if (transitionsThatCouldBeFired.size() > 0) {
+            int transition = policy.choose(transitionsThatCouldBeFired);
 
-                      conditionQueues.wakeUpThread(transition);
+            conditionQueues.wakeUpThread(transition);
 
-                      log.logTransition(t, Thread.currentThread().getName());
-                      return true;
-                  }
-                  else {
-                      break;
-                  }
-              }
-              else {
-                  mutex.release();
-                  conditionQueues.waitForTransition(t);
-              }
+            return true;
+          } else {
+            break;
           }
-
+        } else {
           mutex.release();
-          return true;
-      } catch (InterruptedException e) {
-          return  false;
+          conditionQueues.waitForTransition(t);
+          // The waked up thread fires the transition again and leaves?
+          // Does the waked up thread become a signaler or not?
+          petriNet.fire(t);
+          log.logTransition(t, Thread.currentThread().getName());
+          break; // leaves monitor after firing
+        }
       }
+      mutex.release();
+      return true;
+    } catch (InterruptedException e) {
+      return false;
+    }
   }
 
-  private int[] getNextTransitionsCouldFire(boolean[] waitingThreads, boolean[] enableTransitions) {
-      int numberOfTransitions = waitingThreads.length;
-      int[] transitions = new int[numberOfTransitions];
+  private ArrayList<Integer> getTransitionsThatCouldBeFired(
+      boolean[] waitingThreads, boolean[] enableTransitions) {
+    ArrayList<Integer> transitions = new ArrayList<>();
 
-      for (int i = 0; i < numberOfTransitions; i++) {
-          if(waitingThreads[i] && enableTransitions[i]){
-              transitions[i] = i;
-          }
+    for (int i = 0; i < waitingThreads.length; i++) {
+      if (waitingThreads[i] && enableTransitions[i]) {
+        transitions.add(i);
       }
+    }
 
     return transitions;
   }
