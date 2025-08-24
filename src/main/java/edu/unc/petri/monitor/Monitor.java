@@ -62,6 +62,7 @@ public class Monitor implements MonitorInterface {
 
     try {
       mutex.acquire();
+      log.logMessage("Thread " + Thread.currentThread().getName() + " enters monitor to fire " + t);
       while (true) {
         if (petriNet.fire(t)) {
           log.logTransition(t, Thread.currentThread().getName());
@@ -71,18 +72,46 @@ public class Monitor implements MonitorInterface {
           ArrayList<Integer> transitionsThatCouldBeFired =
               getTransitionsThatCouldBeFired(waitingThreads, enableTransitions);
 
+          log.logMessage(
+              "Thread "
+                  + Thread.currentThread().getName()
+                  + " checks if there are waiting threads for enabled transitions");
+
           if (transitionsThatCouldBeFired.size() > 0) {
+            log.logMessage(
+                "Thread "
+                    + Thread.currentThread().getName()
+                    + " finds waiting threads for enabled transitions");
             int transition = policy.choose(transitionsThatCouldBeFired);
+
+            log.logMessage(
+                "Thread "
+                    + Thread.currentThread().getName()
+                    + " chooses to wake up the thread waiting for "
+                    + transition);
 
             conditionQueues.wakeUpThread(transition);
 
+            log.logMessage("Thread " + Thread.currentThread().getName() + " leaves monitor");
             return true;
           } else {
+            log.logMessage(
+                "Thread "
+                    + Thread.currentThread().getName()
+                    + " finds no waiting threads for enabled transitions");
             break;
           }
         } else {
+          log.logMessage("Thread " + Thread.currentThread().getName() + " could not fire " + t);
           mutex.release();
+          log.logMessage("Thread " + Thread.currentThread().getName() + " goes to wait for " + t);
           conditionQueues.waitForTransition(t);
+          log.logMessage(
+              "Thread "
+                  + Thread.currentThread().getName()
+                  + " wakes up and re-enters monitor to fire "
+                  + t);
+
           // The waked up thread fires the transition again and leaves?
           // Does the waked up thread become a signaler or not?
           petriNet.fire(t);
@@ -90,6 +119,8 @@ public class Monitor implements MonitorInterface {
           break; // leaves monitor after firing
         }
       }
+
+      log.logMessage("Thread " + Thread.currentThread().getName() + " leaves monitor");
       mutex.release();
       return true;
     } catch (InterruptedException e) {
