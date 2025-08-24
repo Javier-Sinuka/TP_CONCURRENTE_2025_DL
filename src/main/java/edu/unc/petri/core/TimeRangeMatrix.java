@@ -49,6 +49,11 @@ public class TimeRangeMatrix {
     long startRange = timeRangeMatrix[transition][0];
     long endRange = timeRangeMatrix[transition][1];
 
+    // Return true for instantaneous transitions [0,0]
+    if (startRange == 0 && endRange == 0) {
+      return true;
+    }
+
     return timePassed >= startRange && timePassed <= endRange;
   }
 }

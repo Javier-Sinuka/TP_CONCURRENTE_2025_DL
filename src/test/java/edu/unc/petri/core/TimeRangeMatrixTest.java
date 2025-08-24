@@ -23,7 +23,8 @@ class TimeRangeMatrixTest {
     long[][] ranges = {
       {50, 150}, // T0
       {200, 300}, // T1
-      {0, 50} // T2
+      {0, 50}, // T2
+      {0, 0} // T3 - instantaneous
     };
 
     EnableVector enableVector = new EnableVector(3);
@@ -52,6 +53,18 @@ class TimeRangeMatrixTest {
     assertTrue(
         timeRangeMatrix.isInsideTimeRange(transition),
         "Should be inside time range as ~100ms is between 50 and 150.");
+  }
+
+  @Test
+  void isInsideTimeRangeShouldReturnTrueForInstantaneousTransition() {
+    int transition = 3; // [0, 0]
+    long enabledTime = System.currentTimeMillis();
+
+    when(mockEnableVector.getEnableTransitionTime(transition)).thenReturn(enabledTime);
+
+    assertTrue(
+        timeRangeMatrix.isInsideTimeRange(transition),
+        "Should be inside time range for instantaneous transition [0,0].");
   }
 
   @Test
