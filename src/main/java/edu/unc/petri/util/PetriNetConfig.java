@@ -57,7 +57,7 @@ public final class PetriNetConfig {
       @JsonProperty("initialMarking") int[] initialMarking,
       @JsonProperty("incidence") byte[][] incidence,
       @JsonProperty("timeRanges") long[][] timeRanges,
-      @JsonProperty("segments") List<Segment> segments) {
+      @JsonProperty("segments") List<Segment> segments,
       @JsonProperty("transitionWeights") Map<Integer, Integer> transitionWeights) {
 
     this.initialMarking = initialMarking;
