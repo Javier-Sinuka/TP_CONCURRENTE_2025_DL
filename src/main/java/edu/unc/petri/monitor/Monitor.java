@@ -40,8 +40,10 @@ public class Monitor implements MonitorInterface {
    * @param policy the policy used to choose transitions
    * @param log the log for recording events in the simulation
    */
-  public Monitor(PetriNet petriNet, PolicyInterface policy, Log log) {
+  public Monitor(
+      PetriNet petriNet, ConditionQueues conditionQueues, PolicyInterface policy, Log log) {
     this.petriNet = petriNet;
+    this.conditionQueues = conditionQueues;
     this.policy = policy;
     this.mutex = new Semaphore(PERMITS);
     this.log = log;

@@ -54,8 +54,11 @@ public final class Main {
       // Initialize the logger to record simulation events
       Log log = new Log(config.logPath);
 
+      // Create condition queues for managing thread synchronization
+      ConditionQueues conditionQueues = new ConditionQueues(incidenceMatrix.getTransitions());
+
       // Create a monitor to manage the Petri net using a random policy
-      Monitor monitor = new Monitor(petriNet, new RandomPolicy(), log);
+      Monitor monitor = new Monitor(petriNet, conditionQueues, new RandomPolicy(), log);
 
       // Prepare threads based on the configuration's segments
       List<Thread> threads = new ArrayList<>();
