@@ -24,15 +24,18 @@ public class Log {
   public Log(String filePath) {
     this.filePath = filePath;
     File file = new File(filePath);
-    if (!file.exists()) {
-      try {
-        boolean created = file.createNewFile();
-        if (!created) {
-          System.out.println("Failed to create the file: " + filePath);
-        }
-      } catch (IOException e) {
-        System.out.println("Error while creating the file: " + e.getMessage());
+    if (file.exists()) {
+      if (!file.delete()) {
+        System.out.println("Failed to delete the existing file: " + filePath);
       }
+    }
+    try {
+      boolean created = file.createNewFile();
+      if (!created) {
+        System.out.println("Failed to create the file: " + filePath);
+      }
+    } catch (IOException e) {
+      System.out.println("Error while creating the file: " + e.getMessage());
     }
   }
 
