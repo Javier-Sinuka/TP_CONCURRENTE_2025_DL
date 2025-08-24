@@ -42,6 +42,8 @@ public class PetriNet {
     this.currentMarking = currentMarking;
     this.timeRangeMatrix = timeRangeMatrix;
     this.enableVector = enableVector;
+
+    this.enableVector.updateEnableVector(incidenceMatrix, currentMarking);
   }
 
   /**

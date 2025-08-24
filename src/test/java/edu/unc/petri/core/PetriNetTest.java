@@ -61,7 +61,8 @@ class PetriNetTest {
       assertTrue(result, "Fire should return true on success.");
 
       verify(mockCurrentMarking).setMarking(nextMarking);
-      verify(mockEnableVector).updateEnableVector(mockIncidenceMatrix, mockCurrentMarking);
+      verify(mockEnableVector, Mockito.times(2))
+          .updateEnableVector(mockIncidenceMatrix, mockCurrentMarking);
     }
   }
 
@@ -76,7 +77,7 @@ class PetriNetTest {
     assertFalse(result, "Fire should return false if transition is not enabled.");
 
     verify(mockCurrentMarking, never()).setMarking(any());
-    verify(mockEnableVector, never()).updateEnableVector(any(), any());
+    verify(mockEnableVector, Mockito.times(1)).updateEnableVector(any(), any());
   }
 
   @Test
@@ -93,6 +94,6 @@ class PetriNetTest {
     assertFalse(result, "Fire should return false if transition is out of its time range.");
 
     verify(mockCurrentMarking, never()).setMarking(any());
-    verify(mockEnableVector, never()).updateEnableVector(any(), any());
+    verify(mockEnableVector, Mockito.times(1)).updateEnableVector(any(), any());
   }
 }
