@@ -26,8 +26,8 @@ public class Worker extends Thread {
    * @param monitor the monitor to interact with the Petri net
    * @param segment the segment this worker is responsible for
    */
-  public Worker(MonitorInterface monitor, Segment segment) {
-    super(segment.name);
+  public Worker(MonitorInterface monitor, Segment segment, int segmentThreadIndex) {
+    super(segment.name + "-Worker-" + segmentThreadIndex);
     this.monitor = monitor;
     this.segment = segment;
   }
