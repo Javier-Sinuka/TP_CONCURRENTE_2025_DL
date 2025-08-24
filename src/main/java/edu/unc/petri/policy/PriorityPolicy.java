@@ -1,5 +1,6 @@
 package edu.unc.petri.policy;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
@@ -33,28 +34,28 @@ public class PriorityPolicy implements PolicyInterface {
   }
 
   /**
-   * Chooses a transition based on its priority.
+   * Selects a transition based on its associated priority weights.
    *
-   * @param n an array of integers representing the enabled transitions. Each element contains the
-   *     number of the enabled transition.
-   * @return the number of the chosen transition
+   * @param transitions a list of integers representing the enabled transitions. Each element
+   *     corresponds to the identifier of an enabled transition.
+   * @return the identifier of the chosen transition
    */
   @Override
-  public int choose(int[] n) {
+  public int choose(ArrayList<Integer> transitions) {
 
-    if (n == null || n.length == 0) {
+    if (transitions == null || transitions.size() == 0) {
       throw new IllegalArgumentException("The given array is null or empty");
     }
 
-    int initialMaxValue = weightTransitions.get(n[0]);
+    int initialMaxValue = weightTransitions.get(transitions.get(0));
     int index = 0;
     boolean randomFlag = true;
 
-    if (n == null || n.length == 0) {
+    if (transitions == null || transitions.size() == 0) {
       throw new IllegalArgumentException("The given array is null or empty");
     } else {
-      for (int i = 0; i < n.length; i++) {
-        int newValue = weightTransitions.get(n[i]);
+      for (int i = 0; i < transitions.size(); i++) {
+        int newValue = weightTransitions.get(transitions.get(i));
         if (initialMaxValue < newValue) {
           initialMaxValue = newValue;
           index = i;
@@ -62,9 +63,9 @@ public class PriorityPolicy implements PolicyInterface {
         }
       }
       if (randomFlag) {
-        index = random.nextInt(n.length);
+        index = random.nextInt(transitions.size());
       }
     }
-    return n[index];
+    return transitions.get(index);
   }
 }

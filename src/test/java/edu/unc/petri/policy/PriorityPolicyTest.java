@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +39,10 @@ class PriorityPolicyTest {
 
   @Test
   void chooseShouldSelectTransitionWithHighestPriority() {
-    int[] enabledTransitions = {0, 2, 4}; // Priorities: 10, 5, 15
+    ArrayList<Integer> enabledTransitions = new ArrayList<>();
+    enabledTransitions.add(0);
+    enabledTransitions.add(2);
+    enabledTransitions.add(4); // Priorities: 10, 5, 15
 
     int chosen = priorityPolicy.choose(enabledTransitions);
 
@@ -47,7 +51,11 @@ class PriorityPolicyTest {
 
   @Test
   void chooseShouldSelectTheFirstOneInCaseOfTie() {
-    int[] enabledTransitions = {0, 1, 3, 4}; // Priorities: 10, 20, 20, 15
+    ArrayList<Integer> enabledTransitions = new ArrayList<>();
+    enabledTransitions.add(0);
+    enabledTransitions.add(1);
+    enabledTransitions.add(3);
+    enabledTransitions.add(4); // Priorities: 10, 20, 20, 15
 
     int chosen = priorityPolicy.choose(enabledTransitions);
 
@@ -63,7 +71,10 @@ class PriorityPolicyTest {
     weights.put(1, 10);
     weights.put(2, 10);
     priorityPolicy = new PriorityPolicy(weights);
-    int[] enabledTransitions = {0, 1, 2};
+    ArrayList<Integer> enabledTransitions = new ArrayList<>();
+    enabledTransitions.add(0);
+    enabledTransitions.add(1);
+    enabledTransitions.add(2);
 
     int chosen = priorityPolicy.choose(enabledTransitions);
 
@@ -78,6 +89,6 @@ class PriorityPolicyTest {
 
   @Test
   void chooseShouldThrowExceptionForEmptyInput() {
-    assertThrows(IllegalArgumentException.class, () -> priorityPolicy.choose(new int[] {}));
+    assertThrows(IllegalArgumentException.class, () -> priorityPolicy.choose(new ArrayList<>()));
   }
 }
