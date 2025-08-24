@@ -16,6 +16,8 @@ import java.time.format.DateTimeFormatter;
  * @since 2025-04-08
  */
 public class Log {
+
+  /** The path of the file where the content will be saved. */
   private final String filePath;
 
   /**
@@ -145,6 +147,7 @@ public class Log {
 
   /* ----------------- Helpers  ----------------- */
 
+  /** Repeats the given string `s`, `n` times. */
   private String repeat(String s, int n) {
     if (n <= 0) {
       return "";
@@ -156,6 +159,7 @@ public class Log {
     return sb.toString();
   }
 
+  /** Pads the string `s` on the right with spaces to reach the specified `width`. */
   private String padRight(String s, int width) {
     if (s.length() >= width) {
       return s;
@@ -168,6 +172,7 @@ public class Log {
     return sb.toString();
   }
 
+  /** Centers the string `s` within a field of the specified `width`, padding with spaces. */
   private String center(String s, int width) {
     if (s.length() >= width) {
       return s;

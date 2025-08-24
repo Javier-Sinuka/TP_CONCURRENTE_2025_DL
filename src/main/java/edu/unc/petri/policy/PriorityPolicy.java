@@ -14,7 +14,10 @@ import java.util.Random;
  */
 public class PriorityPolicy implements PolicyInterface {
 
+  /** A map that associates each transition with its corresponding weight (priority). */
   private final Map<Integer, Integer> weightTransitions;
+
+  /** Random number generator for tie-breaking. */
   private final Random random;
 
   /**

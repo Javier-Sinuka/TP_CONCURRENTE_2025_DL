@@ -17,6 +17,7 @@ import java.util.concurrent.Semaphore;
  */
 public class Monitor implements MonitorInterface {
 
+  /** The number of permits for the semaphore used for mutual exclusion. */
   private final int PERMITS = 1;
 
   /** The Petri net being monitored. */

@@ -13,10 +13,7 @@ import java.util.Random;
  */
 public class RandomPolicy implements PolicyInterface {
 
-  /**
-   * An instance of {@link Random} used to generate random values for policy decisions. This random
-   * generator is initialized once and used throughout the lifetime of the policy.
-   */
+  /** A Random instance utilized for generating random values to guide policy decisions. */
   private final Random random = new Random();
 
   /**

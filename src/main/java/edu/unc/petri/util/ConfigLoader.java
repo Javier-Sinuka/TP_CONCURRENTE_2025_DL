@@ -14,6 +14,7 @@ import java.nio.file.Path;
  */
 public final class ConfigLoader {
 
+  /** The ObjectMapper instance used for JSON deserialization. */
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
   /** Private constructor to prevent instantiation of utility class. */
