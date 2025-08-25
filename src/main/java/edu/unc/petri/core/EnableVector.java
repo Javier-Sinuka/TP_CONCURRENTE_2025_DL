@@ -52,17 +52,25 @@ public class EnableVector {
       throw new IllegalArgumentException("Parameters size cannot be 0");
     }
 
-    // Set all transitions as disabled
-    for (int i = 0; i < incidenceMatrix.getTransitions(); i++) {
-      enabledTransitions[i] = false;
-    }
+    long now = System.currentTimeMillis();
 
-    // Check which transitions are enabled
+    // Recompute enabled state and preserve/adjust timestamps correctly
     for (int i = 0; i < incidenceMatrix.getTransitions(); i++) {
-      if (checkMarking(
-          StateEquationUtils.calculateStateEquation(i, incidenceMatrix, currentMarking))) {
-        enabledTransitions[i] = true; // Enable transition
-        enabledTransitionTimes[i] = System.currentTimeMillis(); // Store enable time
+      boolean willEnable =
+          checkMarking(
+              StateEquationUtils.calculateStateEquation(i, incidenceMatrix, currentMarking));
+
+      if (willEnable) {
+        if (!enabledTransitions[i]) {
+          // Transition becomes enabled now
+          enabledTransitions[i] = true;
+          enabledTransitionTimes[i] = now;
+        }
+        // If it was already enabled, keep previous timestamp
+      } else {
+        // Transition is not enabled: clear state and timestamp
+        enabledTransitions[i] = false;
+        enabledTransitionTimes[i] = 0L;
       }
     }
   }
