@@ -133,7 +133,7 @@ public class Monitor implements MonitorInterface {
       boolean[] waitingThreads, boolean[] enableTransitions) {
     ArrayList<Integer> transitions = new ArrayList<>();
 
-    for (int i = 0; i < waitingThreads.length; i++) {
+    for (int i = 0; i < petriNet.getNumberOfTransitions(); i++) {
       if (waitingThreads[i] && enableTransitions[i]) {
         transitions.add(i);
       }
