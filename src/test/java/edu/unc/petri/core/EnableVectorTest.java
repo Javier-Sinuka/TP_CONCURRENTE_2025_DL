@@ -94,6 +94,90 @@ class EnableVectorTest {
   }
 
   @Test
+  void updateEnableVectorShouldPreserveEnableTimestamps() {
+    when(mockIncidenceMatrix.getPlaces()).thenReturn(2);
+    when(mockIncidenceMatrix.getTransitions()).thenReturn(2);
+    when(mockCurrentMarking.getMarking()).thenReturn(new int[] {1, 1});
+
+    EnableVector enableVector = new EnableVector(2);
+
+    int[] enabledMarking = {1, 1};
+    int[] disabledMarking = {-1, 1};
+
+    try (MockedStatic<StateEquationUtils> mockedUtils =
+        Mockito.mockStatic(StateEquationUtils.class)) {
+      // First call: T0 enabled, T1 disabled
+      mockedUtils
+          .when(
+              () ->
+                  StateEquationUtils.calculateStateEquation(
+                      0, mockIncidenceMatrix, mockCurrentMarking))
+          .thenReturn(enabledMarking);
+      mockedUtils
+          .when(
+              () ->
+                  StateEquationUtils.calculateStateEquation(
+                      1, mockIncidenceMatrix, mockCurrentMarking))
+          .thenReturn(disabledMarking);
+
+      enableVector.updateEnableVector(mockIncidenceMatrix, mockCurrentMarking);
+      long t0EnableTime = enableVector.getEnableTransitionTime(0);
+
+      assertTrue(enableVector.isTransitionEnabled(0), "T0 should be enabled.");
+      assertFalse(enableVector.isTransitionEnabled(1), "T1 should be disabled.");
+      assertTrue(t0EnableTime > 0, "T0 enable time should be set.");
+      long t1EnableTime = enableVector.getEnableTransitionTime(1);
+      assertEquals(0, t1EnableTime, "T1 enable time should be zero.");
+
+      // Second call: T0 remains enabled, T1 becomes enabled
+      mockedUtils
+          .when(
+              () ->
+                  StateEquationUtils.calculateStateEquation(
+                      0, mockIncidenceMatrix, mockCurrentMarking))
+          .thenReturn(enabledMarking);
+      mockedUtils
+          .when(
+              () ->
+                  StateEquationUtils.calculateStateEquation(
+                      1, mockIncidenceMatrix, mockCurrentMarking))
+          .thenReturn(enabledMarking);
+
+      enableVector.updateEnableVector(mockIncidenceMatrix, mockCurrentMarking);
+      long t0EnableTime2 = enableVector.getEnableTransitionTime(0);
+
+      assertTrue(enableVector.isTransitionEnabled(0), "T0 should still be enabled.");
+      assertTrue(enableVector.isTransitionEnabled(1), "T1 should now be enabled.");
+      assertEquals(t0EnableTime, t0EnableTime2, "T0 enable time should be preserved.");
+      long t1EnableTime2 = enableVector.getEnableTransitionTime(1);
+      assertTrue(t1EnableTime2 > 0, "T1 enable time should be set.");
+
+      // Third call: T0 becomes disabled, T1 remains enabled
+      mockedUtils
+          .when(
+              () ->
+                  StateEquationUtils.calculateStateEquation(
+                      0, mockIncidenceMatrix, mockCurrentMarking))
+          .thenReturn(disabledMarking);
+      mockedUtils
+          .when(
+              () ->
+                  StateEquationUtils.calculateStateEquation(
+                      1, mockIncidenceMatrix, mockCurrentMarking))
+          .thenReturn(enabledMarking);
+
+      enableVector.updateEnableVector(mockIncidenceMatrix, mockCurrentMarking);
+      long t0EnableTime3 = enableVector.getEnableTransitionTime(0);
+
+      assertFalse(enableVector.isTransitionEnabled(0), "T0 should now be disabled.");
+      assertTrue(enableVector.isTransitionEnabled(1), "T1 should still be enabled.");
+      assertEquals(0, t0EnableTime3, "T0 enable time should be reset to zero.");
+      long t1EnableTime3 = enableVector.getEnableTransitionTime(1);
+      assertEquals(t1EnableTime2, t1EnableTime3, "T1 enable time should be preserved.");
+    }
+  }
+
+  @Test
   void updateEnableVectorShouldThrowExceptionForNullParameters() {
     EnableVector enableVector = new EnableVector(3);
     assertThrows(
