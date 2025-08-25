@@ -67,7 +67,7 @@ public class IncidenceMatrix {
    * @return The row as a byte array.
    */
   public byte[] getRow(int row) {
-    byte[] rowData = new byte[getPlaces()];
+    byte[] rowData = new byte[getTransitions()];
 
     for (int i = 0; i < getPlaces(); i++) {
       rowData[i] = matrix[row][i];
@@ -83,7 +83,7 @@ public class IncidenceMatrix {
    * @return The column as a byte array.
    */
   public byte[] getColumn(int column) {
-    byte[] columnData = new byte[getTransitions()];
+    byte[] columnData = new byte[getPlaces()];
 
     for (int i = 0; i < getTransitions(); i++) {
       columnData[i] = matrix[i][column];
