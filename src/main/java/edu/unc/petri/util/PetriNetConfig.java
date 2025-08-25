@@ -39,6 +39,9 @@ public final class PetriNetConfig {
   /** The segments of the Petri net, defining logical divisions and thread responsibilities. */
   public final List<Segment> segments;
 
+  /** The scheduling policy for the Petri Net (e.g., "Random", "Priority"). */
+  public final String policy;
+
   /**
    * The weights for each transition in the Petri Net. Represents the cost or priority of each
    * transition.
@@ -62,6 +65,7 @@ public final class PetriNetConfig {
       @JsonProperty("incidence") byte[][] incidence,
       @JsonProperty("timeRanges") long[][] timeRanges,
       @JsonProperty("segments") List<Segment> segments,
+      @JsonProperty("policy") String policy,
       @JsonProperty("transitionWeights") Map<Integer, Integer> transitionWeights) {
 
     this.logPath = logPath;
@@ -69,6 +73,7 @@ public final class PetriNetConfig {
     this.incidence = incidence;
     this.timeRanges = timeRanges;
     this.segments = segments;
+    this.policy = policy;
     this.transitionWeights = transitionWeights;
   }
 }

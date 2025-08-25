@@ -34,6 +34,8 @@
     }
   ],
 
+  "policy": "random", // Policy for selecting transitions (e.g., "random", "priority", etc.)
+
   // Weights for each transition, indicating their relative priority or cost
   "transitionWeights": {
     "0": 1,
