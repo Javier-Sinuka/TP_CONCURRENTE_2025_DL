@@ -56,11 +56,11 @@ public class EnableVector {
 
     // Recompute enabled state and preserve/adjust timestamps correctly
     for (int i = 0; i < incidenceMatrix.getTransitions(); i++) {
-      boolean willEnable =
+      boolean isNowEnable =
           checkMarking(
               StateEquationUtils.calculateStateEquation(i, incidenceMatrix, currentMarking));
 
-      if (willEnable) {
+      if (isNowEnable) {
         if (!enabledTransitions[i]) {
           // Transition becomes enabled now
           enabledTransitions[i] = true;
