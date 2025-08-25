@@ -7,6 +7,8 @@ import edu.unc.petri.core.PetriNet;
 import edu.unc.petri.core.TimeRangeMatrix;
 import edu.unc.petri.monitor.ConditionQueues;
 import edu.unc.petri.monitor.Monitor;
+import edu.unc.petri.policy.PolicyInterface;
+import edu.unc.petri.policy.PriorityPolicy;
 import edu.unc.petri.policy.RandomPolicy;
 import edu.unc.petri.util.ConfigLoader;
 import edu.unc.petri.util.Log;
@@ -14,69 +16,176 @@ import edu.unc.petri.util.PetriNetConfig;
 import edu.unc.petri.util.Segment;
 import edu.unc.petri.workers.Worker;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Main class for the Petri-net simulator. This class serves as the entry point for the application.
- * It currently prints a message indicating that the skeleton is running.
+ * Entry point for the Petri-net simulator.
  *
  * @author Der Landsknecht
  * @version 1.0
- * @since 2025-29-07
+ * @since 2025-07-29
  */
 public final class Main {
 
+  // Spinner/loop tunables
+  private static final String SPINNER_PREFIX = "RUNNING PETRI NET SIMULATION ";
+  private static final String[] SPINNER_FRAMES = {".  ", ".. ", "..."};
+  private static final Duration SPINNER_PERIOD = Duration.ofMillis(300);
+  private static final Duration IDLE_SLEEP = Duration.ofMillis(50);
+
+  private Main() {} // No instances
+
   /**
-   * Main method that serves as the entry point for the Petri-net simulator. It prints a message
-   * indicating that the skeleton is running.
+   * Main entry point for the Petri-net simulator.
    *
-   * @param args command line arguments (not used)
+   * @param args Command-line arguments. The first argument can be a path to the configuration file.
    */
   public static void main(String[] args) {
     try {
-      // Load the Petri net configuration from the specified JSON file
-      // Check if a file path is passed as an argument, otherwise default to "config.json"
-      String configFilePath = args.length > 0 ? args[0] : "config_default.json";
-      PetriNetConfig config = ConfigLoader.load(Paths.get(configFilePath));
+      // 1) Load config
+      Path configPath = resolveConfigPath(args);
+      PetriNetConfig config = ConfigLoader.load(configPath);
 
-      // Initialize the core components of the Petri net
-      IncidenceMatrix incidenceMatrix = new IncidenceMatrix(config.incidence);
-      CurrentMarking currentMarking = new CurrentMarking(config.initialMarking);
-      EnableVector enableVector = new EnableVector(incidenceMatrix.getTransitions());
-      TimeRangeMatrix timeRangeMatrix = new TimeRangeMatrix(config.timeRanges, enableVector);
+      // 2) Build core model
+      PetriNet petriNet = buildPetriNet(config);
 
-      // Instantiate the Petri net with all configurations
-      PetriNet petriNet =
-          new PetriNet(incidenceMatrix, currentMarking, timeRangeMatrix, enableVector);
-
-      // Initialize the logger to record simulation events
+      // 3) Logging + header
       Log log = new Log(config.logPath);
-      log.logHeader("Petri Net Simulation Log", configFilePath);
+      log.logHeader("Petri Net Simulation Log", configPath.toString());
 
-      // Create condition queues for managing thread synchronization
-      ConditionQueues conditionQueues = new ConditionQueues(incidenceMatrix.getTransitions());
+      // 4) Policy + monitor
+      PolicyInterface policy = choosePolicy(config);
+      ConditionQueues conditionQueues = new ConditionQueues(petriNet.getNumberOfTransitions());
+      Monitor monitor = new Monitor(petriNet, conditionQueues, policy, log);
 
-      // Create a monitor to manage the Petri net using a random policy
-      Monitor monitor = new Monitor(petriNet, conditionQueues, new RandomPolicy(), log);
+      // 5) Workers
+      List<Thread> workers = buildWorkers(config, monitor);
 
-      // Prepare threads based on the configuration's segments
-      List<Thread> threads = new ArrayList<>();
-      for (Segment segment : config.segments) {
-        for (int i = 0; i < segment.threadQuantity; i++) {
-          // Add a worker thread for each segment
-          threads.add(new Worker(monitor, segment, i + 1));
-        }
-      }
+      // 6) Run
+      startAll(workers);
+      runSpinnerUntilDone(workers);
+      joinAll(workers);
 
-      // Start all the worker threads
-      for (Thread thread : threads) {
-        thread.start();
-      }
+      // 7) Finish
+      clearCurrentLine();
+      System.out.println("Simulation complete.");
 
     } catch (IOException e) {
       e.printStackTrace();
+      System.err.println("Failed to start: " + e.getMessage());
+      System.exit(1);
     }
+  }
+
+  // ------------------------
+  // Construction helpers
+  // ------------------------
+
+  private static Path resolveConfigPath(String[] args) {
+    String file = (args != null && args.length > 0) ? args[0] : "config_default.json";
+    return Paths.get(file);
+  }
+
+  private static PetriNet buildPetriNet(PetriNetConfig cfg) {
+    IncidenceMatrix incidence = new IncidenceMatrix(cfg.incidence);
+    CurrentMarking current = new CurrentMarking(cfg.initialMarking);
+    EnableVector enableVector = new EnableVector(incidence.getTransitions());
+    TimeRangeMatrix timeRanges = new TimeRangeMatrix(cfg.timeRanges, enableVector);
+    return new PetriNet(incidence, current, timeRanges, enableVector);
+  }
+
+  private static PolicyInterface choosePolicy(PetriNetConfig cfg) {
+    String name = (cfg.policy == null) ? "random" : cfg.policy.trim().toLowerCase();
+    switch (name) {
+      case "priority":
+        return new PriorityPolicy(cfg.transitionWeights);
+      case "random":
+        return new RandomPolicy();
+      default:
+        System.out.println("Unknown policy '" + cfg.policy + "'. Defaulting to RandomPolicy.");
+        return new RandomPolicy();
+    }
+  }
+
+  private static List<Thread> buildWorkers(PetriNetConfig cfg, Monitor monitor) {
+    List<Thread> threads = new ArrayList<>();
+    for (Segment segment : cfg.segments) {
+      for (int i = 0; i < segment.threadQuantity; i++) {
+        threads.add(new Worker(monitor, segment, i + 1));
+      }
+    }
+    return threads;
+  }
+
+  // ------------------------
+  // Thread lifecycle helpers
+  // ------------------------
+
+  private static void startAll(List<Thread> threads) {
+    for (Thread t : threads) {
+      t.start();
+    }
+  }
+
+  private static void joinAll(List<Thread> threads) {
+    for (Thread t : threads) {
+      boolean interrupted = false;
+      try {
+        t.join();
+      } catch (InterruptedException ie) {
+        interrupted = true;
+        Thread.currentThread().interrupt();
+      }
+      if (interrupted) {
+        break;
+      }
+    }
+  }
+
+  // ------------------------
+  // CLI spinner
+  // ------------------------
+
+  private static void runSpinnerUntilDone(List<Thread> threads) {
+    // Print once so the carriage return has something to overwrite
+    System.out.print(SPINNER_PREFIX + SPINNER_FRAMES[0]);
+    System.out.flush();
+
+    int frame = 0;
+    long lastTick = System.nanoTime();
+
+    while (anyAlive(threads)) {
+      long now = System.nanoTime();
+      if (now - lastTick >= SPINNER_PERIOD.toNanos()) {
+        frame = (frame + 1) % SPINNER_FRAMES.length;
+        System.out.print("\r" + SPINNER_PREFIX + SPINNER_FRAMES[frame]);
+        System.out.flush();
+        lastTick = now;
+      }
+      try {
+        Thread.sleep(IDLE_SLEEP.toMillis());
+      } catch (InterruptedException ie) {
+        Thread.currentThread().interrupt();
+        break;
+      }
+    }
+  }
+
+  private static boolean anyAlive(List<Thread> threads) {
+    for (Thread t : threads) {
+      if (t.isAlive()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static void clearCurrentLine() {
+    System.out.print("\r");
+    System.out.flush();
   }
 }
