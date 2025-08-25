@@ -87,4 +87,22 @@ public class PetriNet {
   public boolean[] getEnableTransitions() {
     return enableVector.getEnableVector();
   }
+
+  /**
+   * Return the number of places in the Petri net.
+   *
+   * @return the number of places
+   */
+  public int getNumberOfPlaces() {
+    return incidenceMatrix.getPlaces();
+  }
+
+  /**
+   * Return the number of transitions in the Petri net.
+   *
+   * @return the number of transitions
+   */
+  public int getNumberOfTransitions() {
+    return incidenceMatrix.getTransitions();
+  }
 }
