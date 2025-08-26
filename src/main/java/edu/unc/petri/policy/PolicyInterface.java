@@ -13,11 +13,10 @@ import java.util.List;
 public interface PolicyInterface {
 
   /**
-   * Chooses a transition to fire based on the enabled transitions.
+   * Selects and returns a transition to fire from the list of enabled transitions.
    *
-   * @param transitions an ArrayList of integers representing the enabled transitions. Each element
-   *     contains the number of the enabled transition.
-   * @return the number of the chosen transition
+   * @param transitions an ArrayList of integers, each representing an enabled transition number
+   * @return the number corresponding to the chosen transition to fire
    */
   int choose(List<Integer> transitions);
 }
