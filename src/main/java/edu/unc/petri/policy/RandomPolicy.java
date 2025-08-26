@@ -1,6 +1,6 @@
 package edu.unc.petri.policy;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -24,7 +24,7 @@ public class RandomPolicy implements PolicyInterface {
    * @return the identifier of the chosen transition
    */
   @Override
-  public int choose(ArrayList<Integer> transitions) {
+  public int choose(List<Integer> transitions) {
 
     if (transitions == null || transitions.size() == 0) {
       throw new IllegalArgumentException("The parameter is null or empty");

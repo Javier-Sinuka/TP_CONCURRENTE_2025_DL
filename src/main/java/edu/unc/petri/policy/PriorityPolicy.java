@@ -1,6 +1,7 @@
 package edu.unc.petri.policy;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -48,6 +49,7 @@ public class PriorityPolicy implements PolicyInterface {
 
     if (transitions == null || transitions.size() == 0) {
       throw new IllegalArgumentException("The given array is null or empty");
+  public int choose(List<Integer> transitions) {
     }
 
     int initialMaxValue = weightTransitions.get(transitions.get(0));

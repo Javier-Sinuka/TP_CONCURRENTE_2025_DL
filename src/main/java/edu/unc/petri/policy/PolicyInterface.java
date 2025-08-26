@@ -1,6 +1,6 @@
 package edu.unc.petri.policy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The interface for a policy that determines which transition to fire. This interface defines a
@@ -19,5 +19,5 @@ public interface PolicyInterface {
    *     contains the number of the enabled transition.
    * @return the number of the chosen transition
    */
-  int choose(ArrayList<Integer> transitions);
+  int choose(List<Integer> transitions);
 }
