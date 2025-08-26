@@ -27,7 +27,7 @@ class TimeRangeMatrixTest {
       {0, 0} // T3 - instantaneous
     };
 
-    EnableVector enableVector = new EnableVector(3);
+    EnableVector enableVector = new EnableVector(4);
 
     timeRangeMatrix = new TimeRangeMatrix(ranges, enableVector);
 
