@@ -113,11 +113,9 @@ public class Monitor implements MonitorInterface {
                   + " wakes up and re-enters monitor to fire "
                   + t);
 
-          // The waked up thread fires the transition again and leaves?
-          // Does the waked up thread become a signaler or not?
-          petriNet.fire(t);
-          log.logTransition(t, Thread.currentThread().getName());
-          break; // leaves monitor after firing
+          // When a thread wakes up, it is already inside the monitor and tries to fire the
+          // transition
+          // again, but it doesn't reacquire the mutex because it was handed to it by the signaler.
         }
       }
 
