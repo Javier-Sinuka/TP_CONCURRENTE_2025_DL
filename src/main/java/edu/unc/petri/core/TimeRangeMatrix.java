@@ -22,6 +22,31 @@ public class TimeRangeMatrix {
    * @param timeRangeMatrix A 2D long array representing the time ranges for each transition.
    */
   public TimeRangeMatrix(long[][] timeRangeMatrix, EnableVector enableVector) {
+    if (timeRangeMatrix == null || timeRangeMatrix.length == 0) {
+      throw new IllegalArgumentException("Time range matrix cannot be null or empty");
+    }
+
+    if (enableVector == null) {
+      throw new IllegalArgumentException("EnableVector cannot be null");
+    }
+
+    for (long[] range : timeRangeMatrix) {
+      if (range.length != 2) {
+        throw new IllegalArgumentException("Each time range must have exactly two elements");
+      }
+      if (range[0] < 0 || range[1] < 0) {
+        throw new IllegalArgumentException("Time ranges must be non-negative");
+      }
+      if (range[0] > range[1]) {
+        throw new IllegalArgumentException("Start time must be less than or equal to end time");
+      }
+    }
+
+    if (timeRangeMatrix.length != enableVector.getEnableVector().length) {
+      throw new IllegalArgumentException(
+          "Time range matrix size must match the number of transitions in EnableVector");
+    }
+
     this.timeRangeMatrix = timeRangeMatrix;
     this.enableVector = enableVector;
   }
@@ -42,6 +67,10 @@ public class TimeRangeMatrix {
    * @return true if the transition is inside the time range, false otherwise.
    */
   public boolean isInsideTimeRange(int transition) {
+    if (transition < 0 || transition >= timeRangeMatrix.length) {
+      throw new IndexOutOfBoundsException("Invalid transition index: " + transition);
+    }
+
     long currentTime = System.currentTimeMillis();
     long startTime = enableVector.getEnableTransitionTime(transition);
     long timePassed = currentTime - startTime;
