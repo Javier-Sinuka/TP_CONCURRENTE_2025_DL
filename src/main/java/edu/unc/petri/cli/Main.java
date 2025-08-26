@@ -54,11 +54,23 @@ public final class Main {
       PetriNet petriNet = buildPetriNet(config);
 
       // 3) Logging + header
-      Log log = new Log(config.logPath);
+      String logPath =
+          (config.logPath == null || config.logPath.trim().isEmpty())
+              ? "default_log.txt"
+              : config.logPath;
+      Log log = new Log(logPath);
       log.logHeader("Petri Net Simulation Log", configPath.toString());
 
-      // 4) Policy + monitor
-      PolicyInterface policy = choosePolicy(config);
+      // 4) Policy
+      PolicyInterface policy;
+      try {
+        policy = choosePolicy(config);
+      } catch (IllegalArgumentException iae) {
+        System.err.println("Failed to start: " + iae.getMessage());
+        return;
+      }
+
+      // Monitor
       ConditionQueues conditionQueues = new ConditionQueues(petriNet.getNumberOfTransitions());
       Monitor monitor = new Monitor(petriNet, conditionQueues, policy, log);
 
