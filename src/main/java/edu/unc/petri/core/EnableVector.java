@@ -91,6 +91,10 @@ public class EnableVector {
    * @return true if the transition is enabled, false otherwise.
    */
   public boolean isTransitionEnabled(int transitionIndex) {
+    if (transitionIndex < 0 || transitionIndex >= enabledTransitions.length) {
+      throw new IndexOutOfBoundsException("Transition index out of bounds");
+    }
+
     return enabledTransitions[transitionIndex];
   }
 
@@ -101,6 +105,10 @@ public class EnableVector {
    * @return The time when the transition was enabled.
    */
   public long getEnableTransitionTime(int transitionIndex) {
+    if (transitionIndex < 0 || transitionIndex >= enabledTransitionTimes.length) {
+      throw new IndexOutOfBoundsException("Transition index out of bounds");
+    }
+
     return enabledTransitionTimes[transitionIndex];
   }
 
