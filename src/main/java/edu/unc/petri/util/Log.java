@@ -53,7 +53,7 @@ public class Log {
       w.write("[T" + transitionNumber + "]");
       w.newLine();
     } catch (IOException e) {
-      System.out.println("Error while writing to the file whit logTransition(): " + e.getMessage());
+      System.out.println("Error while writing to the file with logTransition(): " + e.getMessage());
     }
   }
 
