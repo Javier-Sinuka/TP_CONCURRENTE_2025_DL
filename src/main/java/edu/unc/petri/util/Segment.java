@@ -40,6 +40,15 @@ public class Segment {
       @JsonProperty("name") String name,
       @JsonProperty("threadQuantity") int threadQuantity,
       @JsonProperty("transitions") int[] transitions) {
+    if (name == null || name.isEmpty()) {
+      throw new IllegalArgumentException("Segment name cannot be null or empty");
+    }
+    if (threadQuantity <= 0) {
+      throw new IllegalArgumentException("Thread quantity must be a positive integer");
+    }
+    if (transitions == null || transitions.length == 0) {
+      throw new IllegalArgumentException("Transitions array cannot be null or empty");
+    }
     this.name = name;
     this.threadQuantity = threadQuantity;
     this.transitions = transitions;
