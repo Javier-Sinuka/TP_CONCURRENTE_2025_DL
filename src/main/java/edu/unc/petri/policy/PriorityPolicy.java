@@ -16,7 +16,7 @@ import java.util.Random;
 public class PriorityPolicy implements PolicyInterface {
 
   /** A map that associates each transition with its corresponding weight (priority). */
-  private final Map<Integer, Integer> weightTransitions;
+  private final Map<Integer, Integer> transitionsWeights;
 
   /** Random number generator for tie-breaking. */
   private final Random random;
@@ -26,51 +26,63 @@ public class PriorityPolicy implements PolicyInterface {
    * the "key" as the transition to which you want to assign its weight (the weight being the
    * "value" of said key).
    *
-   * @param weightTransitions a Map where the key is the transition number and the value is its
+   * @param transitionsWeights a Map where the key is the transition number and the value is its
    *     weight
    */
-  public PriorityPolicy(Map<Integer, Integer> weightTransitions) {
-    if (weightTransitions == null || weightTransitions.isEmpty()) {
-      throw new IllegalArgumentException("The weightTransitions map cannot be null or empty");
+  public PriorityPolicy(Map<Integer, Integer> transitionsWeights) {
+    if (transitionsWeights == null) {
+      throw new IllegalArgumentException("The weightTransitions map cannot be null");
+    }
+    if (transitionsWeights.isEmpty()) {
+      throw new IllegalArgumentException("The weightTransitions map cannot be empty");
     }
     random = new Random();
-    this.weightTransitions = weightTransitions;
+    this.transitionsWeights = transitionsWeights;
   }
 
   /**
-   * Selects a transition based on its associated priority weights.
+   * Selects a transition from the provided list of enabled transitions using their priority
+   * weights.
    *
-   * @param transitions a list of integers representing the enabled transitions. Each element
-   *     corresponds to the identifier of an enabled transition.
-   * @return the identifier of the chosen transition
+   * @param transitions a list of integers, each representing the identifier of an enabled
+   *     transition. The selection is influenced by the priority weights associated with each
+   *     transition.
+   * @return the identifier of the selected transition
    */
   @Override
-  public int choose(ArrayList<Integer> transitions) {
-
-    if (transitions == null || transitions.size() == 0) {
-      throw new IllegalArgumentException("The given array is null or empty");
   public int choose(List<Integer> transitions) {
+    if (transitions == null) {
+      throw new IllegalArgumentException("The given list of transitions is null");
+    }
+    if (transitions.isEmpty()) {
+      throw new IllegalArgumentException("The given list of transitions is empty");
     }
 
-    int initialMaxValue = weightTransitions.get(transitions.get(0));
-    int index = 0;
-    boolean randomFlag = true;
+    int maxTransitionWeight = Integer.MIN_VALUE;
+    List<Integer> bestTransitions = new ArrayList<>();
 
-    if (transitions == null || transitions.size() == 0) {
-      throw new IllegalArgumentException("The given array is null or empty");
-    } else {
-      for (int i = 0; i < transitions.size(); i++) {
-        int newValue = weightTransitions.get(transitions.get(i));
-        if (initialMaxValue < newValue) {
-          initialMaxValue = newValue;
-          index = i;
-          randomFlag = false;
-        }
+    for (Integer transition : transitions) {
+      Integer transitionWeight = transitionsWeights.get(transition);
+      if (transitionWeight == null) {
+        throw new IllegalArgumentException(
+            "Transition " + transition + " does not exist in the weight map");
       }
-      if (randomFlag) {
-        index = random.nextInt(transitions.size());
+
+      if (transitionWeight > maxTransitionWeight) {
+        maxTransitionWeight = transitionWeight;
+        bestTransitions.clear(); // We have a new best, clear previous bests
+        bestTransitions.add(transition); // Add the new best transition
+      } else if (transitionWeight == maxTransitionWeight) {
+        bestTransitions.add(transition); // We have a tie, add to the list
       }
     }
-    return transitions.get(index);
+
+    // Tie-break only among the best transitions
+    if (bestTransitions.size() == 1) {
+      return bestTransitions.get(0);
+    }
+
+    return bestTransitions.get(
+        random.nextInt(bestTransitions.size())); // Randomly select among the best
   }
 }
