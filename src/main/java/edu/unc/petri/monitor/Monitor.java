@@ -123,6 +123,7 @@ public class Monitor implements MonitorInterface {
       mutex.release();
       return true;
     } catch (InterruptedException e) {
+      mutex.release(); // Ensure the mutex is released if an interruption occurs
       return false;
     }
   }
