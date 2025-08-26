@@ -23,10 +23,13 @@ public class CurrentMarking {
    * @param initialMarking An array of integers representing the initial marking of the Petri net.
    */
   public CurrentMarking(int[] initialMarking) {
-
-    if (initialMarking == null || initialMarking.length == 0) {
+    if (initialMarking == null) {
       throw new IllegalArgumentException("The initial marking cannot be null");
     }
+    if (initialMarking.length == 0) {
+      throw new IllegalArgumentException("The initial marking cannot be empty");
+    }
+
     tokens = initialMarking;
   }
 
@@ -47,7 +50,7 @@ public class CurrentMarking {
    */
   void setPlaceMarking(int placeIndex, int tokenCount) {
 
-    if (placeIndex < 0) {
+    if (placeIndex < 0 || placeIndex >= tokens.length) {
       throw new IndexOutOfBoundsException("Invalid index " + placeIndex);
     }
     if (tokenCount < 0) {
@@ -72,10 +75,10 @@ public class CurrentMarking {
    * @return The number of tokens in the specified place.
    */
   public int getPlaceMarking(int placeIndex) {
-
-    if (placeIndex < 0) {
+    if (placeIndex < 0 || placeIndex >= tokens.length) {
       throw new IndexOutOfBoundsException("Index out of range " + placeIndex);
     }
+
     return tokens[placeIndex];
   }
 }
