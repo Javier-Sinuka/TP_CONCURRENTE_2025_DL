@@ -26,20 +26,40 @@ public class Log {
    * @param filePath is a path of file where the content will be saved.
    */
   public Log(String filePath) {
-    this.filePath = filePath;
     File file = new File(filePath);
-    if (file.exists()) {
-      if (!file.delete()) {
-        System.out.println("Failed to delete the existing file: " + filePath);
+    int suffix = 1;
+    String baseName = file.getName();
+    String parent = file.getParent(); // may be null if no parent
+    // If no parent directory, default to "logs/"
+    if (parent == null) {
+      File logsDir = new File("logs");
+      if (!logsDir.exists()) {
+        logsDir.mkdirs();
       }
+      file = new File(logsDir, baseName);
+      parent = logsDir.getPath();
     }
+    String name = baseName;
+    String extension = "";
+    int dotIndex = baseName.lastIndexOf('.');
+    if (dotIndex > 0) {
+      name = baseName.substring(0, dotIndex);
+      extension = baseName.substring(dotIndex);
+    }
+    while (file.exists()) {
+      String newName = name + "(" + suffix + ")" + extension;
+      file = parent != null ? new File(parent, newName) : new File(newName);
+      suffix++;
+    }
+    this.filePath = file.getPath();
     try {
       boolean created = file.createNewFile();
       if (!created) {
-        System.out.println("Failed to create the file: " + filePath);
+        throw new IOException("Failed to create the file: " + this.filePath);
       }
     } catch (IOException e) {
-      System.out.println("Error while creating the file: " + e.getMessage());
+      throw new RuntimeException(
+          "Error while creating the file: " + this.filePath + ", reason: " + e.getMessage(), e);
     }
   }
 
