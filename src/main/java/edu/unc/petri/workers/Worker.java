@@ -1,6 +1,7 @@
 package edu.unc.petri.workers;
 
 import edu.unc.petri.monitor.MonitorInterface;
+import edu.unc.petri.simulation.SimulationManager;
 import edu.unc.petri.util.Segment;
 
 /**
@@ -14,6 +15,9 @@ import edu.unc.petri.util.Segment;
  */
 public class Worker extends Thread {
 
+  /** The simulation manager to check for shutdown signals. */
+  private final SimulationManager simulationManager;
+
   /** The monitor used to interact with the Petri net. */
   private final MonitorInterface monitor;
 
@@ -26,8 +30,13 @@ public class Worker extends Thread {
    * @param monitor the monitor to interact with the Petri net
    * @param segment the segment this worker is responsible for
    */
-  public Worker(MonitorInterface monitor, Segment segment, int segmentThreadIndex) {
+  public Worker(
+      SimulationManager simulationManager,
+      MonitorInterface monitor,
+      Segment segment,
+      int segmentThreadIndex) {
     super(segment.name + "-Worker-" + segmentThreadIndex);
+    this.simulationManager = simulationManager;
     this.monitor = monitor;
     this.segment = segment;
   }
@@ -39,11 +48,15 @@ public class Worker extends Thread {
   @Override
   public void run() {
     int index = 0;
-    while (!Thread.currentThread().isInterrupted()) {
+    while (!simulationManager.isInvariantLimitReached()
+        && !Thread.currentThread().isInterrupted()) {
       int transition = segment.transitions[index];
       try {
-        monitor.fireTransition(
-            transition); // may throw RuntimeException(cause=InterruptedException)
+        boolean hasFired = monitor.fireTransition(transition);
+
+        if (!hasFired) {
+          break; // Segment is done, exit the while loop
+        }
       } catch (RuntimeException ex) {
         // Exit silently on shutdown interrupt
         if (causedByInterruptedException(ex)) {
@@ -54,6 +67,8 @@ public class Worker extends Thread {
       }
       index = (index + 1) % segment.transitions.length;
     }
+
+    return;
   }
 
   private static boolean causedByInterruptedException(Throwable ex) {
