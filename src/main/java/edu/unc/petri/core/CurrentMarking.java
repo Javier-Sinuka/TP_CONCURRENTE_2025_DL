@@ -81,4 +81,23 @@ public class CurrentMarking {
 
     return tokens[placeIndex];
   }
+
+  /**
+   * Returns a string representation of the tokens array in the format [token1,token2,...].
+   *
+   * @return a string representation of the tokens array
+   */
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("[");
+    for (int i = 0; i < tokens.length; i++) {
+      sb.append(tokens[i]);
+      if (i < tokens.length - 1) {
+        sb.append(",");
+      }
+    }
+    sb.append("]");
+    return sb.toString();
+  }
 }
