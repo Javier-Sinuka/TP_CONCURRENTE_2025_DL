@@ -12,22 +12,15 @@ public class TimeRangeMatrix {
   /** Matrix of time ranges for each transition. */
   private final long[][] timeRangeMatrix;
 
-  /** EnableVector instance to manage enabled transitions. */
-  private EnableVector enableVector;
-
   /**
    * Constructs a TimeRangeMatrix from a given config file. The matrix is initialized with the
    * number of transitions in the path.
    *
    * @param timeRangeMatrix A 2D long array representing the time ranges for each transition.
    */
-  public TimeRangeMatrix(long[][] timeRangeMatrix, EnableVector enableVector) {
+  public TimeRangeMatrix(long[][] timeRangeMatrix) {
     if (timeRangeMatrix == null || timeRangeMatrix.length == 0) {
       throw new IllegalArgumentException("Time range matrix cannot be null or empty");
-    }
-
-    if (enableVector == null) {
-      throw new IllegalArgumentException("EnableVector cannot be null");
     }
 
     for (long[] range : timeRangeMatrix) {
@@ -42,13 +35,7 @@ public class TimeRangeMatrix {
       }
     }
 
-    if (timeRangeMatrix.length != enableVector.getEnableVector().length) {
-      throw new IllegalArgumentException(
-          "Time range matrix size must match the number of transitions in EnableVector");
-    }
-
     this.timeRangeMatrix = timeRangeMatrix;
-    this.enableVector = enableVector;
   }
 
   /**
@@ -64,17 +51,17 @@ public class TimeRangeMatrix {
    * Checks if the given transition is inside the time range defined for it.
    *
    * @param transition The transition to check.
+   * @param enabledTime The time when the transition was enabled.
    * @return true if the transition is inside the time range, false otherwise.
    * @throws IndexOutOfBoundsException if the transition index is out of bounds.
    */
-  public boolean isInsideTimeRange(int transition) {
+  public boolean isInsideTimeRange(int transition, long enabledTime) {
     if (transition < 0 || transition >= timeRangeMatrix.length) {
       throw new IndexOutOfBoundsException("Invalid transition index: " + transition);
     }
 
     long currentTime = System.currentTimeMillis();
-    long startTime = enableVector.getEnableTransitionTime(transition);
-    long timePassed = currentTime - startTime;
+    long timePassed = currentTime - enabledTime;
 
     long startRange = timeRangeMatrix[transition][0];
     long endRange = timeRangeMatrix[transition][1];
@@ -94,35 +81,32 @@ public class TimeRangeMatrix {
    * @return true if the current time is before the start time of the transition, false otherwise
    * @throws IndexOutOfBoundsException if the transition index is out of bounds
    */
-  public boolean isBeforeTimeRange(int transition) {
+  public boolean isBeforeTimeRange(int transition, long enabledTime) {
     if (transition < 0 || transition >= timeRangeMatrix.length) {
       throw new IndexOutOfBoundsException("Invalid transition index: " + transition);
     }
     // Assuming timeRangeMatrix is a 2D array with [start, end] times for each transition
     long startTime = timeRangeMatrix[transition][0];
     long currentTime = System.currentTimeMillis();
+    long timePassed = currentTime - enabledTime;
 
-    return currentTime < startTime;
+    return timePassed < startTime;
   }
 
   /**
    * Calculates the remaining sleep time before a transition can fire.
    *
-   * <p>If the transition index is invalid, throws {@link IndexOutOfBoundsException}. If the
-   * transition has not yet reached its start time, returns the time to wait (in milliseconds).
-   * Otherwise, returns 0 if already within or past the time range.
-   *
    * @param transition the index of the transition
+   * @param enabledTime the time when the transition was enabled
    * @return the sleep time in milliseconds before the transition can fire, or 0 if already eligible
    * @throws IndexOutOfBoundsException if the transition index is out of bounds
    */
-  public long getSleepTimeToFire(int transition) {
+  public long getSleepTimeToFire(int transition, long enabledTime) {
     if (transition < 0 || transition >= timeRangeMatrix.length) {
       throw new IndexOutOfBoundsException("Invalid transition index: " + transition);
     }
     long currentTime = System.currentTimeMillis();
-    long startTime = enableVector.getEnableTransitionTime(transition);
-    long timePassed = currentTime - startTime;
+    long timePassed = currentTime - enabledTime;
     long startRange = timeRangeMatrix[transition][0];
     if (timePassed < startRange) {
       return startRange - timePassed; // Time to wait until the start of the range

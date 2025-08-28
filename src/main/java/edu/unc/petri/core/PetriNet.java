@@ -22,9 +22,6 @@ public class PetriNet {
   /** The current marking of the Petri net, representing the number of tokens in each place. */
   private CurrentMarking currentMarking;
 
-  /** The time range matrix of the Petri net, representing the time ranges for each transition. */
-  private TimeRangeMatrix timeRangeMatrix;
-
   /** The enable vector of the Petri net, indicating which transitions are currently enabled. */
   private EnableVector enableVector;
 
@@ -41,12 +38,10 @@ public class PetriNet {
   public PetriNet(
       IncidenceMatrix incidenceMatrix,
       CurrentMarking currentMarking,
-      TimeRangeMatrix timeRangeMatrix,
       EnableVector enableVector,
       Log log) {
     this.incidenceMatrix = incidenceMatrix;
     this.currentMarking = currentMarking;
-    this.timeRangeMatrix = timeRangeMatrix;
     this.enableVector = enableVector;
     this.log = log;
 
@@ -67,16 +62,6 @@ public class PetriNet {
 
     if (!enableVector.isTransitionEnabled(transitionIndex)) {
       return false; // Transition is not enabled token wise
-    }
-
-    if (!timeRangeMatrix.isInsideTimeRange(transitionIndex)) {
-      if (!timeRangeMatrix.isBeforeTimeRange(transitionIndex)) {
-        long sleepTime = timeRangeMatrix.getSleepTimeToFire(transitionIndex);
-
-        throw new TransitionTimeNotReachedException(sleepTime);
-      }
-
-      return false; // Transition has past its time range
     }
 
     // String markingBefore = currentMarking.toString();

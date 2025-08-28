@@ -1,5 +1,6 @@
 package edu.unc.petri.core;
 
+import edu.unc.petri.exceptions.TransitionTimeNotReachedException;
 import edu.unc.petri.util.StateEquationUtils;
 
 /**
@@ -18,15 +19,26 @@ public class EnableVector {
   /** The times when each transition was enabled, corresponding to the enabledTransitions vector. */
   private long[] enabledTransitionTimes;
 
+  /** The TimeRangeMatrix associated with this EnableVector. */
+  private TimeRangeMatrix timeRangeMatrix;
+
   /**
    * Constructs an EnableVector with a specified number of transitions.
    *
    * @param numberOfTransitions The number of transitions in the Petri net.
    */
-  public EnableVector(int numberOfTransitions) {
+  public EnableVector(int numberOfTransitions, TimeRangeMatrix timeRangeMatrix) {
     if (numberOfTransitions <= 0) {
       throw new IllegalArgumentException("Number of transitions must be greater than 0");
     }
+    if (timeRangeMatrix == null) {
+      throw new IllegalArgumentException("TimeRangeMatrix cannot be null");
+    }
+    if (timeRangeMatrix.getTimeRangeMatrix().length != numberOfTransitions) {
+      throw new IllegalArgumentException(
+          "TimeRangeMatrix size must match the number of transitions");
+    }
+
     this.enabledTransitions = new boolean[numberOfTransitions];
     this.enabledTransitionTimes = new long[numberOfTransitions];
 
@@ -34,6 +46,8 @@ public class EnableVector {
       enabledTransitions[i] = false;
       enabledTransitionTimes[i] = 0;
     }
+
+    this.timeRangeMatrix = timeRangeMatrix;
   }
 
   /**
@@ -90,12 +104,35 @@ public class EnableVector {
    * @param transitionIndex The index of the transition to check.
    * @return true if the transition is enabled, false otherwise.
    */
-  public boolean isTransitionEnabled(int transitionIndex) {
+  public boolean isTransitionEnabled(int transitionIndex) throws TransitionTimeNotReachedException {
     if (transitionIndex < 0 || transitionIndex >= enabledTransitions.length) {
       throw new IndexOutOfBoundsException("Transition index out of bounds");
     }
 
-    return enabledTransitions[transitionIndex];
+    boolean isTokenEnabled = enabledTransitions[transitionIndex];
+
+    // If the transition is not token-wise enabled, return false immediately
+    if (!isTokenEnabled) {
+      return false;
+    }
+
+    // If the transition is token-wise enabled, check the time range
+    boolean isTimeEnabled =
+        timeRangeMatrix.isInsideTimeRange(transitionIndex, enabledTransitionTimes[transitionIndex]);
+
+    if (!isTimeEnabled) {
+      if (timeRangeMatrix.isBeforeTimeRange(
+          transitionIndex, enabledTransitionTimes[transitionIndex])) {
+        long sleepTime =
+            timeRangeMatrix.getSleepTimeToFire(
+                transitionIndex, enabledTransitionTimes[transitionIndex]);
+        throw new TransitionTimeNotReachedException(sleepTime);
+      } else {
+        return false; // Transition has passed its time range
+      }
+    }
+
+    return true; // Transition is both token-wise and time-wise enabled
   }
 
   /**
