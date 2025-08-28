@@ -1,5 +1,6 @@
 package edu.unc.petri.core;
 
+import edu.unc.petri.util.Log;
 import edu.unc.petri.util.StateEquationUtils;
 
 /**
@@ -26,6 +27,9 @@ public class PetriNet {
   /** The enable vector of the Petri net, indicating which transitions are currently enabled. */
   private EnableVector enableVector;
 
+  /** The log for recording events in the simulation. */
+  private Log log;
+
   /**
    * Constructs a Petri net with the given incidence matrix, current marking, and enable vector.
    *
@@ -37,11 +41,13 @@ public class PetriNet {
       IncidenceMatrix incidenceMatrix,
       CurrentMarking currentMarking,
       TimeRangeMatrix timeRangeMatrix,
-      EnableVector enableVector) {
+      EnableVector enableVector,
+      Log log) {
     this.incidenceMatrix = incidenceMatrix;
     this.currentMarking = currentMarking;
     this.timeRangeMatrix = timeRangeMatrix;
     this.enableVector = enableVector;
+    this.log = log;
 
     this.enableVector.updateEnableVector(incidenceMatrix, currentMarking);
   }
@@ -67,11 +73,17 @@ public class PetriNet {
       return false; // Transition is not within its time range
     }
 
+    // String markingBefore = currentMarking.toString();
+
     // Calculate the next marking based on the current marking and the incidence
     // matrix
     currentMarking.setMarking(
         StateEquationUtils.calculateStateEquation(
             transitionIndex, incidenceMatrix, currentMarking));
+
+    // String markingAfter = currentMarking.toString();
+
+    // log.logMessage("" + markingBefore + "->" + markingAfter + " by T" + transitionIndex);
 
     enableVector.updateEnableVector(incidenceMatrix, currentMarking);
 
