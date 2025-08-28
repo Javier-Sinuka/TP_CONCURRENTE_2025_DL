@@ -79,7 +79,7 @@ public final class Main {
 
       // 6) Run
       startAll(workers);
-      runSpinnerUntilDone(workers, 1000);
+      runSpinnerUntilDone(workers, 60000);
       interruptAll(workers);
 
       // 7) Finish
@@ -104,9 +104,9 @@ public final class Main {
   private static PetriNet buildPetriNet(PetriNetConfig cfg, Log log) {
     IncidenceMatrix incidence = new IncidenceMatrix(cfg.incidence);
     CurrentMarking current = new CurrentMarking(cfg.initialMarking);
-    EnableVector enableVector = new EnableVector(incidence.getTransitions());
-    TimeRangeMatrix timeRanges = new TimeRangeMatrix(cfg.timeRanges, enableVector);
-    return new PetriNet(incidence, current, timeRanges, enableVector, log);
+    TimeRangeMatrix timeRanges = new TimeRangeMatrix(cfg.timeRanges);
+    EnableVector enableVector = new EnableVector(incidence.getTransitions(), timeRanges);
+    return new PetriNet(incidence, current, enableVector, log);
   }
 
   private static PolicyInterface choosePolicy(PetriNetConfig cfg) {
