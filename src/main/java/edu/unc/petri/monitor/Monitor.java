@@ -1,6 +1,7 @@
 package edu.unc.petri.monitor;
 
 import edu.unc.petri.core.PetriNet;
+import edu.unc.petri.exceptions.TransitionTimeNotReachedException;
 import edu.unc.petri.policy.PolicyInterface;
 import edu.unc.petri.util.Log;
 import java.util.ArrayList;
@@ -65,57 +66,82 @@ public class Monitor implements MonitorInterface {
       mutex.acquire();
       log.logMessage("Thread " + Thread.currentThread().getName() + " enters monitor to fire " + t);
       while (true) {
-        if (petriNet.fire(t)) {
-          log.logTransition(t, Thread.currentThread().getName());
-          boolean[] waitingThreads = conditionQueues.areThereWaitingThreads();
-          boolean[] enableTransitions = petriNet.getEnableTransitions();
+        try {
+          if (petriNet.fire(t)) {
+            log.logTransition(t, Thread.currentThread().getName());
+            boolean[] waitingThreads = conditionQueues.areThereWaitingThreads();
+            boolean[] enableTransitions = petriNet.getEnableTransitions();
 
-          ArrayList<Integer> transitionsThatCouldBeFired =
-              getTransitionsThatCouldBeFired(waitingThreads, enableTransitions);
+            ArrayList<Integer> transitionsThatCouldBeFired =
+                getTransitionsThatCouldBeFired(waitingThreads, enableTransitions);
 
+            log.logMessage(
+                "Thread "
+                    + Thread.currentThread().getName()
+                    + " checks if there are waiting threads for enabled transitions");
+
+            if (transitionsThatCouldBeFired.size() > 0) {
+              log.logMessage(
+                  "Thread "
+                      + Thread.currentThread().getName()
+                      + " finds waiting threads for enabled transitions");
+              int transition = policy.choose(transitionsThatCouldBeFired);
+
+              log.logMessage(
+                  "Thread "
+                      + Thread.currentThread().getName()
+                      + " chooses to wake up the thread waiting for "
+                      + transition);
+
+              conditionQueues.wakeUpThread(transition);
+
+              log.logMessage("Thread " + Thread.currentThread().getName() + " leaves monitor");
+              return true;
+            } else {
+              log.logMessage(
+                  "Thread "
+                      + Thread.currentThread().getName()
+                      + " finds no waiting threads for enabled transitions");
+              break;
+            }
+          } else {
+            log.logMessage("Thread " + Thread.currentThread().getName() + " could not fire " + t);
+            mutex.release();
+            log.logMessage("Thread " + Thread.currentThread().getName() + " goes to wait for " + t);
+            conditionQueues.waitForTransition(t);
+            log.logMessage(
+                "Thread "
+                    + Thread.currentThread().getName()
+                    + " wakes up and re-enters monitor to fire "
+                    + t);
+
+            // When a thread wakes up, it is already inside the monitor and tries to fire the
+            // transition
+            // again, but it doesn't reacquire the mutex because it was handed to it by the
+            // signaler.
+          }
+        } catch (TransitionTimeNotReachedException e) {
           log.logMessage(
               "Thread "
                   + Thread.currentThread().getName()
-                  + " checks if there are waiting threads for enabled transitions");
-
-          if (transitionsThatCouldBeFired.size() > 0) {
-            log.logMessage(
-                "Thread "
-                    + Thread.currentThread().getName()
-                    + " finds waiting threads for enabled transitions");
-            int transition = policy.choose(transitionsThatCouldBeFired);
-
-            log.logMessage(
-                "Thread "
-                    + Thread.currentThread().getName()
-                    + " chooses to wake up the thread waiting for "
-                    + transition);
-
-            conditionQueues.wakeUpThread(transition);
-
-            log.logMessage("Thread " + Thread.currentThread().getName() + " leaves monitor");
-            return true;
-          } else {
-            log.logMessage(
-                "Thread "
-                    + Thread.currentThread().getName()
-                    + " finds no waiting threads for enabled transitions");
-            break;
+                  + " could not fire "
+                  + t
+                  + " because the transition time has not been reached. Sleeping for "
+                  + e.getSleepTime()
+                  + " ms");
+          mutex.release(); // Release the mutex before sleeping
+          try {
+            Thread.sleep(e.getSleepTime()); // Sleeps outside the monitor
+          } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt(); // Restore the interrupted status
+            return false; // Exit if interrupted during sleep
           }
-        } else {
-          log.logMessage("Thread " + Thread.currentThread().getName() + " could not fire " + t);
-          mutex.release();
-          log.logMessage("Thread " + Thread.currentThread().getName() + " goes to wait for " + t);
-          conditionQueues.waitForTransition(t);
+          mutex.acquire(); // Reacquire the mutex after waking up
           log.logMessage(
               "Thread "
                   + Thread.currentThread().getName()
                   + " wakes up and re-enters monitor to fire "
                   + t);
-
-          // When a thread wakes up, it is already inside the monitor and tries to fire the
-          // transition
-          // again, but it doesn't reacquire the mutex because it was handed to it by the signaler.
         }
       }
 
