@@ -64,7 +64,7 @@ public class Monitor implements MonitorInterface {
 
     try {
       mutex.acquire();
-      log.logMessage("Thread " + Thread.currentThread().getName() + " enters monitor to fire " + t);
+      log.logDebug("Thread " + Thread.currentThread().getName() + " enters monitor to fire " + t);
       while (true) {
         try {
           if (petriNet.fire(t)) {
@@ -75,19 +75,19 @@ public class Monitor implements MonitorInterface {
             ArrayList<Integer> transitionsThatCouldBeFired =
                 getTransitionsThatCouldBeFired(waitingThreads, enableTransitions);
 
-            log.logMessage(
+            log.logDebug(
                 "Thread "
                     + Thread.currentThread().getName()
                     + " checks if there are waiting threads for enabled transitions");
 
             if (transitionsThatCouldBeFired.size() > 0) {
-              log.logMessage(
+              log.logDebug(
                   "Thread "
                       + Thread.currentThread().getName()
                       + " finds waiting threads for enabled transitions");
               int transition = policy.choose(transitionsThatCouldBeFired);
 
-              log.logMessage(
+              log.logDebug(
                   "Thread "
                       + Thread.currentThread().getName()
                       + " chooses to wake up the thread waiting for "
@@ -95,21 +95,21 @@ public class Monitor implements MonitorInterface {
 
               conditionQueues.wakeUpThread(transition);
 
-              log.logMessage("Thread " + Thread.currentThread().getName() + " leaves monitor");
+              log.logDebug("Thread " + Thread.currentThread().getName() + " leaves monitor");
               return true;
             } else {
-              log.logMessage(
+              log.logDebug(
                   "Thread "
                       + Thread.currentThread().getName()
                       + " finds no waiting threads for enabled transitions");
               break;
             }
           } else {
-            log.logMessage("Thread " + Thread.currentThread().getName() + " could not fire " + t);
+            log.logDebug("Thread " + Thread.currentThread().getName() + " could not fire " + t);
             mutex.release();
-            log.logMessage("Thread " + Thread.currentThread().getName() + " goes to wait for " + t);
+            log.logDebug("Thread " + Thread.currentThread().getName() + " goes to wait for " + t);
             conditionQueues.waitForTransition(t);
-            log.logMessage(
+            log.logDebug(
                 "Thread "
                     + Thread.currentThread().getName()
                     + " wakes up and re-enters monitor to fire "
@@ -121,7 +121,7 @@ public class Monitor implements MonitorInterface {
             // signaler.
           }
         } catch (TransitionTimeNotReachedException e) {
-          log.logMessage(
+          log.logDebug(
               "Thread "
                   + Thread.currentThread().getName()
                   + " could not fire "
@@ -137,7 +137,7 @@ public class Monitor implements MonitorInterface {
             return false; // Exit if interrupted during sleep
           }
           mutex.acquire(); // Reacquire the mutex after waking up
-          log.logMessage(
+          log.logDebug(
               "Thread "
                   + Thread.currentThread().getName()
                   + " wakes up and re-enters monitor to fire "
@@ -145,7 +145,7 @@ public class Monitor implements MonitorInterface {
         }
       }
 
-      log.logMessage("Thread " + Thread.currentThread().getName() + " leaves monitor");
+      log.logDebug("Thread " + Thread.currentThread().getName() + " leaves monitor");
       mutex.release();
       return true;
     } catch (InterruptedException e) {

@@ -75,13 +75,14 @@ public class Log {
   }
 
   /**
-   * Method that stores a string of the format "[LOG] *message*".
+   * Method that stores a string of the format "[DEBUG][time] *message*".
    *
    * @param message the message to be logged
    */
-  public void logMessage(String message) {
+  public void logDebug(String message) {
     try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, true))) {
-      w.write("[LOG] " + message);
+      String timestamp = java.time.LocalTime.now().toString();
+      w.write("[DEBUG][" + timestamp + "] " + message);
       w.newLine();
     } catch (IOException e) {
       System.out.println("Error while writing to the file: " + e.getMessage());
