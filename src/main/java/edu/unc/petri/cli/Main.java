@@ -50,16 +50,16 @@ public final class Main {
       Path configPath = resolveConfigPath(args);
       PetriNetConfig config = ConfigLoader.load(configPath);
 
-      // 2) Build core model
-      PetriNet petriNet = buildPetriNet(config);
-
-      // 3) Logging + header
+      // 2) Logging + header
       String logPath =
           (config.logPath == null || config.logPath.trim().isEmpty())
               ? "default_log.txt"
               : config.logPath;
       Log log = new Log(logPath);
       log.logHeader("Petri Net Simulation Log", configPath.toString());
+
+      // 3) Build core model
+      PetriNet petriNet = buildPetriNet(config, log);
 
       // 4) Policy
       PolicyInterface policy;
@@ -102,12 +102,12 @@ public final class Main {
     return Paths.get(file);
   }
 
-  private static PetriNet buildPetriNet(PetriNetConfig cfg) {
+  private static PetriNet buildPetriNet(PetriNetConfig cfg, Log log) {
     IncidenceMatrix incidence = new IncidenceMatrix(cfg.incidence);
     CurrentMarking current = new CurrentMarking(cfg.initialMarking);
     EnableVector enableVector = new EnableVector(incidence.getTransitions());
     TimeRangeMatrix timeRanges = new TimeRangeMatrix(cfg.timeRanges, enableVector);
-    return new PetriNet(incidence, current, timeRanges, enableVector);
+    return new PetriNet(incidence, current, timeRanges, enableVector, log);
   }
 
   private static PolicyInterface choosePolicy(PetriNetConfig cfg) {
