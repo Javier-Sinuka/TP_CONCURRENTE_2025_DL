@@ -1,4 +1,5 @@
 # ───── Java / Maven build artifacts ───────────────────────────
+logs/
 target/
 *.class
 dependency-reduced-pom.xml
