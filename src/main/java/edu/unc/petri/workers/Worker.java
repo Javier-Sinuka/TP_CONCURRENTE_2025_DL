@@ -39,12 +39,29 @@ public class Worker extends Thread {
   @Override
   public void run() {
     int index = 0;
-    while (true) {
+    while (!Thread.currentThread().isInterrupted()) {
       int transition = segment.transitions[index];
-      monitor.fireTransition(transition);
-      index =
-          (index + 1)
-              % segment.transitions.length; // Loop back to the start after the last transition
+      try {
+        monitor.fireTransition(
+            transition); // may throw RuntimeException(cause=InterruptedException)
+      } catch (RuntimeException ex) {
+        // Exit silently on shutdown interrupt
+        if (causedByInterruptedException(ex)) {
+          Thread.currentThread().interrupt(); // preserve interrupt status
+          break; // leave the while loop quietly
+        }
+        throw ex; // real bug -> keep the stack trace
+      }
+      index = (index + 1) % segment.transitions.length;
     }
+  }
+
+  private static boolean causedByInterruptedException(Throwable ex) {
+    for (Throwable t = ex; t != null && t.getCause() != t; t = t.getCause()) {
+      if (t instanceof InterruptedException) {
+        return true;
+      }
+    }
+    return false;
   }
 }
