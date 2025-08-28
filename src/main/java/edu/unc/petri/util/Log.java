@@ -44,16 +44,17 @@ public class Log {
   }
 
   /**
-   * Method that stores a string of the format "[T *transitionNumber*]".
+   * Method that prints a string of the format "[time] TN".
    *
-   * @param transitionNumber number of trasition
+   * @param transitionNumber number of transition
    */
   public void logTransition(int transitionNumber) {
     try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, true))) {
-      w.write("[T" + transitionNumber + "]");
+      String timeStamp = java.time.LocalTime.now().toString();
+      w.write("[" + timeStamp + "] T" + transitionNumber);
       w.newLine();
     } catch (IOException e) {
-      System.out.println("Error while writing to the file with logTransition(): " + e.getMessage());
+      System.out.println("Error while writing to the file: " + e.getMessage());
     }
   }
 
