@@ -59,14 +59,15 @@ public class Log {
   }
 
   /**
-   * Method that stores a string of the format "[Th-N: *threadName* T*transitionNumber*]".
+   * Method that stores a string of the format "[time] TN Thread: *threadName*".
    *
    * @param transitionNumber The number of the transition being logged.
    * @param threadName The name of the thread associated with the transition.
    */
   public void logTransition(int transitionNumber, String threadName) {
     try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, true))) {
-      w.write("[Th-N: " + threadName + " T" + transitionNumber + "]");
+      String time = java.time.LocalDateTime.now().toString(); // ISO-8601 format
+      w.write("[" + time + "] T" + transitionNumber + " Thread: " + threadName + "]");
       w.newLine();
     } catch (IOException e) {
       System.out.println("Error while writing to the file: " + e.getMessage());
