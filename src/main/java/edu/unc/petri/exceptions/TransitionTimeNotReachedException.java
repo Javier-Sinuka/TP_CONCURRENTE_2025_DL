@@ -1,4 +1,4 @@
-package edu.unc.petri.core;
+package edu.unc.petri.exceptions;
 
 /**
  * Exception thrown when a required transition time has not yet been reached. Indicates how long to
