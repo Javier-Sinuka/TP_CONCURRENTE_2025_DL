@@ -7,6 +7,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import edu.unc.petri.util.Log;
 import edu.unc.petri.util.StateEquationUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ class PetriNetTest {
   @Mock private CurrentMarking mockCurrentMarking;
   @Mock private TimeRangeMatrix mockTimeRangeMatrix;
   @Mock private EnableVector mockEnableVector;
+  @Mock private Log mockLog;
 
   private PetriNet petriNet;
 
@@ -31,7 +33,11 @@ class PetriNetTest {
   void setUp() {
     petriNet =
         new PetriNet(
-            mockIncidenceMatrix, mockCurrentMarking, mockTimeRangeMatrix, mockEnableVector);
+            mockIncidenceMatrix,
+            mockCurrentMarking,
+            mockTimeRangeMatrix,
+            mockEnableVector,
+            mockLog);
 
     when(mockIncidenceMatrix.getTransitions()).thenReturn(10); // Mock total transitions
   }
