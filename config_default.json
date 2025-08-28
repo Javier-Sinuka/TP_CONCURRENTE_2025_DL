@@ -2,6 +2,8 @@
   // Path to the log file where execution logs will be stored
   "logPath": "log_default.txt",
 
+  "invariantLimit": 20, // Establishes a limit for invariants in the Petri net simulation
+
   // Initial marking of the Petri net, depicting the initial state of tokens in each place
   "initialMarking": [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 
@@ -29,8 +31,8 @@
   "segments": [
     {
       "name": "Default-Segment", // Name of the segment
-      "threadQuantity": 1,       // Number of threads assigned to this segment
-      "transitions": [0, 1]      // Transitions that belong to this segment
+      "threadQuantity": 1, // Number of threads assigned to this segment
+      "transitions": [0, 1] // Transitions that belong to this segment
     }
   ],
 
@@ -46,4 +48,3 @@
     "5": 1
   }
 }
-
