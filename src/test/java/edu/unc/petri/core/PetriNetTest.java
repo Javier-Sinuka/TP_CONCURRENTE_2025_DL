@@ -7,6 +7,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import edu.unc.petri.exceptions.TransitionTimeNotReachedException;
 import edu.unc.petri.util.Log;
 import edu.unc.petri.util.StateEquationUtils;
 import org.junit.jupiter.api.BeforeEach;
