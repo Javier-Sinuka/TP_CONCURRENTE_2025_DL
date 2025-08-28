@@ -79,11 +79,10 @@ public final class Main {
 
       // 6) Run
       startAll(workers);
-      runSpinnerUntilDone(workers);
-      joinAll(workers);
+      runSpinnerUntilDone(workers, 1000);
+      interruptAll(workers);
 
       // 7) Finish
-      clearCurrentLine();
       System.out.println("Simulation complete.");
 
     } catch (IOException e) {
@@ -143,34 +142,36 @@ public final class Main {
     }
   }
 
-  private static void joinAll(List<Thread> threads) {
-    for (Thread t : threads) {
-      boolean interrupted = false;
-      try {
-        t.join();
-      } catch (InterruptedException ie) {
-        interrupted = true;
-        Thread.currentThread().interrupt();
-      }
-      if (interrupted) {
-        break;
-      }
-    }
-  }
+  // private static void joinAll(List<Thread> threads) {
+  //   for (Thread t : threads) {
+  //     boolean interrupted = false;
+  //     try {
+  //       t.join();
+  //     } catch (InterruptedException ie) {
+  //       interrupted = true;
+  //       Thread.currentThread().interrupt();
+  //     }
+  //     if (interrupted) {
+  //       break;
+  //     }
+  //   }
+  // }
 
   // ------------------------
   // CLI spinner
   // ------------------------
 
-  private static void runSpinnerUntilDone(List<Thread> threads) {
+  private static void runSpinnerUntilDone(List<Thread> threads, long simulationMillis) {
     // Print once so the carriage return has something to overwrite
     System.out.print(SPINNER_PREFIX + SPINNER_FRAMES[0]);
     System.out.flush();
 
     int frame = 0;
     long lastTick = System.nanoTime();
+    long startTime = System.nanoTime();
+    long simulationNanos = simulationMillis * 1_000_000L;
 
-    while (anyAlive(threads)) {
+    while ((System.nanoTime() - startTime < simulationNanos)) {
       long now = System.nanoTime();
       if (now - lastTick >= SPINNER_PERIOD.toNanos()) {
         frame = (frame + 1) % SPINNER_FRAMES.length;
@@ -187,17 +188,18 @@ public final class Main {
     }
   }
 
-  private static boolean anyAlive(List<Thread> threads) {
-    for (Thread t : threads) {
-      if (t.isAlive()) {
-        return true;
-      }
-    }
-    return false;
-  }
+  // private static boolean anyAlive(List<Thread> threads) {
+  //   for (Thread t : threads) {
+  //     if (t.isAlive()) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
-  private static void clearCurrentLine() {
-    System.out.print("\r");
-    System.out.flush();
+  private static void interruptAll(List<? extends Thread> threads) {
+    for (Thread t : threads) {
+      t.interrupt();
+    }
   }
 }
