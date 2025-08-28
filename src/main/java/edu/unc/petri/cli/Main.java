@@ -1,5 +1,7 @@
 package edu.unc.petri.cli;
 
+import edu.unc.petri.analysis.InvariantAnalyzer;
+import edu.unc.petri.analysis.PetriNetAnalyzer;
 import edu.unc.petri.core.CurrentMarking;
 import edu.unc.petri.core.EnableVector;
 import edu.unc.petri.core.IncidenceMatrix;
@@ -49,6 +51,15 @@ public final class Main {
       // 1) Load config
       Path configPath = resolveConfigPath(args);
       PetriNetConfig config = ConfigLoader.load(configPath);
+
+      InvariantAnalyzer invariantAnalyzer = new InvariantAnalyzer();
+      IncidenceMatrix incidenceMatrix = new IncidenceMatrix(config.incidence);
+      PetriNetAnalyzer analyzer = new PetriNetAnalyzer(invariantAnalyzer, incidenceMatrix);
+
+      List<ArrayList<Integer>> transitionInvariants = analyzer.getTransitionInvariants();
+
+      SimulationManager simManager =
+          new SimulationManager(transitionInvariants, config.invariantLimit);
 
       // 2) Logging + header
       String debugLogPath =
