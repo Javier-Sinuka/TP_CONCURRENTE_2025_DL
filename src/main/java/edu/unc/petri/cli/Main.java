@@ -51,15 +51,17 @@ public final class Main {
       PetriNetConfig config = ConfigLoader.load(configPath);
 
       // 2) Logging + header
-      String logPath =
+      String debugLogPath =
           (config.logPath == null || config.logPath.trim().isEmpty())
-              ? "default_log.txt"
+              ? "debug_log.txt"
               : config.logPath;
-      Log log = new Log(logPath);
-      log.logHeader("Petri Net Simulation Log", configPath.toString());
+      Log debugLog = new Log(debugLogPath);
+      debugLog.logHeader("Petri Net Simulation Log", configPath.toString());
+
+      Log transitionLog = new Log();
 
       // 3) Build core model
-      PetriNet petriNet = buildPetriNet(config, log);
+      PetriNet petriNet = buildPetriNet(config, transitionLog);
 
       // 4) Policy
       PolicyInterface policy;
@@ -72,7 +74,7 @@ public final class Main {
 
       // Monitor
       ConditionQueues conditionQueues = new ConditionQueues(petriNet.getNumberOfTransitions());
-      Monitor monitor = new Monitor(petriNet, conditionQueues, policy, log);
+      Monitor monitor = new Monitor(petriNet, conditionQueues, policy, debugLog);
 
       // 5) Workers
       List<Thread> workers = buildWorkers(config, monitor);

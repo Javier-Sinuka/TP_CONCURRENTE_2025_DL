@@ -64,6 +64,30 @@ public class Log {
   }
 
   /**
+   * Constructs a Log object and ensures that the log file 'transition_log.txt' exists. If the file
+   * already exists, it will be deleted and recreated. The file path is stored in the instance.
+   *
+   * @throws RuntimeException if an IOException occurs while creating or deleting the file.
+   */
+  public Log() {
+    try {
+      File file = new File("transition_log.txt");
+      if (file.exists()) {
+        if (!file.delete()) {
+          throw new IOException("Failed to delete existing file: transition_log.txt");
+        }
+      }
+      file.createNewFile();
+      this.filePath = file.getPath();
+    } catch (IOException e) {
+      throw new RuntimeException(
+          "Error while creating or deleting the file: transition_log.txt, reason: "
+              + e.getMessage(),
+          e);
+    }
+  }
+
+  /**
    * Method that prints a string of the format "[time] TN".
    *
    * @param transitionNumber number of transition
