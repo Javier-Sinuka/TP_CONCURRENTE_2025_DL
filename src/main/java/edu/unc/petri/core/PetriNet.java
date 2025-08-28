@@ -1,5 +1,6 @@
 package edu.unc.petri.core;
 
+import edu.unc.petri.exceptions.TransitionTimeNotReachedException;
 import edu.unc.petri.util.Log;
 import edu.unc.petri.util.StateEquationUtils;
 
@@ -27,7 +28,7 @@ public class PetriNet {
   /** The enable vector of the Petri net, indicating which transitions are currently enabled. */
   private EnableVector enableVector;
 
-  /** The log for recording events in the simulation. */
+  /** The log for recording transition firings in the simulation. */
   private Log log;
 
   /**
@@ -59,18 +60,23 @@ public class PetriNet {
    * @param transitionIndex the index of the transition to fire
    * @return true if the transition was successfully fired, false otherwise
    */
-  public boolean fire(int transitionIndex) {
+  public boolean fire(int transitionIndex) throws TransitionTimeNotReachedException {
     if (transitionIndex < 0 || transitionIndex >= incidenceMatrix.getTransitions()) {
       throw new IllegalArgumentException("Invalid transition index: " + transitionIndex);
     }
 
     if (!enableVector.isTransitionEnabled(transitionIndex)) {
-
-      return false; // Transition is not enabled
+      return false; // Transition is not enabled token wise
     }
 
     if (!timeRangeMatrix.isInsideTimeRange(transitionIndex)) {
-      return false; // Transition is not within its time range
+      if (!timeRangeMatrix.isBeforeTimeRange(transitionIndex)) {
+        long sleepTime = timeRangeMatrix.getSleepTimeToFire(transitionIndex);
+
+        throw new TransitionTimeNotReachedException(sleepTime);
+      }
+
+      return false; // Transition has past its time range
     }
 
     // String markingBefore = currentMarking.toString();
