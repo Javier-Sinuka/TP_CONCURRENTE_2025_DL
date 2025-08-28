@@ -87,6 +87,8 @@ public class PetriNet {
         StateEquationUtils.calculateStateEquation(
             transitionIndex, incidenceMatrix, currentMarking));
 
+    log.logTransition(transitionIndex);
+
     // String markingAfter = currentMarking.toString();
 
     // log.logMessage("" + markingBefore + "->" + markingAfter + " by T" + transitionIndex);

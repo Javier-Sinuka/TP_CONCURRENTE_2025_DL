@@ -68,7 +68,6 @@ public class Monitor implements MonitorInterface {
       while (true) {
         try {
           if (petriNet.fire(t)) {
-            log.logTransition(t, Thread.currentThread().getName());
             boolean[] waitingThreads = conditionQueues.areThereWaitingThreads();
             boolean[] enableTransitions = petriNet.getEnableTransitions();
 
