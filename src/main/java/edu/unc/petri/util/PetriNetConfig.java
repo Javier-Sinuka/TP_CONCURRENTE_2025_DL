@@ -48,6 +48,9 @@ public final class PetriNetConfig {
    */
   public final Map<Integer, Integer> transitionWeights;
 
+  /** The limit for invariant analysis, if applicable. */
+  public final Integer invariantLimit;
+
   /**
    * Constructs a PetriNetConfig object with the specified initial marking, incidence matrix, and
    * time ranges.
@@ -66,7 +69,8 @@ public final class PetriNetConfig {
       @JsonProperty("timeRanges") long[][] timeRanges,
       @JsonProperty("segments") List<Segment> segments,
       @JsonProperty("policy") String policy,
-      @JsonProperty("transitionWeights") Map<Integer, Integer> transitionWeights) {
+      @JsonProperty("transitionWeights") Map<Integer, Integer> transitionWeights,
+      @JsonProperty("invariantLimit") Integer invariantLimit) {
 
     this.logPath = logPath;
     this.initialMarking = initialMarking;
@@ -75,5 +79,6 @@ public final class PetriNetConfig {
     this.segments = segments;
     this.policy = policy;
     this.transitionWeights = transitionWeights;
+    this.invariantLimit = invariantLimit;
   }
 }
