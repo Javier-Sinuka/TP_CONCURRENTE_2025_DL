@@ -32,13 +32,7 @@ class PetriNetTest {
 
   @BeforeEach
   void setUp() {
-    petriNet =
-        new PetriNet(
-            mockIncidenceMatrix,
-            mockCurrentMarking,
-            mockTimeRangeMatrix,
-            mockEnableVector,
-            mockLog);
+    petriNet = new PetriNet(mockIncidenceMatrix, mockCurrentMarking, mockEnableVector, mockLog);
 
     when(mockIncidenceMatrix.getTransitions()).thenReturn(10); // Mock total transitions
   }
@@ -48,8 +42,11 @@ class PetriNetTest {
 
     int transitionToFire = 3;
 
-    when(mockEnableVector.isTransitionEnabled(transitionToFire)).thenReturn(true);
-    when(mockTimeRangeMatrix.isInsideTimeRange(transitionToFire)).thenReturn(true);
+    try {
+      when(mockEnableVector.isTransitionEnabled(transitionToFire)).thenReturn(true);
+    } catch (TransitionTimeNotReachedException e) {
+      e.printStackTrace();
+    }
 
     int[] nextMarking = {1, 0, 1};
 
@@ -84,7 +81,12 @@ class PetriNetTest {
   void fireShouldFailWhenTransitionIsNotEnabled() {
     int transitionToFire = 5;
 
-    when(mockEnableVector.isTransitionEnabled(transitionToFire)).thenReturn(false);
+    try {
+      when(mockEnableVector.isTransitionEnabled(transitionToFire)).thenReturn(false);
+    } catch (Exception e) {
+      // Handle the exception appropriately
+      e.printStackTrace();
+    }
 
     boolean result = false;
     try {
@@ -96,29 +98,6 @@ class PetriNetTest {
     }
 
     assertFalse(result, "Fire should return false if transition is not enabled.");
-
-    verify(mockCurrentMarking, never()).setMarking(any());
-    verify(mockEnableVector, Mockito.times(1)).updateEnableVector(any(), any());
-  }
-
-  @Test
-  void fireShouldFailWhenTransitionIsOutOfTimeRange() {
-    int transitionToFire = 7;
-
-    when(mockEnableVector.isTransitionEnabled(transitionToFire))
-        .thenReturn(true); // It's enabled token-wise
-    when(mockTimeRangeMatrix.isInsideTimeRange(transitionToFire))
-        .thenReturn(false); // It's not enabled time-wise
-
-    boolean result = false;
-    try {
-      result = petriNet.fire(transitionToFire);
-    } catch (Exception e) {
-      // Handle exception, e.g., log or rethrow
-      e.printStackTrace();
-    }
-
-    assertFalse(result, "Fire should return false if transition is out of its time range.");
 
     verify(mockCurrentMarking, never()).setMarking(any());
     verify(mockEnableVector, Mockito.times(1)).updateEnableVector(any(), any());
