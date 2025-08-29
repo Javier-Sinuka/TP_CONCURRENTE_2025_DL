@@ -12,7 +12,7 @@ import edu.unc.petri.monitor.Monitor;
 import edu.unc.petri.policy.PolicyInterface;
 import edu.unc.petri.policy.PriorityPolicy;
 import edu.unc.petri.policy.RandomPolicy;
-import edu.unc.petri.simulation.SimulationManager;
+import edu.unc.petri.simulation.InvariantTracker;
 import edu.unc.petri.util.ConfigLoader;
 import edu.unc.petri.util.Log;
 import edu.unc.petri.util.PetriNetConfig;
@@ -48,29 +48,22 @@ public final class Main {
    * @param args Command-line arguments. The first argument can be a path to the configuration file.
    */
   public static void main(String[] args) {
+    Log debugLog = null;
+    Log transitionLog = null;
     try {
       // 1) Load config
       Path configPath = resolveConfigPath(args);
       PetriNetConfig config = ConfigLoader.load(configPath);
-
-      InvariantAnalyzer invariantAnalyzer = new InvariantAnalyzer();
-      IncidenceMatrix incidenceMatrix = new IncidenceMatrix(config.incidence);
-      PetriNetAnalyzer analyzer = new PetriNetAnalyzer(invariantAnalyzer, incidenceMatrix);
-
-      List<ArrayList<Integer>> transitionInvariants = analyzer.getTransitionInvariants();
-
-      SimulationManager simManager =
-          new SimulationManager(transitionInvariants, config.invariantLimit);
 
       // 2) Logging + header
       String debugLogPath =
           (config.logPath == null || config.logPath.trim().isEmpty())
               ? "debug_log.txt"
               : config.logPath;
-      Log debugLog = new Log(debugLogPath);
+      debugLog = new Log(debugLogPath);
       debugLog.logHeader("Petri Net Simulation Log", configPath.toString());
 
-      Log transitionLog = new Log();
+      transitionLog = new Log();
 
       // 3) Build core model
       PetriNet petriNet = buildPetriNet(config, transitionLog);
@@ -84,17 +77,24 @@ public final class Main {
         return;
       }
 
+      InvariantAnalyzer invariantAnalyzer = new InvariantAnalyzer();
+      IncidenceMatrix incidenceMatrix = new IncidenceMatrix(config.incidence);
+      PetriNetAnalyzer analyzer = new PetriNetAnalyzer(invariantAnalyzer, incidenceMatrix);
+      List<ArrayList<Integer>> transitionInvariants = analyzer.getTransitionInvariants();
+      InvariantTracker invariantTracker =
+          new InvariantTracker(transitionInvariants, config.invariantLimit);
+
       // Monitor
       ConditionQueues conditionQueues = new ConditionQueues(petriNet.getNumberOfTransitions());
-      Monitor monitor = new Monitor(simManager, petriNet, conditionQueues, policy, debugLog);
+      Monitor monitor = new Monitor(invariantTracker, petriNet, conditionQueues, policy, debugLog);
 
       // 5) Workers
-      List<Thread> workers = buildWorkers(config, simManager, monitor);
+      List<Thread> workers = buildWorkers(config, invariantTracker, monitor);
 
       // 6) Run
       startAll(workers);
 
-      while (!simManager.isInvariantLimitReached()) {
+      while (!invariantTracker.isInvariantLimitReached()) {
         // runSpinnerUntilDone(workers);
         try {
           Thread.sleep(100); // Sleep for a short duration to reduce CPU usage
@@ -215,7 +215,7 @@ public final class Main {
   }
 
   private static List<Thread> buildWorkers(
-      PetriNetConfig cfg, SimulationManager simManager, Monitor monitor) {
+      PetriNetConfig cfg, InvariantTracker simManager, Monitor monitor) {
     List<Thread> threads = new ArrayList<>();
     for (Segment segment : cfg.segments) {
       for (int i = 0; i < segment.threadQuantity; i++) {
