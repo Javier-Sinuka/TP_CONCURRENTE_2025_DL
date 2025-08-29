@@ -1,7 +1,7 @@
 package edu.unc.petri.workers;
 
 import edu.unc.petri.monitor.MonitorInterface;
-import edu.unc.petri.simulation.SimulationManager;
+import edu.unc.petri.simulation.InvariantTracker;
 import edu.unc.petri.util.Segment;
 
 /**
@@ -16,7 +16,7 @@ import edu.unc.petri.util.Segment;
 public class Worker extends Thread {
 
   /** The simulation manager to check for shutdown signals. */
-  private final SimulationManager simulationManager;
+  private final InvariantTracker invariantTracker;
 
   /** The monitor used to interact with the Petri net. */
   private final MonitorInterface monitor;
@@ -31,12 +31,12 @@ public class Worker extends Thread {
    * @param segment the segment this worker is responsible for
    */
   public Worker(
-      SimulationManager simulationManager,
+      InvariantTracker invariantTracker,
       MonitorInterface monitor,
       Segment segment,
       int segmentThreadIndex) {
     super(segment.name + "-Worker-" + segmentThreadIndex);
-    this.simulationManager = simulationManager;
+    this.invariantTracker = invariantTracker;
     this.monitor = monitor;
     this.segment = segment;
   }
@@ -48,8 +48,7 @@ public class Worker extends Thread {
   @Override
   public void run() {
     int index = 0;
-    while (!simulationManager.isInvariantLimitReached()
-        && !Thread.currentThread().isInterrupted()) {
+    while (!invariantTracker.isInvariantLimitReached() && !Thread.currentThread().isInterrupted()) {
       int transition = segment.transitions[index];
       try {
         boolean hasFired = monitor.fireTransition(transition);
