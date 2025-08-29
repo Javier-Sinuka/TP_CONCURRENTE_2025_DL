@@ -4,7 +4,7 @@ import edu.unc.petri.core.PetriNet;
 import edu.unc.petri.exceptions.SimulationLimitReachedException;
 import edu.unc.petri.exceptions.TransitionTimeNotReachedException;
 import edu.unc.petri.policy.PolicyInterface;
-import edu.unc.petri.simulation.SimulationManager;
+import edu.unc.petri.simulation.InvariantTracker;
 import edu.unc.petri.util.Log;
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
@@ -21,7 +21,7 @@ import java.util.concurrent.Semaphore;
 public class Monitor implements MonitorInterface {
 
   /** The simulation manager to check for shutdown signals. */
-  private final SimulationManager simulationManager;
+  private final InvariantTracker invariantTracker;
 
   /** The number of permits for the semaphore used for mutual exclusion. */
   private final int permits = 1;
@@ -49,12 +49,12 @@ public class Monitor implements MonitorInterface {
    * @param log the log for recording events in the simulation
    */
   public Monitor(
-      SimulationManager simulationManager,
+      InvariantTracker invariantTracker,
       PetriNet petriNet,
       ConditionQueues conditionQueues,
       PolicyInterface policy,
       Log log) {
-    this.simulationManager = simulationManager;
+    this.invariantTracker = invariantTracker;
     this.petriNet = petriNet;
     this.conditionQueues = conditionQueues;
     this.policy = policy;
@@ -81,7 +81,7 @@ public class Monitor implements MonitorInterface {
             log.logDebug("Thread " + Thread.currentThread().getName() + " successfully fired " + t);
 
             try {
-              simulationManager.updateInvariant(t);
+              invariantTracker.updateInvariantTracker(t);
             } catch (SimulationLimitReachedException e) {
               return false; // Exit if the simulation limit has been reached
               // We do not release the mutex here because the simulation is ending
