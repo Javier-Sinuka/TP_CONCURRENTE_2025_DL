@@ -1,5 +1,6 @@
 {
   "logPath": "log_4_segments_1_thread_segment_A.txt",
+  "invariantLimit": 20,
   "initialMarking": [3, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
   "incidence": [
     [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
