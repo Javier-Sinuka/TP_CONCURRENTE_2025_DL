@@ -8,6 +8,7 @@ import edu.unc.petri.simulation.InvariantTracker;
 import edu.unc.petri.util.Log;
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The Monitor class is responsible for monitoring the Petri net simulation. It implements the
@@ -139,27 +140,36 @@ public class Monitor implements MonitorInterface {
             // signaler.
           }
         } catch (TransitionTimeNotReachedException e) {
-          log.logDebug(
-              "Thread "
-                  + Thread.currentThread().getName()
-                  + " could not fire "
-                  + t
-                  + " because the transition time has not been reached. Sleeping for "
-                  + e.getSleepTime()
-                  + " ms");
-          mutex.release(); // Release the mutex before sleeping
-          try {
-            Thread.sleep(e.getSleepTime()); // Sleeps outside the monitor
-          } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt(); // Restore the interrupted status
-            return false; // Exit if interrupted during sleep
+          long sleepNanos = e.getSleepTimeNanos();
+          if (sleepNanos > 0) {
+            long sleepMillis = TimeUnit.NANOSECONDS.toMillis(sleepNanos);
+            int remainingNanos = (int) (sleepNanos % 1_000_000);
+
+            log.logDebug(
+                "Thread "
+                    + Thread.currentThread().getName()
+                    + " could not fire "
+                    + t
+                    + " because the transition time has not been reached. Sleeping for "
+                    + sleepMillis
+                    + " ms and "
+                    + remainingNanos
+                    + " ns.");
+
+            mutex.release(); // Release the mutex before sleeping
+            try {
+              Thread.sleep(sleepMillis, remainingNanos); // Use high-precision sleep
+            } catch (InterruptedException ie) {
+              Thread.currentThread().interrupt(); // Restore the interrupted status
+              return false; // Exit if interrupted during sleep
+            }
+            mutex.acquire(); // Reacquire the mutex after waking up
+            log.logDebug(
+                "Thread "
+                    + Thread.currentThread().getName()
+                    + " wakes up and re-enters monitor to fire "
+                    + t);
           }
-          mutex.acquire(); // Reacquire the mutex after waking up
-          log.logDebug(
-              "Thread "
-                  + Thread.currentThread().getName()
-                  + " wakes up and re-enters monitor to fire "
-                  + t);
         }
       }
 
