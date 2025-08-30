@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * The Log class is logs the events in the Petri net simulation. It is used to keep track of the
- * simulation's progress and any significant events that occur.
+ * The Log class is logs the events in the Petri net simulation. It can be disabled by passing a
+ * null path to its constructor, in which case it performs no file I/O.
  *
  * @author Der Landsknecht
  * @version 1.0
@@ -17,20 +17,33 @@ import java.time.format.DateTimeFormatter;
  */
 public class Log {
 
-  /** The path of the file where the content will be saved. */
+  /** The path of the file where the content will be saved. Will be null if logging is disabled. */
   private final String filePath;
 
   /**
-   * Constructs a Log that generates a file with the sampled content.
+   * Constructs a {@code Log} instance that writes sampled content to a file. If the provided {@code
+   * filePath} is {@code null} or empty, logging is disabled and no files will be created or
+   * written.
    *
-   * @param filePath is a path of file where the content will be saved.
+   * <p>If the file already exists, a numeric suffix is appended to the filename to avoid
+   * overwriting existing files. If no parent directory is specified in {@code filePath}, the file
+   * will be created in a {@code logs} directory in the current working directory, which will be
+   * created if it does not exist.
+   *
+   * @param filePath the path of the file where the content will be saved; if {@code null} or empty,
+   *     logging is disabled
+   * @throws RuntimeException if the file cannot be created due to an I/O error
    */
   public Log(String filePath) {
+    if (filePath == null || filePath.trim().isEmpty()) {
+      this.filePath = null; // Disable logging
+      return;
+    }
+
     File file = new File(filePath);
     int suffix = 1;
     String baseName = file.getName();
     String parent = file.getParent(); // may be null if no parent
-    // If no parent directory, default to "logs/"
     if (parent == null) {
       File logsDir = new File("logs");
       if (!logsDir.exists()) {
@@ -64,10 +77,18 @@ public class Log {
   }
 
   /**
-   * Constructs a Log object and ensures that the log file 'transition_log.txt' exists. If the file
-   * already exists, it will be deleted and recreated. The file path is stored in the instance.
+   * Initializes a new {@code Log} instance and manages the lifecycle of the log file {@code
+   * transition_log.txt}.
    *
-   * @throws RuntimeException if an IOException occurs while creating or deleting the file.
+   * <p>If {@code transition_log.txt} already exists in the working directory, it will be deleted
+   * and recreated to ensure a clean log file. The absolute path to the log file is stored in the
+   * {@code filePath} instance variable.
+   *
+   * <p><b>Note:</b> Any I/O errors encountered during file deletion or creation will result in a
+   * {@link RuntimeException} being thrown.
+   *
+   * @throws RuntimeException if an {@link IOException} occurs while deleting or creating the log
+   *     file.
    */
   public Log() {
     try {
@@ -88,11 +109,18 @@ public class Log {
   }
 
   /**
-   * Method that prints a string of the format "[time] TN".
+   * Logs a transition event to the specified file in the format "[HH:mm:ss.SSS] TN".
    *
-   * @param transitionNumber number of transition
+   * <p>The method appends a line containing the current local time and the given transition number
+   * to the file at {@code filePath}. If {@code filePath} is {@code null}, the method returns
+   * immediately. In case of an I/O error, an error message is printed to standard output.
+   *
+   * @param transitionNumber the number of the transition to log
    */
   public void logTransition(int transitionNumber) {
+    if (filePath == null) {
+      return;
+    }
     try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, true))) {
       String timeStamp = java.time.LocalTime.now().toString();
       w.write("[" + timeStamp + "] T" + transitionNumber);
@@ -103,27 +131,18 @@ public class Log {
   }
 
   /**
-   * Method that stores a string of the format "[time] TN Thread: *threadName*".
+   * Logs a debug message to the configured log file with a timestamp.
    *
-   * @param transitionNumber The number of the transition being logged.
-   * @param threadName The name of the thread associated with the transition.
-   */
-  public void logTransition(int transitionNumber, String threadName) {
-    try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, true))) {
-      String time = java.time.LocalDateTime.now().toString(); // ISO-8601 format
-      w.write("[" + time + "] T" + transitionNumber + " Thread: " + threadName + "]");
-      w.newLine();
-    } catch (IOException e) {
-      System.out.println("Error while writing to the file: " + e.getMessage());
-    }
-  }
-
-  /**
-   * Method that stores a string of the format "[DEBUG][time] *message*".
+   * <p>The message is prefixed with [DEBUG] and the current local time. If the log file path is not
+   * set, the method returns without logging. Any I/O errors encountered during writing are reported
+   * to standard output.
    *
-   * @param message the message to be logged
+   * @param message the debug message to be logged; must not be {@code null}
    */
   public void logDebug(String message) {
+    if (filePath == null) {
+      return;
+    }
     try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, true))) {
       String timestamp = java.time.LocalTime.now().toString();
       w.write("[DEBUG][" + timestamp + "] " + message);
@@ -138,9 +157,12 @@ public class Log {
    * The header is displayed in a visually structured format with aligned content inside a box.
    *
    * @param title The title to be displayed prominently in uppercase.
-   * @param description A description to be displayed below the title with additional file context.
+   * @param description A description to be displayed below the title.
    */
   public void logHeader(String title, String description) {
+    if (filePath == null) {
+      return;
+    }
     try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, true))) {
       // Prepare content
       String headerTitle = title.toUpperCase();
@@ -151,7 +173,6 @@ public class Log {
       // Compute inner width based on the longest content line
       int innerWidth =
           Math.max(Math.max(headerTitle.length(), headerDesc.length()), headerTime.length());
-
       int minWidth = 40;
       int maxWidth = 120;
       innerWidth = Math.max(innerWidth, minWidth);
@@ -184,11 +205,25 @@ public class Log {
     }
   }
 
-  /** Clear content file, make that before to start write the new content. */
+  /**
+   * Clears the content of the log file specified by {@code filePath}.
+   *
+   * <p>If the log file exists, its contents will be truncated, effectively erasing all previous log
+   * entries. If the file does not exist, a new empty file will be created at the specified path.
+   *
+   * <p>This method does nothing if {@code filePath} is {@code null}. Any {@link IOException}
+   * encountered during the operation will be reported to {@code System.err}.
+   */
   public void clearLog() {
+    if (filePath == null) {
+      return;
+    }
+    // The 'false' argument in FileWriter truncates the file if it exists.
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
+      // The try-with-resources block handles closing the writer, which flushes
+      // the empty content, effectively clearing the file.
     } catch (IOException e) {
-      System.out.println("Error while clearing the file: " + e.getMessage());
+      System.err.println("Error while clearing the file: " + e.getMessage());
     }
   }
 
