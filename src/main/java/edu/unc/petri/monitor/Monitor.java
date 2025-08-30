@@ -25,7 +25,7 @@ public class Monitor implements MonitorInterface {
   private final InvariantTracker invariantTracker;
 
   /** The number of permits for the semaphore used for mutual exclusion. */
-  private final int permits = 1;
+  private static final int PERMITS = 1;
 
   /** The Petri net being monitored. */
   private PetriNet petriNet;
@@ -59,7 +59,7 @@ public class Monitor implements MonitorInterface {
     this.petriNet = petriNet;
     this.conditionQueues = conditionQueues;
     this.policy = policy;
-    this.mutex = new Semaphore(permits);
+    this.mutex = new Semaphore(PERMITS);
     this.log = log;
   }
 
@@ -180,6 +180,18 @@ public class Monitor implements MonitorInterface {
       mutex.release(); // Ensure the mutex is released if an interruption occurs
       return false;
     }
+  }
+
+  /**
+   * Resets the monitor's state for a new simulation run. This re-initializes the mutex to ensure
+   * it's unlocked and creates fresh condition queues to clear any state from the previous run.
+   */
+  public void reset() {
+    // Re-create the mutex to guarantee a clean, single-permit, unlocked state.
+    this.mutex = new Semaphore(PERMITS);
+    // The ConditionQueues object holds the transition-specific semaphores.
+    // Resetting it ensures no lingering permits or queued threads from the last run.
+    this.conditionQueues.reset();
   }
 
   private ArrayList<Integer> getTransitionsThatCouldBeFired(
