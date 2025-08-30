@@ -19,7 +19,7 @@ public class EnableVector {
    */
   private boolean[] tokenEnabledTransitions;
 
-  /** The times when each transition was enabled token wise. */
+  /** The times in nanoseconds when each transition was enabled token wise. */
   private long[] transitionTokenEnablementTimes;
 
   /** The TimeRangeMatrix associated with this EnableVector. */
@@ -69,7 +69,7 @@ public class EnableVector {
       throw new IllegalArgumentException("Parameters size cannot be 0");
     }
 
-    long now = System.currentTimeMillis();
+    long now = System.nanoTime();
 
     // Recompute enabled state and preserve/adjust timestamps correctly
     for (int i = 0; i < incidenceMatrix.getTransitions(); i++) {
@@ -127,10 +127,10 @@ public class EnableVector {
     if (!isTimeEnabled) {
       if (timeRangeMatrix.isBeforeTimeRange(
           transitionIndex, transitionTokenEnablementTimes[transitionIndex])) {
-        long sleepTime =
+        long sleepNanos =
             timeRangeMatrix.getSleepTimeToFire(
                 transitionIndex, transitionTokenEnablementTimes[transitionIndex]);
-        throw new TransitionTimeNotReachedException(sleepTime);
+        throw new TransitionTimeNotReachedException(sleepNanos);
       } else {
         return false; // Transition has passed its time range
       }
