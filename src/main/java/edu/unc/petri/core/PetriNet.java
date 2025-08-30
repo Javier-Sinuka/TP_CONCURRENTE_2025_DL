@@ -84,6 +84,18 @@ public class PetriNet {
   }
 
   /**
+   * Resets the Petri net to its initial state for a new simulation run.
+   *
+   * @param initialMarking The initial marking array from the configuration.
+   */
+  public void reset(int[] initialMarking) {
+    // Restore the token marking to the initial configuration
+    this.currentMarking = new CurrentMarking(initialMarking);
+    // Recalculate which transitions are enabled from this initial state
+    this.enableVector.updateEnableVector(this.incidenceMatrix, this.currentMarking);
+  }
+
+  /**
    * Returns the transitions currently enabled in the Petri net.
    *
    * @return an array of booleans where each index corresponds to a transition and true indicates
