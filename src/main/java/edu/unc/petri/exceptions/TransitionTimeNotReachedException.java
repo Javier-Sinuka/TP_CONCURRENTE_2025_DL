@@ -6,25 +6,25 @@ package edu.unc.petri.exceptions;
  */
 public class TransitionTimeNotReachedException extends Exception {
 
-  /** The amount of time (in milliseconds) to sleep before retrying. */
-  private final long sleepTime;
+  /** The amount of time (in nanoseconds) to sleep before retrying. */
+  private final long sleepTimeNanos;
 
   /**
    * Constructs a new TransitionTimeNotReachedException with the specified sleep time.
    *
-   * @param sleepTime the time in milliseconds to sleep before retrying
+   * @param sleepTimeNanos the time in nanoseconds to sleep before retrying
    */
-  public TransitionTimeNotReachedException(long sleepTime) {
+  public TransitionTimeNotReachedException(long sleepTimeNanos) {
     super();
-    this.sleepTime = sleepTime;
+    this.sleepTimeNanos = sleepTimeNanos;
   }
 
   /**
-   * Returns the sleep time in milliseconds.
+   * Returns the sleep time in nanoseconds.
    *
-   * @return the sleep time in milliseconds
+   * @return the sleep time in nanoseconds
    */
-  public long getSleepTime() {
-    return sleepTime;
+  public long getSleepTimeNanos() {
+    return sleepTimeNanos;
   }
 }
