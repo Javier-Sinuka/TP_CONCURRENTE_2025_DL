@@ -9,21 +9,34 @@ package edu.unc.petri.core;
  * @since 2025-29-07
  */
 public class TimeRangeMatrix {
-  /** Matrix of time ranges for each transition. */
+
+  /** Matrix of time ranges in nanoseconds for each transition. */
   private final long[][] timeRangeMatrix;
 
+  /** Constant for converting milliseconds to nanoseconds. */
+  private static final long MILLIS_TO_NANOS = 1_000_000L;
+
   /**
-   * Constructs a TimeRangeMatrix from a given config file. The matrix is initialized with the
-   * number of transitions in the path.
+   * Constructs a TimeRangeMatrix with the specified time ranges for each transition.
    *
-   * @param timeRangeMatrix A 2D long array representing the time ranges for each transition.
+   * <p>Validates that the input matrix is not null or empty, and that each time range contains
+   * exactly two non-negative elements where the start time is less than or equal to the end time.
+   *
+   * <p>Converts the input time ranges from milliseconds to nanoseconds.
+   *
+   * @param timeRangeMatrix a 2D long array where each sub-array represents a time range in
+   *     milliseconds [start, end] for a transition
+   * @throws IllegalArgumentException if the matrix is null, empty, contains invalid ranges, or
+   *     negative values
    */
   public TimeRangeMatrix(long[][] timeRangeMatrix) {
     if (timeRangeMatrix == null || timeRangeMatrix.length == 0) {
       throw new IllegalArgumentException("Time range matrix cannot be null or empty");
     }
 
-    for (long[] range : timeRangeMatrix) {
+    long[][] nanoTimeRangeMatrix = new long[timeRangeMatrix.length][2];
+    for (int i = 0; i < timeRangeMatrix.length; i++) {
+      long[] range = timeRangeMatrix[i];
       if (range.length != 2) {
         throw new IllegalArgumentException("Each time range must have exactly two elements");
       }
@@ -33,9 +46,12 @@ public class TimeRangeMatrix {
       if (range[0] > range[1]) {
         throw new IllegalArgumentException("Start time must be less than or equal to end time");
       }
+      // Convert milliseconds to nanoseconds
+      nanoTimeRangeMatrix[i][0] = range[0] * MILLIS_TO_NANOS;
+      nanoTimeRangeMatrix[i][1] = range[1] * MILLIS_TO_NANOS;
     }
 
-    this.timeRangeMatrix = timeRangeMatrix;
+    this.timeRangeMatrix = nanoTimeRangeMatrix;
   }
 
   /**
@@ -53,65 +69,70 @@ public class TimeRangeMatrix {
    * @param transition The transition to check.
    * @param enabledTime The time when the transition was enabled.
    * @return true if the transition is inside the time range, false otherwise.
-   * @throws IndexOutOfBoundsException if the transition index is out of bounds.
    */
   public boolean isInsideTimeRange(int transition, long enabledTime) {
     if (transition < 0 || transition >= timeRangeMatrix.length) {
       throw new IndexOutOfBoundsException("Invalid transition index: " + transition);
     }
 
-    long currentTime = System.currentTimeMillis();
-    long timePassed = currentTime - enabledTime;
+    long timePassed = System.nanoTime() - enabledTime;
 
     long startRange = timeRangeMatrix[transition][0];
     long endRange = timeRangeMatrix[transition][1];
 
-    // Return true for instantaneous transitions [0,0]
+    // Case 1: Instantaneous transitions [0, 0]
     if (startRange == 0 && endRange == 0) {
       return true;
     }
 
+    // Case 2: Fixed-time transitions [a, a] where a > 0
+    if (startRange > 0 && startRange == endRange) {
+      // For fixed time, we check if AT LEAST that much time has passed to
+      // account for scheduling delays.
+      return timePassed >= startRange;
+    }
+
+    // Case 3: Normal time intervals [a, b]
     return timePassed >= startRange && timePassed <= endRange;
   }
 
   /**
-   * Checks if the current system time is before the start time of the specified transition.
+   * Checks if the elapsed time is before the start time of the specified transition.
    *
-   * @param transition the index of the transition in the timeRangeMatrix
-   * @return true if the current time is before the start time of the transition, false otherwise
-   * @throws IndexOutOfBoundsException if the transition index is out of bounds
+   * @param transition the index of the transition.
+   * @param enabledTime The time when the transition was enabled.
+   * @return true if the elapsed time is less than the transition's start time.
    */
   public boolean isBeforeTimeRange(int transition, long enabledTime) {
     if (transition < 0 || transition >= timeRangeMatrix.length) {
       throw new IndexOutOfBoundsException("Invalid transition index: " + transition);
     }
-    // Assuming timeRangeMatrix is a 2D array with [start, end] times for each transition
-    long startTime = timeRangeMatrix[transition][0];
-    long currentTime = System.currentTimeMillis();
-    long timePassed = currentTime - enabledTime;
 
-    return timePassed < startTime;
+    long startRange = timeRangeMatrix[transition][0];
+    long timePassed = System.nanoTime() - enabledTime;
+
+    return timePassed < startRange;
   }
 
   /**
-   * Calculates the remaining sleep time before a transition can fire.
+   * Calculates the remaining sleep time in nanoseconds before a transition can fire.
    *
-   * @param transition the index of the transition
-   * @param enabledTime the time when the transition was enabled
-   * @return the sleep time in milliseconds before the transition can fire, or 0 if already eligible
-   * @throws IndexOutOfBoundsException if the transition index is out of bounds
+   * @param transition the index of the transition.
+   * @param enabledTime the time when the transition was enabled.
+   * @return the sleep time in nanoseconds, or 0 if already eligible.
    */
   public long getSleepTimeToFire(int transition, long enabledTime) {
     if (transition < 0 || transition >= timeRangeMatrix.length) {
       throw new IndexOutOfBoundsException("Invalid transition index: " + transition);
     }
-    long currentTime = System.currentTimeMillis();
-    long timePassed = currentTime - enabledTime;
+
+    long timePassed = System.nanoTime() - enabledTime;
     long startRange = timeRangeMatrix[transition][0];
+
     if (timePassed < startRange) {
-      return startRange - timePassed; // Time to wait until the start of the range
+      return startRange - timePassed; // Return precise nanoseconds
     } else {
-      return 0; // Already within or past the time range
+      return 0; // Already within or past the time range start.
     }
   }
 }
