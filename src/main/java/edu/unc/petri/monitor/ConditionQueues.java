@@ -76,4 +76,16 @@ public class ConditionQueues {
 
     return waitingThreads;
   }
+
+  /**
+   * Resets all condition queues to a clean state for a new simulation run by creating new
+   * semaphores.
+   */
+  public void reset() {
+    int size = queues.size();
+    queues.clear();
+    for (int i = 0; i < size; i++) {
+      queues.add(new Semaphore(0));
+    }
+  }
 }
