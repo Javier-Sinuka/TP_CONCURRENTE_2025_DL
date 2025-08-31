@@ -1,5 +1,5 @@
 {
-  "logPath": "log_5_segments_3_threads_segment_A_and_E_random.txt",
+  "logPath": "log_5_segments_3_threads_segment_A_random_no_time.txt",
   "invariantLimit": 200,
   "initialMarking": [3, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
   "incidence": [
@@ -18,16 +18,16 @@
   ],
   "timeRanges": [
     [0, 0],
-    [50, 100],
     [0, 0],
-    [50, 100],
-    [50, 100],
     [0, 0],
-    [50, 100],
     [0, 0],
-    [50, 100],
-    [50, 100],
-    [50, 100],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
     [0, 0]
   ],
   "segments": [
@@ -53,7 +53,7 @@
     },
     {
       "name": "Segment-E",
-      "threadQuantity": 3,
+      "threadQuantity": 1,
       "transitions": [11]
     }
   ],

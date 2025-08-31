@@ -1,5 +1,5 @@
 {
-  "logPath": "log_4_segments_1_thread_segment_A.txt",
+  "logPath": "log_5_segments_1_thread_segment_A_priority_T5.txt",
   "invariantLimit": 200,
   "initialMarking": [3, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
   "incidence": [
@@ -33,8 +33,8 @@
   "segments": [
     {
       "name": "Segment-A",
-      "threadQuantity": 10,
-      "transitions": [0, 1, 11]
+      "threadQuantity": 1,
+      "transitions": [0, 1]
     },
     {
       "name": "Segment-B",
@@ -50,6 +50,11 @@
       "name": "Segment-D",
       "threadQuantity": 1,
       "transitions": [7, 8, 9, 10]
+    },
+    {
+      "name": "Segment-E",
+      "threadQuantity": 1,
+      "transitions": [11]
     }
   ],
   "policy": "priority",
