@@ -109,11 +109,12 @@ public class Log {
   }
 
   /**
-   * Logs a transition event to the specified file in the format "[HH:mm:ss.SSS] TN".
+   * Logs a transition event to the specified file in the format "[YYYY-MM-DDTHH:mm:ss.SSS] TN".
    *
-   * <p>The method appends a line containing the current local time and the given transition number
-   * to the file at {@code filePath}. If {@code filePath} is {@code null}, the method returns
-   * immediately. In case of an I/O error, an error message is printed to standard output.
+   * <p>The method appends a line containing the current local date and time and the given
+   * transition number to the file at {@code filePath}. If {@code filePath} is {@code null}, the
+   * method returns immediately. In case of an I/O error, an error message is printed to standard
+   * output.
    *
    * @param transitionNumber the number of the transition to log
    */
@@ -122,7 +123,7 @@ public class Log {
       return;
     }
     try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, true))) {
-      String timeStamp = java.time.LocalTime.now().toString();
+      String timeStamp = java.time.LocalDateTime.now().toString();
       w.write("[" + timeStamp + "] T" + transitionNumber);
       w.newLine();
     } catch (IOException e) {
@@ -133,9 +134,9 @@ public class Log {
   /**
    * Logs a debug message to the configured log file with a timestamp.
    *
-   * <p>The message is prefixed with [DEBUG] and the current local time. If the log file path is not
-   * set, the method returns without logging. Any I/O errors encountered during writing are reported
-   * to standard output.
+   * <p>The message is prefixed with [DEBUG] and the current local date and time. If the log file
+   * path is not set, the method returns without logging. Any I/O errors encountered during writing
+   * are reported to standard output.
    *
    * @param message the debug message to be logged; must not be {@code null}
    */
@@ -144,7 +145,7 @@ public class Log {
       return;
     }
     try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, true))) {
-      String timestamp = java.time.LocalTime.now().toString();
+      String timestamp = java.time.LocalDateTime.now().toString();
       w.write("[DEBUG][" + timestamp + "] " + message);
       w.newLine();
     } catch (IOException e) {
