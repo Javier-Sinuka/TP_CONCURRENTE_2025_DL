@@ -27,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.CyclicBarrier;
 
 /**
  * Entry point for the Petri-net simulator. It can run a simulation, an analysis, or both based on
@@ -207,7 +208,10 @@ public final class Main {
             debugLog.logHeader("Petri Net Simulation Log: Run " + (i + 1), configPath.toString());
 
             // 2. Create new lightweight worker threads for this run
-            List<Thread> workers = buildWorkers(config, invariantTracker, monitor);
+            final int totalWorkers = config.segments.stream().mapToInt(s -> s.threadQuantity).sum();
+            final CyclicBarrier startBarrier =
+                (totalWorkers > 0) ? new CyclicBarrier(totalWorkers) : null;
+            List<Thread> workers = buildWorkers(config, invariantTracker, monitor, startBarrier);
 
             // 3. Execute the simulation for one run
             SimulationManager runner = new SimulationManager(invariantTracker, workers);
@@ -346,7 +350,10 @@ public final class Main {
 
   /** Constructs worker threads based on the configuration segments. */
   private static List<Thread> buildWorkers(
-      PetriNetConfig cfg, InvariantTracker invariantTracker, Monitor monitor) {
+      PetriNetConfig cfg,
+      InvariantTracker invariantTracker,
+      Monitor monitor,
+      CyclicBarrier startBarrier) {
     List<Thread> threads = new ArrayList<>();
     for (Segment segment : cfg.segments) {
       int qty = Math.max(0, segment.threadQuantity);
@@ -355,7 +362,7 @@ public final class Main {
         continue;
       }
       for (int i = 0; i < qty; i++) {
-        Thread w = new Worker(invariantTracker, monitor, segment, i + 1);
+        Thread w = new Worker(invariantTracker, monitor, segment, i + 1, startBarrier);
         if (w.getName() == null || w.getName().trim().isEmpty()) {
           w.setName(segment.name + "-Worker-" + (i + 1));
         }
