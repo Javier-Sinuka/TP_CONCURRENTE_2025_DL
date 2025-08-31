@@ -97,7 +97,7 @@ public class EnableVector {
    *
    * @return The vector of enabled transitions.
    */
-  public boolean[] getEnableVector() {
+  public boolean[] getTokenEnabledTransitions() {
     return tokenEnabledTransitions;
   }
 
