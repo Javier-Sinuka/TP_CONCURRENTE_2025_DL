@@ -1,6 +1,7 @@
 package edu.unc.petri.cli;
 
 import edu.unc.petri.analysis.AnalysisManager;
+import edu.unc.petri.analysis.ConflictAnalyzer;
 import edu.unc.petri.analysis.InvariantAnalyzer;
 import edu.unc.petri.analysis.PetriNetAnalyzer;
 import edu.unc.petri.core.CurrentMarking;
@@ -165,7 +166,8 @@ public final class Main {
       PetriNetAnalyzer analyzer = setupAnalyzer(config);
 
       if (cli.analysis) {
-        AnalysisManager analysisManager = new AnalysisManager(analyzer);
+        ConflictAnalyzer conflictAnalyzer = new ConflictAnalyzer(analyzer.getIncidenceMatrix());
+        AnalysisManager analysisManager = new AnalysisManager(analyzer, conflictAnalyzer);
         analysisManager.printAnalysisReport();
       }
 
