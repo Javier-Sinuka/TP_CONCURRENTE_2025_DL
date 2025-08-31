@@ -4,7 +4,10 @@ import edu.unc.petri.util.PetriNetConfig;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,8 +23,13 @@ import java.util.stream.Collectors;
  */
 public class SimulationManager {
 
+  /** Shared tracker to monitor invariant completion. */
   private final InvariantTracker invariantTracker;
+
+  /** List of worker threads executing the simulation. */
   private final List<Thread> workers;
+
+  /** Path to the transition log file. */
   private static final String TRANSITION_LOG_PATH = "transition_log.txt";
 
   /**
@@ -60,8 +68,15 @@ public class SimulationManager {
     }
 
     interruptAll(workers);
-    long endTime = System.currentTimeMillis();
-    long duration = endTime - startTime;
+
+    LocalDateTime logResult = readLastTransitionTimeFromLog();
+
+    // Convert the last timestamp to epoch milliseconds to calculate the duration
+    long lastTransitionTime = logResult.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+    long duration = lastTransitionTime - startTime;
+
+    // Ensure duration is non-negative in case of system clock quirks
     System.out.println("--- Simulation Run Complete (" + duration + " ms) ---");
 
     // Gather results
@@ -143,6 +158,39 @@ public class SimulationManager {
       }
     }
     System.out.println("\n--- End of Simulation Report ---");
+  }
+
+  /**
+   * Reads only the last line of the transition log file to find the timestamp of the last
+   * transition.
+   *
+   * @return The timestamp of the last transition, or null if not found.
+   */
+  private LocalDateTime readLastTransitionTimeFromLog() {
+    LocalDateTime latestTime = null;
+    Pattern pattern = Pattern.compile("\\[([^\\]]+)\\] T(\\d+)");
+    String lastLine = null;
+
+    try (RandomAccessFile file = new RandomAccessFile(TRANSITION_LOG_PATH, "r")) {
+      long fileLength = file.length() - 1;
+      StringBuilder sb = new StringBuilder();
+      for (long pointer = fileLength; pointer >= 0; pointer--) {
+        file.seek(pointer);
+        int readByte = file.readByte();
+        if (readByte == '\n' && sb.length() > 0) {
+          break;
+        }
+        sb.append((char) readByte);
+      }
+      lastLine = sb.reverse().toString().trim();
+      Matcher matcher = pattern.matcher(lastLine);
+      if (matcher.find()) {
+        latestTime = LocalDateTime.parse(matcher.group(1));
+      }
+    } catch (IOException e) {
+      System.err.println("Error reading last transition from log: " + e.getMessage());
+    }
+    return latestTime;
   }
 
   /** Prints the header section of the simulation report. */
