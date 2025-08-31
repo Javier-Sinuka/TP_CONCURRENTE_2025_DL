@@ -1,6 +1,6 @@
 {
-  "logPath": "log_4_segments_1_thread_segment_A.txt",
-  "invariantLimit": 20,
+  "logPath": "log_5_segments_3_threads_segment_A.txt",
+  "invariantLimit": 200,
   "initialMarking": [3, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
   "incidence": [
     [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -18,23 +18,23 @@
   ],
   "timeRanges": [
     [0, 0],
-    [1000, 2000],
+    [50, 100],
     [0, 0],
-    [1000, 2000],
-    [1000, 2000],
+    [50, 100],
+    [50, 100],
     [0, 0],
-    [100, 200],
+    [50, 100],
     [0, 0],
-    [1000, 2000],
-    [1000, 2000],
-    [1000, 2000],
+    [50, 100],
+    [50, 100],
+    [50, 100],
     [0, 0]
   ],
   "segments": [
     {
       "name": "Segment-A",
-      "threadQuantity": 1,
-      "transitions": [0, 1, 11]
+      "threadQuantity": 3,
+      "transitions": [0, 1]
     },
     {
       "name": "Segment-B",
@@ -50,21 +50,12 @@
       "name": "Segment-D",
       "threadQuantity": 1,
       "transitions": [7, 8, 9, 10]
+    },
+    {
+      "name": "Segment-E",
+      "threadQuantity": 3,
+      "transitions": [11]
     }
   ],
-  "policy": "random",
-  "transitionWeights": {
-    "0": 1,
-    "1": 1,
-    "2": 1,
-    "3": 1,
-    "4": 1,
-    "5": 1,
-    "6": 1,
-    "7": 1,
-    "8": 1,
-    "9": 1,
-    "10": 1,
-    "11": 1
-  }
+  "policy": "random"
 }
