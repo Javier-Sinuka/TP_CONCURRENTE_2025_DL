@@ -42,6 +42,15 @@ public class PetriNetAnalyzer {
   }
 
   /**
+   * Returns the incidence matrix used by this analyzer.
+   *
+   * @return The IncidenceMatrix instance.
+   */
+  public IncidenceMatrix getIncidenceMatrix() {
+    return incidenceMatrix;
+  }
+
+  /**
    * Calculates and returns the transition invariants (T-invariants) of the Petri net.
    *
    * <p>An invariant is represented as a list of 0-based indices corresponding to the transitions
