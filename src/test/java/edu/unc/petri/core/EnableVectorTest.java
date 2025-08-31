@@ -31,12 +31,13 @@ class EnableVectorTest {
 
     assertEquals(
         numberOfTransitions,
-        enableVector.getEnableVector().length,
+        enableVector.getTokenEnabledTransitions().length,
         "Enable vector size should match number of transitions.");
 
     for (int i = 0; i < numberOfTransitions; i++) {
       assertFalse(
-          enableVector.getEnableVector()[i], "All transitions should be initialized to disabled.");
+          enableVector.getTokenEnabledTransitions()[i],
+          "All transitions should be initialized to disabled.");
       assertEquals(
           0,
           enableVector.getEnableTransitionTime(i),
@@ -99,9 +100,9 @@ class EnableVectorTest {
 
       enableVector.updateEnableVector(mockIncidenceMatrix, mockCurrentMarking);
 
-      assertTrue(enableVector.getEnableVector()[0], "T0 should be enabled.");
-      assertFalse(enableVector.getEnableVector()[1], "T1 should be disabled.");
-      assertTrue(enableVector.getEnableVector()[2], "T2 should be enabled.");
+      assertTrue(enableVector.getTokenEnabledTransitions()[0], "T0 should be enabled.");
+      assertFalse(enableVector.getTokenEnabledTransitions()[1], "T1 should be disabled.");
+      assertTrue(enableVector.getTokenEnabledTransitions()[2], "T2 should be enabled.");
       assertTrue(enableVector.getEnableTransitionTime(0) > 0, "T0 enable time should be set.");
       assertEquals(0, enableVector.getEnableTransitionTime(1), "T1 enable time should be zero.");
       assertTrue(enableVector.getEnableTransitionTime(2) > 0, "T2 enable time should be set.");
@@ -138,8 +139,8 @@ class EnableVectorTest {
 
       enableVector.updateEnableVector(mockIncidenceMatrix, mockCurrentMarking);
 
-      assertTrue(enableVector.getEnableVector()[0], "T0 should be enabled.");
-      assertFalse(enableVector.getEnableVector()[1], "T1 should be disabled.");
+      assertTrue(enableVector.getTokenEnabledTransitions()[0], "T0 should be enabled.");
+      assertFalse(enableVector.getTokenEnabledTransitions()[1], "T1 should be disabled.");
       assertTrue(enableVector.getEnableTransitionTime(0) > 0, "T0 enable time should be set.");
       assertEquals(0, enableVector.getEnableTransitionTime(1), "T1 enable time should be zero.");
 
@@ -159,8 +160,8 @@ class EnableVectorTest {
 
       enableVector.updateEnableVector(mockIncidenceMatrix, mockCurrentMarking);
 
-      assertTrue(enableVector.getEnableVector()[0], "T0 should still be enabled.");
-      assertTrue(enableVector.getEnableVector()[1], "T1 should now be enabled.");
+      assertTrue(enableVector.getTokenEnabledTransitions()[0], "T0 should still be enabled.");
+      assertTrue(enableVector.getTokenEnabledTransitions()[1], "T1 should now be enabled.");
       assertTrue(
           enableVector.getEnableTransitionTime(0) > 0, "T0 enable time should be preserved.");
       assertTrue(enableVector.getEnableTransitionTime(1) > 0, "T1 enable time should be set.");
@@ -181,8 +182,8 @@ class EnableVectorTest {
 
       enableVector.updateEnableVector(mockIncidenceMatrix, mockCurrentMarking);
 
-      assertFalse(enableVector.getEnableVector()[0], "T0 should now be disabled.");
-      assertTrue(enableVector.getEnableVector()[1], "T1 should still be enabled.");
+      assertFalse(enableVector.getTokenEnabledTransitions()[0], "T0 should now be disabled.");
+      assertTrue(enableVector.getTokenEnabledTransitions()[1], "T1 should still be enabled.");
       assertEquals(0, enableVector.getEnableTransitionTime(0), "T0 enable time should be reset.");
       assertTrue(
           enableVector.getEnableTransitionTime(1) > 0, "T1 enable time should be preserved.");
