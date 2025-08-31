@@ -76,7 +76,7 @@ public class PetriNet {
 
     // String markingAfter = currentMarking.toString();
 
-    // log.logMessage("" + markingBefore + "->" + markingAfter + " by T" + transitionIndex);
+    // log.logDebug("" + markingBefore + "->" + markingAfter + " by T" + transitionIndex);
 
     enableVector.updateEnableVector(incidenceMatrix, currentMarking);
 
