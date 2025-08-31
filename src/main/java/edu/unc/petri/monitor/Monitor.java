@@ -89,7 +89,29 @@ public class Monitor implements MonitorInterface {
             }
 
             boolean[] waitingThreads = conditionQueues.areThereWaitingThreads();
-            boolean[] enableTransitions = petriNet.getEnableTransitions();
+
+            for (int i = 0; i < waitingThreads.length; i++) {
+              if (waitingThreads[i]) {
+                log.logDebug(
+                    "Thread "
+                        + Thread.currentThread().getName()
+                        + " finds threads waiting for transition "
+                        + i);
+              }
+            }
+
+            boolean[] enableTransitions = petriNet.getTokenEnabledTransitions();
+
+            for (int i = 0; i < enableTransitions.length; i++) {
+              if (enableTransitions[i]) {
+                log.logDebug(
+                    "Thread "
+                        + Thread.currentThread().getName()
+                        + " finds transition "
+                        + i
+                        + " enabled");
+              }
+            }
 
             ArrayList<Integer> transitionsThatCouldBeFired =
                 getTransitionsThatCouldBeFired(waitingThreads, enableTransitions);
