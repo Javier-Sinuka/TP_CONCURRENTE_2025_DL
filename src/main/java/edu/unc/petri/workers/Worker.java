@@ -3,6 +3,8 @@ package edu.unc.petri.workers;
 import edu.unc.petri.monitor.MonitorInterface;
 import edu.unc.petri.simulation.InvariantTracker;
 import edu.unc.petri.util.Segment;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 /**
  * The Worker class represents a thread that actively attempts to fire transitions in a Petri net.
@@ -24,21 +26,27 @@ public class Worker extends Thread {
   /** The segment this worker is responsible for, containing the transitions it can fire. */
   private final Segment segment;
 
+  /** The barrier to synchronize the start of all workers in a simulation run. */
+  private final CyclicBarrier startBarrier;
+
   /**
    * Constructs a new Worker thread.
    *
    * @param monitor the monitor to interact with the Petri net
    * @param segment the segment this worker is responsible for
+   * @param startBarrier the barrier to wait on before starting execution
    */
   public Worker(
       InvariantTracker invariantTracker,
       MonitorInterface monitor,
       Segment segment,
-      int segmentThreadIndex) {
+      int segmentThreadIndex,
+      CyclicBarrier startBarrier) {
     super(segment.name + "-Worker-" + segmentThreadIndex);
     this.invariantTracker = invariantTracker;
     this.monitor = monitor;
     this.segment = segment;
+    this.startBarrier = startBarrier;
   }
 
   /**
@@ -47,6 +55,21 @@ public class Worker extends Thread {
    */
   @Override
   public void run() {
+    try {
+      // Wait for all other workers to reach this point before starting.
+      if (startBarrier != null) {
+        startBarrier.await();
+      }
+    } catch (InterruptedException e) {
+      // If interrupted while waiting, restore the interrupted status and exit.
+      Thread.currentThread().interrupt();
+      return;
+    } catch (BrokenBarrierException e) {
+      // If another thread fails or is interrupted while waiting, the barrier breaks.
+      // This worker should also exit.
+      return;
+    }
+
     int index = 0;
     while (!invariantTracker.isInvariantLimitReached() && !Thread.currentThread().isInterrupted()) {
       int transition = segment.transitions[index];
