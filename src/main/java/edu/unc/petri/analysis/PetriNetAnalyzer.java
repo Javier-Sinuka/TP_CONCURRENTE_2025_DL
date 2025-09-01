@@ -1,6 +1,8 @@
 package edu.unc.petri.analysis;
 
+import edu.unc.petri.core.CurrentMarking;
 import edu.unc.petri.core.IncidenceMatrix;
+import edu.unc.petri.exceptions.NotEqualToPlaceInvariantEquationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +17,15 @@ import java.util.List;
  * @since 2025-28-08
  */
 public class PetriNetAnalyzer {
+
   /** The incidence matrix representing the Petri net structure. */
   private final IncidenceMatrix incidenceMatrix;
 
   /** Analyzer for computing invariants in the Petri net. */
   private final InvariantAnalyzer invariantAnalyzer;
+
+  /** The initial marking of the Petri net. */
+  private final CurrentMarking initialMarking;
 
   /** Cache for computed transition invariants. */
   private List<ArrayList<Integer>> cachedTransitionInvariants;
@@ -27,18 +33,29 @@ public class PetriNetAnalyzer {
   /** Cache for computed place invariants. */
   private List<ArrayList<Integer>> cachedPlaceInvariants;
 
+  /** Cache for computed place invariant equations. */
+  private List<PlaceInvariantEquation> cachedPlaceInvariantEquations;
+
   /**
    * Constructs a PetriNetAnalyzer for a given incidence matrix.
    *
    * @param invariantAnalyzer The invariant analyzer to use for calculations.
    * @param incidenceMatrix The incidence matrix of the Petri net to analyze.
    */
-  public PetriNetAnalyzer(InvariantAnalyzer invariantAnalyzer, IncidenceMatrix incidenceMatrix) {
+  public PetriNetAnalyzer(
+      InvariantAnalyzer invariantAnalyzer,
+      IncidenceMatrix incidenceMatrix,
+      CurrentMarking initialMarking) {
     if (incidenceMatrix == null) {
       throw new IllegalArgumentException("Incidence matrix cannot be null.");
     }
-    this.incidenceMatrix = incidenceMatrix;
+    if (initialMarking == null) {
+      throw new IllegalArgumentException("Current marking cannot be null.");
+    }
+
     this.invariantAnalyzer = invariantAnalyzer;
+    this.incidenceMatrix = incidenceMatrix;
+    this.initialMarking = initialMarking;
   }
 
   /**
@@ -65,6 +82,7 @@ public class PetriNetAnalyzer {
       List<int[]> invariantVectors = invariantAnalyzer.calculateTransitionInvariants(intMatrix);
       cachedTransitionInvariants = formatInvariants(invariantVectors);
     }
+
     return cachedTransitionInvariants;
   }
 
@@ -82,7 +100,51 @@ public class PetriNetAnalyzer {
       List<int[]> invariantVectors = invariantAnalyzer.calculatePlaceInvariants(intMatrix);
       cachedPlaceInvariants = formatInvariants(invariantVectors);
     }
+
     return cachedPlaceInvariants;
+  }
+
+  /**
+   * Computes and returns the place invariant equations for the Petri net.
+   *
+   * <p>Place invariants are linear equations that describe the conservation of tokens across places
+   * in the net, regardless of transition firings. This method uses the current incidence matrix and
+   * initial marking to analyze and generate all valid place invariant equations. Results are cached
+   * for efficiency.
+   *
+   * @return a list of {@link PlaceInvariantEquation} objects representing the place invariants
+   */
+  public List<PlaceInvariantEquation> getPlaceInvariantEquations() {
+    if (cachedPlaceInvariantEquations == null) {
+      Matrix intMatrix = convertToIntegerMatrix(incidenceMatrix.getMatrix());
+      int[] initialMarking = this.initialMarking.getMarking();
+      List<PlaceInvariantEquation> invariantEquations =
+          invariantAnalyzer.getPlaceInvariantEquations(intMatrix, initialMarking);
+      cachedPlaceInvariantEquations = invariantEquations;
+    }
+
+    return cachedPlaceInvariantEquations;
+  }
+
+  /**
+   * Validates that the given marking satisfies all place invariant equations of the Petri net.
+   *
+   * @param marking an array representing the current marking of the Petri net (tokens in each
+   *     place)
+   * @return true if all place invariant equations are satisfied
+   * @throws NotEqualToPlaceInvariantEquationException if any equation is violated by the marking
+   */
+  public boolean checkPlaceInvariants(int[] marking)
+      throws NotEqualToPlaceInvariantEquationException {
+    List<PlaceInvariantEquation> equations = getPlaceInvariantEquations();
+
+    for (PlaceInvariantEquation equation : equations) {
+      if (!equation.testPlaceInvariant(marking)) {
+        throw new NotEqualToPlaceInvariantEquationException();
+      }
+    }
+
+    return true; // All equations are satisfied
   }
 
   /** Converts a byte[][] matrix to an int[][] matrix. */
@@ -90,14 +152,17 @@ public class PetriNetAnalyzer {
     if (byteMatrix == null || byteMatrix.length == 0) {
       return new Matrix(0, 0);
     }
+
     int rows = byteMatrix.length;
     int cols = byteMatrix[0].length;
+
     int[][] intMatrix = new int[rows][cols];
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < cols; j++) {
         intMatrix[i][j] = byteMatrix[i][j];
       }
     }
+
     return new Matrix(intMatrix);
   }
 
@@ -127,6 +192,7 @@ public class PetriNetAnalyzer {
         formattedInvariants.add(currentInvariant);
       }
     }
+
     return formattedInvariants;
   }
 }
