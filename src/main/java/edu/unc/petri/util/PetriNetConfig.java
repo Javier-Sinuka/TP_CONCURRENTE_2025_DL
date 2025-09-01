@@ -71,7 +71,6 @@ public final class PetriNetConfig {
       @JsonProperty("policy") String policy,
       @JsonProperty("transitionWeights") Map<Integer, Integer> transitionWeights,
       @JsonProperty("invariantLimit") Integer invariantLimit) {
-
     this.logPath = logPath;
     this.initialMarking = initialMarking;
     this.incidence = incidence;
