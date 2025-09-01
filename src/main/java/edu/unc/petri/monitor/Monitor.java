@@ -1,6 +1,7 @@
 package edu.unc.petri.monitor;
 
 import edu.unc.petri.core.PetriNet;
+import edu.unc.petri.exceptions.NotEqualToPlaceInvariantEquationException;
 import edu.unc.petri.exceptions.SimulationLimitReachedException;
 import edu.unc.petri.exceptions.TransitionTimeNotReachedException;
 import edu.unc.petri.policy.PolicyInterface;
@@ -192,6 +193,14 @@ public class Monitor implements MonitorInterface {
                     + " wakes up and re-enters monitor to fire "
                     + t);
           }
+        } catch (NotEqualToPlaceInvariantEquationException e) {
+          log.logDebug(
+              "Thread "
+                  + Thread.currentThread().getName()
+                  + " could not fire "
+                  + t
+                  + " because a place-invariant equation was violated. Terminating simulation.");
+          throw new RuntimeException(e); // Rethrow as unchecked to terminate the simulation
         }
       }
 
