@@ -27,7 +27,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CyclicBarrier;
 
 /**
@@ -49,7 +53,11 @@ public final class Main {
               "--analysis", "--simulation", "--statistics", "--debug", "--help", "--runs"));
 
   private static final class Cli {
-    final boolean analysis, simulation, statistics, debug, help;
+    final boolean analysis;
+    final boolean simulation;
+    final boolean statistics;
+    final boolean debug;
+    final boolean help;
     final int runs;
     final String configPath;
 
@@ -65,7 +73,11 @@ public final class Main {
   }
 
   private static Cli parseArgs(String[] args) {
-    boolean analysis = false, simulation = false, statistics = false, debug = false, help = false;
+    boolean analysis = false;
+    boolean simulation = false;
+    boolean statistics = false;
+    boolean debug = false;
+    boolean help = false;
     String configArg = null;
     int runs = 1;
 
@@ -108,6 +120,10 @@ public final class Main {
             break;
           case "--help":
             help = true;
+            break;
+          default:
+            System.err.println("Unknown option: " + a);
+            System.exit(2);
             break;
         }
       } else {
@@ -180,7 +196,7 @@ public final class Main {
         Log debugLog = new Log(debugLogPath); // Creates a "do-nothing" log if path is null
 
         Log transitionLog = new Log(); // Cleared each run
-        PetriNet petriNet = buildPetriNet(config, transitionLog);
+        PetriNet petriNet = buildPetriNet(config, analyzer, transitionLog);
         PolicyInterface policy = choosePolicy(config);
         InvariantTracker invariantTracker = setupInvariantTracker(config, analyzer);
         Monitor monitor = setupMonitor(invariantTracker, petriNet, policy, debugLog);
@@ -302,8 +318,9 @@ public final class Main {
   /** Initializes the PetriNetAnalyzer with the given configuration. */
   private static PetriNetAnalyzer setupAnalyzer(PetriNetConfig config) {
     IncidenceMatrix incidenceMatrix = new IncidenceMatrix(config.incidence);
+    CurrentMarking initialMarking = new CurrentMarking(config.initialMarking);
     InvariantAnalyzer invariantAnalyzer = new InvariantAnalyzer();
-    return new PetriNetAnalyzer(invariantAnalyzer, incidenceMatrix);
+    return new PetriNetAnalyzer(invariantAnalyzer, incidenceMatrix, initialMarking);
   }
 
   /** Initializes the InvariantTracker with invariants from the analyzer and config limits. */
@@ -342,12 +359,13 @@ public final class Main {
   }
 
   /** Constructs the PetriNet instance from the configuration and transition log. */
-  private static PetriNet buildPetriNet(PetriNetConfig cfg, Log log) {
+  private static PetriNet buildPetriNet(
+      PetriNetConfig cfg, PetriNetAnalyzer petriNetAnalyzer, Log log) {
     IncidenceMatrix incidence = new IncidenceMatrix(cfg.incidence);
     CurrentMarking current = new CurrentMarking(cfg.initialMarking);
     TimeRangeMatrix timeRanges = new TimeRangeMatrix(cfg.timeRanges);
     EnableVector enableVector = new EnableVector(incidence.getTransitions(), timeRanges);
-    return new PetriNet(incidence, current, enableVector, log);
+    return new PetriNet(incidence, current, enableVector, petriNetAnalyzer, log);
   }
 
   /** Constructs worker threads based on the configuration segments. */
