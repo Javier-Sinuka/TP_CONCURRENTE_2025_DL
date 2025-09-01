@@ -97,6 +97,19 @@ public class AnalysisManager {
       }
     }
 
+    // Print P-Invariant Equations
+    System.out.println("\nCalculating P-Invariant Equations...");
+    List<PlaceInvariantEquation> placeInvariantEquations = analyzer.getPlaceInvariantEquations();
+    if (placeInvariantEquations.isEmpty()) {
+      System.out.println("-> No P-Invariant Equations found.");
+    } else {
+      System.out.println(
+          "-> Found " + placeInvariantEquations.size() + " P-Invariant Equation(s):");
+      for (int i = 0; i < placeInvariantEquations.size(); i++) {
+        System.out.println("   - Equation " + (i + 1) + ": " + placeInvariantEquations.get(i));
+      }
+    }
+
     // Print Structural Conflicts
     System.out.println("\nAnalyzing Structural Conflicts...");
     Map<Integer, List<Integer>> rawConflicts = conflictAnalyzer.getConflicts();
