@@ -1,5 +1,7 @@
 package edu.unc.petri.core;
 
+import edu.unc.petri.analysis.PetriNetAnalyzer;
+import edu.unc.petri.exceptions.NotEqualToPlaceInvariantEquationException;
 import edu.unc.petri.exceptions.TransitionTimeNotReachedException;
 import edu.unc.petri.util.Log;
 import edu.unc.petri.util.StateEquationUtils;
@@ -25,6 +27,9 @@ public class PetriNet {
   /** The enable vector of the Petri net, indicating which transitions are currently enabled. */
   private EnableVector enableVector;
 
+  /** The PetriNetAnalysis associated with this Petri net. */
+  private PetriNetAnalyzer petriNetAnalyzer;
+
   /** The log for recording transition firings in the simulation. */
   private Log log;
 
@@ -39,10 +44,12 @@ public class PetriNet {
       IncidenceMatrix incidenceMatrix,
       CurrentMarking currentMarking,
       EnableVector enableVector,
+      PetriNetAnalyzer petriNetAnalyzer,
       Log log) {
     this.incidenceMatrix = incidenceMatrix;
     this.currentMarking = currentMarking;
     this.enableVector = enableVector;
+    this.petriNetAnalyzer = petriNetAnalyzer;
     this.log = log;
 
     this.enableVector.updateEnableVector(incidenceMatrix, currentMarking);
@@ -55,7 +62,8 @@ public class PetriNet {
    * @param transitionIndex the index of the transition to fire
    * @return true if the transition was successfully fired, false otherwise
    */
-  public boolean fire(int transitionIndex) throws TransitionTimeNotReachedException {
+  public boolean fire(int transitionIndex)
+      throws TransitionTimeNotReachedException, NotEqualToPlaceInvariantEquationException {
     if (transitionIndex < 0 || transitionIndex >= incidenceMatrix.getTransitions()) {
       throw new IllegalArgumentException("Invalid transition index: " + transitionIndex);
     }
@@ -73,6 +81,9 @@ public class PetriNet {
             transitionIndex, incidenceMatrix, currentMarking));
 
     log.logTransition(transitionIndex);
+
+    // Check place invariants after firing the transition
+    petriNetAnalyzer.checkPlaceInvariants(currentMarking.getMarking());
 
     // String markingAfter = currentMarking.toString();
 
