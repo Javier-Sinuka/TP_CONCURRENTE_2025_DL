@@ -7,6 +7,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import edu.unc.petri.analysis.PetriNetAnalyzer;
 import edu.unc.petri.exceptions.TransitionTimeNotReachedException;
 import edu.unc.petri.util.Log;
 import edu.unc.petri.util.StateEquationUtils;
@@ -26,13 +27,20 @@ class PetriNetTest {
   @Mock private CurrentMarking mockCurrentMarking;
   @Mock private TimeRangeMatrix mockTimeRangeMatrix;
   @Mock private EnableVector mockEnableVector;
+  @Mock private PetriNetAnalyzer mockPetriNetAnalyzer;
   @Mock private Log mockLog;
 
   private PetriNet petriNet;
 
   @BeforeEach
   void setUp() {
-    petriNet = new PetriNet(mockIncidenceMatrix, mockCurrentMarking, mockEnableVector, mockLog);
+    petriNet =
+        new PetriNet(
+            mockIncidenceMatrix,
+            mockCurrentMarking,
+            mockEnableVector,
+            mockPetriNetAnalyzer,
+            mockLog);
 
     when(mockIncidenceMatrix.getTransitions()).thenReturn(10); // Mock total transitions
   }
@@ -64,7 +72,8 @@ class PetriNetTest {
 
       try {
         result = petriNet.fire(transitionToFire);
-      } catch (TransitionTimeNotReachedException e) {
+      } catch (Exception e) {
+        // Handle exception appropriately
         e.printStackTrace();
         result = false;
       }
