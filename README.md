@@ -3,18 +3,23 @@
 ## Introduction
 The Petri Net Simulator is a concurrent, configurable simulation framework written in Java. It provides a robust environment for modeling, simulating, and analyzing systems with parallel processes using Petri Nets.
 
-The project emphasizes a clean separation of concerns, with a core Petri Net engine, a monitor-based synchronization layer for handling concurrency, and a pluggable policy system for defining transition firing logic. The entire simulation, including the net's structure, timing, and threading model, is defined through external JSON configuration files.
+The project emphasizes a clean separation of concerns, with a core Petri Net engine, a monitor-based synchronization layer for handling concurrency, and a pluggable policy system for defining transition firing logic. The entire simulation, including the net's structure, timing, and threading model, is defined through external JSON configuration files. Additionally, it features a powerful static analysis toolkit to compute and report on structural properties of the net.
 
 ## Features
 - **JSON Configuration**: Dynamically configure the entire Petri Net, including its structure (places, transitions, incidence matrix), initial state, transition timings, and threading model from a single JSON file.
+- **Advanced Analysis Tools**: A built-in static analyzer computes key structural properties of the Petri net, including:
+    - **P-Invariants (Place Invariants)**: Identifies sets of places where the weighted sum of tokens remains constant, crucial for verifying conservation properties.
+    - **T-Invariants (Transition Invariants)**: Finds sequences of transition firings that restore the net to a previous state, useful for detecting cycles and verifying liveness.
+    - **Structural Conflicts**: Detects which transitions compete for the same input resources (places).
+- **Flexible Command-Line Interface**: Run simulations, analysis, or both using simple command-line flags. Supports executing multiple runs and generating aggregated statistical reports.
 - **Multi-threaded Simulation**: Leverage a sophisticated threading model using "Segments" to assign groups of transitions to dedicated worker threads, enabling true parallel simulation.
 - **Monitor-Based Synchronization**: Guarantees thread-safe state transitions using a classic monitor pattern, which manages concurrent access to the Petri Net and coordinates worker threads via condition queues.
-- **Pluggable Firing Policies**: Easily switch between different strategies for selecting which transition to fire when multiple are enabled. The project includes a `RandomPolicy` and a `PriorityPolicy`, and the `PolicyInterface` allows for custom implementations.
-- **Time-Aware Transitions**: Model timed Petri Nets by specifying minimum and maximum firing delays for each transition, allowing for more realistic system simulations.
-- **Comprehensive Logging**: Generates a detailed, formatted log file that records the entire simulation sequence, including which thread fired each transition and other significant monitor events.
-- **Maven Build System**: The project is built and managed with Maven, providing easy dependency management, testing, and execution.
+- **Pluggable Firing Policies**: Easily switch between different strategies for selecting which transition to fire when multiple are enabled. The project includes a `RandomPolicy` and a `PriorityPolicy`.
+- **Time-Aware Transitions**: Model timed Petri Nets by specifying minimum and maximum firing delays for each transition.
+- **Invariant-Based Simulation Goals**: Define a clear end-condition for simulations by setting an `invariantLimit` in the configuration file.
+- **Comprehensive Logging**: Generates detailed log files for both transition sequences and debug information.
 
-## Installation
+## Installation and Building
 
 ### Prerequisites
 - **Java Development Kit (JDK)**: Version 8 or higher.
@@ -27,139 +32,123 @@ The project emphasizes a clean separation of concerns, with a core Petri Net eng
     ```
 2.  **Navigate to the project directory:**
     ```bash
-    cd TP_CONCURRENTE_2025_DL
+    cd TP_CONCURRENTE_2025_DL-feature-analyzer
     ```
 3.  **Build the project using the Maven Wrapper:**
-    This command will compile the source code, download dependencies, and package the application.
+    This command will format the code, compile the source, run tests, and package the application into a runnable JAR file located in the `target/` directory.
 
     *   On **Linux** or **macOS**:
         ```bash
-        ./mvnw clean install
+        ./mvnw verify
         ```
     *   On **Windows** (Command Prompt or PowerShell):
         ```bash
-        mvnw.cmd clean install
+        mvnw.cmd verify
         ```
-4.  **Run tests to verify the installation:**
+    A `BUILD SUCCESS` message indicates the simulator is ready.
 
-    *   On **Linux** or **macOS**:
-        ```bash
-        ./mvnw test
-        ```
-    *   On **Windows**:
-        ```bash
-        mvnw.cmd test
-        ```
+## Usage
+The simulator is run from the command line and controlled with flags. By default, it runs both a static analysis and a single simulation.
 
-## Development Workflow and Usage
+### Basic Syntax
+```bash
+java -jar target/petri-sim-0.1.0-SNAPSHOT.jar [options] [config_file_path]
+```
 
-This project is managed with the Maven Wrapper. Use `./mvnw` on Linux/macOS and `mvnw.cmd` on Windows. The workflow for building, testing, and running is the same across platforms.
+### Command-Line Options
 
-#### Step 1: Format Code (Recommended)
-Before building, it's good practice to format your code according to the project's style guide (Google Java Style).
+| Option         | Description                                                                                                   |
+|----------------|---------------------------------------------------------------------------------------------------------------|
+| `--analysis`   | Run only the static Petri net analysis (P/T invariants, conflicts).                                           |
+| `--simulation` | Run only the simulation.                                                                                      |
+| `--runs <N>`   | Execute the simulation `N` times. Defaults to 1.                                                              |
+| `--statistics` | When `--runs > 1`, suppresses individual run reports and shows a final statistical report with averages.      |
+| `--debug`      | Enable detailed debug logging. The log file is specified by `logPath` in the JSON configuration.              |
+| `--help`       | Display the help message and exit.                                                                            |
 
-*   On **Linux** or **macOS**:
+### Examples
+*   **Run both analysis and a single simulation (default behavior):**
     ```bash
-    ./mvnw spotless:apply
-    ```
-*   On **Windows**:
-    ```bash
-    mvnw.cmd spotless:apply
-    ```
-
-#### Step 2: Build and Verify the Project
-The `verify` command compiles the code, runs all unit tests, and packages the application into a runnable JAR file in the `target` directory.
-
-*   On **Linux** or **macOS**:
-    ```bash
-    ./mvnw verify
-    ```
-*   On **Windows**:
-    ```bash
-    mvnw.cmd verify
-    ```
-    A `BUILD SUCCESS` message means the simulator is ready to run.
-
-#### Step 3: Run the Simulator
-Once packaged, you can execute the application. It expects the path to a JSON configuration file as an argument; without one, it defaults to `config_default.json`.
-
-*   On **Linux** or **macOS**:
-    ```bash
-    java -jar target/petri-sim-0.1.0-SNAPSHOT.jar /path/to/your_config.json
-    ```
-*   On **Windows**:
-    ```bash
-    java -jar target\petri-sim-0.1.0-SNAPSHOT.jar \path\to\your_config.json
+    java -jar target/petri-sim-0.1.0-SNAPSHOT.jar
     ```
 
-#### All-in-One Command
-You can chain these commands to format, build, and run in a single line.
-
-*   On **Linux** or **macOS**:
+*   **Run analysis only using a specific configuration:**
     ```bash
-    ./mvnw spotless:apply && ./mvnw verify && java -jar target/petri-sim-0.1.0-SNAPSHOT.jar /path/to/your_config.json
-    ```
-*   On **Windows**:
-    ```bash
-    mvnw.cmd spotless:apply && mvnw.cmd verify && java -jar target\petri-sim-0.1.0-SNAPSHOT.jar \path\to\your_config.json
+    java -jar target/petri-sim-0.1.0-SNAPSHOT.jar --analysis simulation_configs/config_tp_2024.json
     ```
 
-### Configuration File Explained
-The behavior of the simulation is entirely controlled by a JSON file. Here is a breakdown of the structure using `config_default.json` as an example:
+*   **Run 10 simulations with statistical reporting and debug logging:**
+    ```bash
+    java -jar target/petri-sim-0.1.0-SNAPSHOT.jar --simulation --runs 10 --statistics --debug
+    ```
+
+## Configuration File Explained
+The simulation's behavior is entirely controlled by a JSON file. Below is a breakdown of its structure.
 
 ```json
 {
-  // Path for the output log file.
+  // Path for the debug output log file.
   "logPath": "log_default.txt",
 
-  // An array representing the initial number of tokens in each place. The index corresponds to the place number (P0, P1, ...).
-  "initialMarking":,
+  // The simulation will stop after this many T-invariants have completed.
+  "invariantLimit": 10,
 
-  // The incidence matrix (I). Rows represent places and columns represent transitions.
-  // -1: Token is consumed from the place.
-  //  1: Token is produced into the place.
+  // An array representing the initial number of tokens in each place (P0, P1, ...).
+  "initialMarking": [1, 0, 0, 0],
+
+  // The incidence matrix (I). Rows are places, columns are transitions.
+  // -1: Token is consumed.
+  //  1: Token is produced.
   //  0: No connection.
   "incidence": [
-    [-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0]
+    [-1, 0, 0, 1],
+    [1, -1, 0, 0],
+    [0, 1, -1, 0],
+    [0, 0, 1, -1]
   ],
 
-  // Time ranges [min, max] in milliseconds for each transition. A transition can only fire if the time since it was enabled falls within this range.
-  // represents an immediate transition.
+  // Time ranges [min, max] in milliseconds for each transition.
+  // A transition can only fire if the time since it was last enabled falls within this range.
+  // [0, 0] represents an immediate transition.
   "timeRanges": [
-   ,,,,,
+    [100, 100],
+    [100, 100],
+    [100, 100],
+    [100, 100]
   ],
 
-  // Defines the threading model. Each object in this array is a "Segment".
+  // Defines the threading model. Each object is a "Segment".
   "segments": [
     {
-      "name": "Default-Segment",       // A logical name for the group of threads.
-      "threadQuantity": 1,             // The number of worker threads to create for this segment.
-      "transitions":            // The transitions that the threads in this segment will attempt to fire.
+      "name": "Default-Segment",
+      "threadQuantity": 1,
+      "transitions": [0, 1, 2, 3]
     }
   ],
 
-  // A map of transition weights used by the PriorityPolicy. Higher numbers mean higher priority.
+  // Policy for choosing which transition to fire when multiple are enabled.
+  // Options: "random", "priority".
+  "policy": "random",
+
+  // A map of transition weights used by the "priority" policy. Higher numbers mean higher priority.
+  // Required only if policy is "priority".
   "transitionWeights": {
-    "0": 1, "1": 1, "2": 1, "3": 1, "4": 1, "5": 1
+    "0": 1,
+    "1": 1,
+    "2": 1,
+    "3": 1
   }
 }
 ```
 
 ## Contributing
-
-See the [`CONTRIBUTING.md`](./CONTRIBUTING.md) file for detailed guidelines.
+Please see the [`CONTRIBUTING.md`](./CONTRIBUTING.md) file for detailed guidelines on the development workflow, coding standards, and branching model.
 
 ### Code Style
-Please adhere to the Google Java Style Guide. The project uses the `spotless-maven-plugin` to automatically check and format the code.
+The project adheres to the **Google Java Style Guide**. The `spotless-maven-plugin` is used to automatically check and format the code. Run `./mvnw spotless:apply` before committing.
 
 ## License
-This project is licensed under the MIT License. See the `LICENSE` file for more details.
+This project is licensed under the Apache License 2.0. See the headers in the source files for more details.
 
 ## Contact
 For any inquiries or support, please open an issue on the GitHub repository.
-
