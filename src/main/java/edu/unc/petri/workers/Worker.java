@@ -4,6 +4,7 @@ import edu.unc.petri.monitor.MonitorInterface;
 import edu.unc.petri.simulation.InvariantTracker;
 import edu.unc.petri.util.Segment;
 import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 
 /**
@@ -29,6 +30,9 @@ public class Worker extends Thread {
   /** The barrier to synchronize the start of all workers in a simulation run. */
   private final CyclicBarrier startBarrier;
 
+  /** The latch to signal when this worker has completed its execution. */
+  private final CountDownLatch doneSignal;
+
   /**
    * Constructs a new Worker thread.
    *
@@ -41,12 +45,14 @@ public class Worker extends Thread {
       MonitorInterface monitor,
       Segment segment,
       int segmentThreadIndex,
-      CyclicBarrier startBarrier) {
+      CyclicBarrier startBarrier,
+      CountDownLatch doneSignal) {
     super(segment.name + "-Worker-" + segmentThreadIndex);
     this.invariantTracker = invariantTracker;
     this.monitor = monitor;
     this.segment = segment;
     this.startBarrier = startBarrier;
+    this.doneSignal = doneSignal;
   }
 
   /**
@@ -77,7 +83,8 @@ public class Worker extends Thread {
         boolean hasFired = monitor.fireTransition(transition);
 
         if (!hasFired) {
-          break; // Segment is done, exit the while loop
+          doneSignal.countDown(); // Signal that this worker is done
+          return; // Segment is done, exit the while loop
         }
       } catch (RuntimeException ex) {
         // Exit silently on shutdown interrupt
