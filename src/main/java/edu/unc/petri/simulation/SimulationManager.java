@@ -112,7 +112,7 @@ public class SimulationManager {
     System.out.println("Total simulation time: " + result.getDuration() + " ms.");
     System.out.println(
         "Total invariants completed: "
-            + result.getConfig().invariantLimit
+            + result.getTotalInvariantCompletionsCount()
             + "/"
             + result.getConfig().invariantLimit);
 

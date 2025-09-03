@@ -28,6 +28,9 @@ public class SimulationResult {
   /** Map of transition IDs to their respective firing counts. */
   private final Map<Integer, Integer> transitionCounts;
 
+  /** Total number of invariant completions during the simulation. */
+  private final int totalInvariantCompletionCount;
+
   /** Array of counts indicating how many times each invariant was completed. */
   private final int[] invariantCompletionCounts;
 
@@ -63,6 +66,7 @@ public class SimulationResult {
       PetriNetConfig config) {
     this.duration = duration;
     this.transitionCounts = transitionCounts;
+    this.totalInvariantCompletionCount = invariantTracker.getInvariantCounter();
     this.invariantCompletionCounts = invariantTracker.getInvariantCompletionCounts();
     this.originalInvariants = invariantTracker.getOriginalInvariants();
     this.configPath = configPath;
@@ -77,6 +81,10 @@ public class SimulationResult {
 
   public Map<Integer, Integer> getTransitionCounts() {
     return transitionCounts;
+  }
+
+  public int getTotalInvariantCompletionsCount() {
+    return totalInvariantCompletionCount;
   }
 
   public int[] getInvariantCompletionCounts() {
