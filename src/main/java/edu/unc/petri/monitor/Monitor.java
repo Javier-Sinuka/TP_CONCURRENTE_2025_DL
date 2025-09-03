@@ -152,8 +152,8 @@ public class Monitor implements MonitorInterface {
             }
           } else {
             log.logDebug("Thread " + Thread.currentThread().getName() + " could not fire " + t);
-            mutex.release();
             log.logDebug("Thread " + Thread.currentThread().getName() + " goes to wait for " + t);
+            mutex.release();
             conditionQueues.waitForTransition(t);
             log.logDebug(
                 "Thread "
