@@ -199,7 +199,7 @@ public final class Main {
         PetriNet petriNet = buildPetriNet(config, analyzer, transitionLog);
         PolicyInterface policy = choosePolicy(config);
         InvariantTracker invariantTracker = setupInvariantTracker(config, analyzer);
-        Monitor monitor = setupMonitor(invariantTracker, petriNet, policy, debugLog);
+        Monitor monitor = null;
 
         StatisticsAggregator stats = new StatisticsAggregator();
         // Create a stateless manager instance for report generation
@@ -221,7 +221,7 @@ public final class Main {
             // 1. Reset state of shared components for a clean run
             petriNet.reset(config.initialMarking);
             invariantTracker.reset();
-            monitor.reset();
+            monitor = setupMonitor(invariantTracker, petriNet, policy, debugLog);
             transitionLog.clearLog();
             debugLog.logHeader("Petri Net Simulation Log: Run " + (i + 1), configPath.toString());
 
