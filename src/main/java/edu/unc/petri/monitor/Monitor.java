@@ -214,17 +214,15 @@ public class Monitor implements MonitorInterface {
   }
 
   /**
-   * Resets the monitor's state for a new simulation run. This re-initializes the mutex to ensure
-   * it's unlocked and creates fresh condition queues to clear any state from the previous run.
+   * Returns a list of transition indices that could be fired based on the current state. A
+   * transition is considered for firing if its corresponding thread is waiting and the transition
+   * is enabled.
+   *
+   * @param waitingThreads an array indicating which threads are currently waiting for each
+   *     transition
+   * @param enableTransitions an array indicating which transitions are currently enabled
+   * @return a list of transition indices that could be fired
    */
-  public void reset() {
-    // Re-create the mutex to guarantee a clean, single-permit, unlocked state.
-    this.mutex = new Semaphore(PERMITS);
-    // The ConditionQueues object holds the transition-specific semaphores.
-    // Resetting it ensures no lingering permits or queued threads from the last run.
-    this.conditionQueues.reset();
-  }
-
   private ArrayList<Integer> getTransitionsThatCouldBeFired(
       boolean[] waitingThreads, boolean[] enableTransitions) {
     ArrayList<Integer> transitions = new ArrayList<>();
