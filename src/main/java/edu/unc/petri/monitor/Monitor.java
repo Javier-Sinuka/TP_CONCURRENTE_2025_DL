@@ -85,6 +85,10 @@ public class Monitor implements MonitorInterface {
             try {
               invariantTracker.updateInvariantTracker(t);
             } catch (SimulationLimitReachedException e) {
+              log.logDebug(
+                  "Thread "
+                      + Thread.currentThread().getName()
+                      + " detected simulation limit reached. Terminating simulation.");
               return false; // Exit if the simulation limit has been reached
               // We do not release the mutex here because the simulation is ending
             }
