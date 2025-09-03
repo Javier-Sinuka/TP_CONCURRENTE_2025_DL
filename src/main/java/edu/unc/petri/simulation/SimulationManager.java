@@ -4,15 +4,13 @@ import edu.unc.petri.util.PetriNetConfig;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -51,30 +49,25 @@ public class SimulationManager {
    * @param config The loaded PetriNetConfig object for metadata.
    * @return A SimulationResult object containing the results and metadata of the run.
    */
-  public SimulationResult execute(Path configPath, PetriNetConfig config) {
+  public SimulationResult execute(
+      Path configPath, PetriNetConfig config, CountDownLatch firstDoneSignal) {
     long startTime = System.currentTimeMillis();
 
     startAll(workers);
 
-    // Wait for the simulation to reach its invariant limit
-    while (!invariantTracker.isInvariantLimitReached()) {
-      try {
-        Thread.sleep(100); // Poll to avoid busy-waiting
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-        System.err.println("Simulation monitoring was interrupted.");
-        break;
-      }
+    try {
+      firstDoneSignal.await(); // Wait for the first worker to signal completion
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      // Handle the exception, e.g., log or rethrow
+      System.err.println("Thread was interrupted while waiting for workers to complete.");
     }
 
-    interruptAll(workers);
+    interruptAll(workers); // Interrupt remaining workers to signal shutdown
 
-    LocalDateTime logResult = readLastTransitionTimeFromLog();
+    long endTime = System.currentTimeMillis();
 
-    // Convert the last timestamp to epoch milliseconds to calculate the duration
-    long lastTransitionTime = logResult.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-
-    long duration = lastTransitionTime - startTime;
+    long duration = endTime - startTime;
 
     // Ensure duration is non-negative in case of system clock quirks
     System.out.println("--- Simulation Run Complete (" + duration + " ms) ---");
@@ -158,39 +151,6 @@ public class SimulationManager {
       }
     }
     System.out.println("\n--- End of Simulation Report ---");
-  }
-
-  /**
-   * Reads only the last line of the transition log file to find the timestamp of the last
-   * transition.
-   *
-   * @return The timestamp of the last transition, or null if not found.
-   */
-  private LocalDateTime readLastTransitionTimeFromLog() {
-    LocalDateTime latestTime = null;
-    Pattern pattern = Pattern.compile("\\[([^\\]]+)\\] T(\\d+)");
-    String lastLine = null;
-
-    try (RandomAccessFile file = new RandomAccessFile(TRANSITION_LOG_PATH, "r")) {
-      long fileLength = file.length() - 1;
-      StringBuilder sb = new StringBuilder();
-      for (long pointer = fileLength; pointer >= 0; pointer--) {
-        file.seek(pointer);
-        int readByte = file.readByte();
-        if (readByte == '\n' && sb.length() > 0) {
-          break;
-        }
-        sb.append((char) readByte);
-      }
-      lastLine = sb.reverse().toString().trim();
-      Matcher matcher = pattern.matcher(lastLine);
-      if (matcher.find()) {
-        latestTime = LocalDateTime.parse(matcher.group(1));
-      }
-    } catch (IOException e) {
-      System.err.println("Error reading last transition from log: " + e.getMessage());
-    }
-    return latestTime;
   }
 
   /** Prints the header section of the simulation report. */
