@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 
 /**
@@ -229,11 +230,13 @@ public final class Main {
             final int totalWorkers = config.segments.stream().mapToInt(s -> s.threadQuantity).sum();
             final CyclicBarrier startBarrier =
                 (totalWorkers > 0) ? new CyclicBarrier(totalWorkers) : null;
-            List<Thread> workers = buildWorkers(config, invariantTracker, monitor, startBarrier);
+            final CountDownLatch firstDoneSignal = new CountDownLatch(1);
+            List<Thread> workers =
+                buildWorkers(config, invariantTracker, monitor, startBarrier, firstDoneSignal);
 
             // 3. Execute the simulation for one run
             SimulationManager runner = new SimulationManager(invariantTracker, workers);
-            SimulationResult result = runner.execute(configPath, config);
+            SimulationResult result = runner.execute(configPath, config, firstDoneSignal);
 
             // 4. Process the result
             if (cli.runs > 1 && cli.statistics) {
@@ -373,7 +376,8 @@ public final class Main {
       PetriNetConfig cfg,
       InvariantTracker invariantTracker,
       Monitor monitor,
-      CyclicBarrier startBarrier) {
+      CyclicBarrier startBarrier,
+      CountDownLatch firstDoneSignal) {
     List<Thread> threads = new ArrayList<>();
     for (Segment segment : cfg.segments) {
       int qty = Math.max(0, segment.threadQuantity);
@@ -382,7 +386,8 @@ public final class Main {
         continue;
       }
       for (int i = 0; i < qty; i++) {
-        Thread w = new Worker(invariantTracker, monitor, segment, i + 1, startBarrier);
+        Thread w =
+            new Worker(invariantTracker, monitor, segment, i + 1, startBarrier, firstDoneSignal);
         if (w.getName() == null || w.getName().trim().isEmpty()) {
           w.setName(segment.name + "-Worker-" + (i + 1));
         }
