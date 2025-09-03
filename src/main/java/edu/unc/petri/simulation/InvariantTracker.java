@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -29,13 +30,28 @@ import java.util.stream.Collectors;
  */
 public class InvariantTracker {
 
+  /** Stores the original invariants as a list of integer lists. */
   private final List<ArrayList<Integer>> originalInvariants;
+
+  /** Maps transition indices to lists of positions. */
   private final Map<Integer, List<Pos>> indexByTransition;
-  private Set<TrackerBundle> activeBundles = new HashSet<>();
+
+  /** Set of currently active tracking instance bundles. */
+  private Set<TrackingInstanceBundle> activeBundles = new HashSet<>();
+
+  /** The maximum number of invariants allowed. */
   private final int invariantLimit;
+
+  /** Counter for the number of invariants processed. */
   private int invariantCounter;
+
+  /** Array tracking completion counts for each invariant. */
   private final int[] invariantCompletionCounts;
+
+  /** Indicates whether the invariant limit is enabled. */
   private final boolean limitEnabled;
+
+  /** Static variable for generating unique bundle IDs. */
   private static long nextBundleId = 0;
 
   /**
@@ -45,8 +61,11 @@ public class InvariantTracker {
    * the sequence of transitions for that template.
    */
   private static final class Pos {
-    final int tpl; // template index
-    final int pos; // position in sequence
+    /** The index of the template. */
+    final int tpl;
+
+    /** The position in the sequence. */
+    final int pos;
 
     Pos(int tpl, int pos) {
       this.tpl = tpl;
@@ -61,9 +80,14 @@ public class InvariantTracker {
    * sequence of transitions. It records:
    */
   private static final class InvariantTrackingInstance {
-    final int tpl; // The index of the invariant template
-    final int nextExpectedTransitionIdx; // The index of the *next* transition expected in sequence
-    final int startPosInTpl; // The starting position in the template sequence (for circular check)
+    /** The index of the invariant template. */
+    final int tpl;
+
+    /** The index of the next transition expected in sequence. */
+    int nextExpectedTransitionIdx;
+
+    /** The starting position in the template sequence (for circular check). */
+    final int startPosInTpl;
 
     InvariantTrackingInstance(int tpl, int nextExpectedTransitionIdx, int startPosInTpl) {
       this.tpl = tpl;
@@ -79,11 +103,14 @@ public class InvariantTracker {
    * InvariantTrackingInstance} objects representing the hypotheses being tracked. Bundles are
    * considered equal if their {@code id} values are the same.
    */
-  private static final class TrackerBundle {
+  private static final class TrackingInstanceBundle {
+    /** Unique identifier for the tracking instance. */
     final long id;
+
+    /** Set of hypotheses being tracked by this instance. */
     final Set<InvariantTrackingInstance> hypotheses;
 
-    TrackerBundle(Set<InvariantTrackingInstance> hypotheses) {
+    TrackingInstanceBundle(Set<InvariantTrackingInstance> hypotheses) {
       this.id = nextBundleId++;
       this.hypotheses = hypotheses;
     }
@@ -96,7 +123,7 @@ public class InvariantTracker {
       if (o == null || getClass() != o.getClass()) {
         return false;
       }
-      return id == ((TrackerBundle) o).id;
+      return id == ((TrackingInstanceBundle) o).id;
     }
 
     @Override
@@ -208,27 +235,30 @@ public class InvariantTracker {
     }
 
     // --- Stage 1: Identify all candidate bundles that can consume this firedTransition ---
-    List<TrackerBundle> candidates = new ArrayList<>();
-    for (TrackerBundle bundle : activeBundles) {
+    List<TrackingInstanceBundle> candidates = new ArrayList<>();
+    for (TrackingInstanceBundle bundle : activeBundles) {
       for (InvariantTrackingInstance instance : bundle.hypotheses) {
         if (originalInvariants.get(instance.tpl).get(instance.nextExpectedTransitionIdx)
             == firedTransition) {
           candidates.add(bundle);
-          break; // Found a match, this bundle is a candidate.
+          break; // Found a match, this bundle is a candidate. We just need at least one match.
         }
       }
     }
 
     // --- Stage 2: Process based on whether there are candidates ---
     if (candidates.isEmpty()) {
-      // **Case A: No existing bundle consumed the firedTransition. Spawn a new one.**
+      // **Case A: No active bundle expects to consume the firedTransition. Spawn a new one.**
       spawnNewBundle(firedTransition);
     } else {
-      // **Case B: One or more bundles could consume the firedTransition. Select a winner.**
-      TrackerBundle winner =
-          candidates.stream().min(Comparator.comparingLong(b -> b.id)).orElse(null);
+      // **Case B: One or more active bundles expect to consume the firedTransition. Select a
+      // winner.**
+      TrackingInstanceBundle winnerBundle =
+          candidates.stream()
+              .min(Comparator.comparingLong(b -> b.id))
+              .orElse(null); // Select the earliest-created bundle
 
-      processWinnerBundle(winner, firedTransition);
+      processWinnerBundle(winnerBundle, firedTransition);
     }
 
     if (isInvariantLimitReached()) {
@@ -236,58 +266,64 @@ public class InvariantTracker {
     }
   }
 
-  private void processWinnerBundle(TrackerBundle winner, int firedTransition) {
-    Set<TrackerBundle> nextGenerationBundles = new HashSet<>();
-    for (TrackerBundle bundle : activeBundles) {
-      if (bundle.id != winner.id) {
-        // This bundle was not the winner, so it persists unchanged.
-        nextGenerationBundles.add(bundle);
-      }
-    }
-
-    // Now, process the winner to determine its next state
-    Set<InvariantTrackingInstance> nextHypotheses = new HashSet<>();
+  /**
+   * Processes the winner bundle after a transition fires.
+   *
+   * <p>For the given fired transition, this method advances all hypotheses within the winner bundle
+   * that expect the transition, while pruning (removing) those that do not. Advancing means
+   * updating the tracking instance's expected transition index to the next position in its
+   * invariant template.
+   *
+   * <p>If any hypothesis completes its invariant (i.e., all expected transitions have fired in
+   * order), the bundle is marked as completed, relevant counters are incremented, and the bundle is
+   * removed from the set of active bundles. Only one invariant can complete per fired transition;
+   * support for multiple completions (e.g., cobegin/coend) is a potential future enhancement.
+   *
+   * @param winnerBundle the bundle containing hypotheses to process
+   * @param firedTransition the transition that has just fired
+   */
+  private void processWinnerBundle(TrackingInstanceBundle winnerBundle, int firedTransition) {
     boolean bundleCompleted = false;
 
-    // A single transition firing only advances *one* path within the winner bundle
-    // We iterate to find the specific hypothesis that matches the firedTransition
-    for (InvariantTrackingInstance instance : winner.hypotheses) {
-      if (originalInvariants.get(instance.tpl).get(instance.nextExpectedTransitionIdx)
-          == firedTransition) {
-        // This is the specific hypothesis that is advanced by the firedTransition
-        List<Integer> seq = originalInvariants.get(instance.tpl);
-        int currentTransitionPosition =
-            instance.nextExpectedTransitionIdx; // This was the one that just fired
-        int nextPosInTpl = nextIdx(currentTransitionPosition, seq.size());
+    // A single transition firing advances all the hypotheses that expect the transition within the
+    // winner bundle and the rest of the hypotheses are pruned.
+    for (Iterator<InvariantTrackingInstance> it = winnerBundle.hypotheses.iterator();
+        it.hasNext(); ) {
+      InvariantTrackingInstance trackingInstance = it.next();
 
-        if (seq.size() == 1 || nextPosInTpl == instance.startPosInTpl) {
-          // The invariant complete
+      if (originalInvariants
+              .get(trackingInstance.tpl)
+              .get(trackingInstance.nextExpectedTransitionIdx)
+          == firedTransition) {
+
+        // This hypothesis expects the firedTransition, it advances.
+        List<Integer> invariantTemplate = originalInvariants.get(trackingInstance.tpl);
+        int currentTransitionPosition = trackingInstance.nextExpectedTransitionIdx; // just fired
+        int nextPosInTpl = nextIdx(currentTransitionPosition, invariantTemplate.size());
+
+        if (invariantTemplate.size() == 1 || nextPosInTpl == trackingInstance.startPosInTpl) {
+          // NOTE: Only one invariant can complete per fired transition.
+          // TODO: add support for cobegin and coend to allow multiple invariants to complete at the
+          // same time.
           invariantCounter++;
-          invariantCompletionCounts[instance.tpl]++;
+          invariantCompletionCounts[trackingInstance.tpl]++;
           bundleCompleted = true;
-          // The bundle is now complete and will not be added to nextGenerationBundles
+          break; // bundle complete; no need to process further hypotheses
         } else {
-          // The hypothesis advances.
-          nextHypotheses.add(
-              new InvariantTrackingInstance(instance.tpl, nextPosInTpl, instance.startPosInTpl));
+          // Advance the tracking instance in place (safe: no structural modification)
+          trackingInstance.nextExpectedTransitionIdx = nextPosInTpl;
         }
-        // IMPORTANT: Once we found and processed the matching hypothesis,
-        // we assume this single firedTransition only advances *that* one.
-        // Other hypotheses in this bundle (if any) are implicitly pruned for this event.
-        // However, if there are multiple hypotheses in the same bundle, and more than one could be
-        // advanced by
-        // the *same* firedTransition, this logic still implicitly favors the first one encountered.
+
       } else {
-        // This hypothesis did not match the firedTransition, it is pruned.
+        // This hypothesis did not expect the firedTransition, prune it
+        it.remove();
       }
     }
 
-    if (!bundleCompleted && !nextHypotheses.isEmpty()) {
-      // The winning bundle advanced; add its new version to the next generation.
-      nextGenerationBundles.add(new TrackerBundle(nextHypotheses));
+    if (bundleCompleted) {
+      // The winner bundle completed; remove it from active bundles.
+      this.activeBundles.remove(winnerBundle);
     }
-
-    this.activeBundles = nextGenerationBundles;
   }
 
   /**
@@ -315,24 +351,25 @@ public class InvariantTracker {
 
   /** Spawns a new bundle for the given fired transition if no existing bundle could consume it. */
   private void spawnNewBundle(int firedTransition) {
-    List<Pos> carriers = indexByTransition.get(firedTransition);
-    if (carriers != null) {
+    List<Pos> transitionPositions = indexByTransition.get(firedTransition);
+    if (transitionPositions != null) {
       Set<InvariantTrackingInstance> newHypotheses = new HashSet<>();
-      for (Pos p : carriers) {
-        List<Integer> seq = originalInvariants.get(p.tpl);
-        if (seq.size() == 1) {
+      for (Pos p : transitionPositions) {
+        List<Integer> invariantTemplate = originalInvariants.get(p.tpl);
+        if (invariantTemplate.size() == 1) { // Autoloop invariant
           // Single-transition invariant completes immediately, does not form a bundle.
-          invariantCounter++;
-          invariantCompletionCounts[p.tpl]++;
+          invariantCounter++; // Global count
+          invariantCompletionCounts[p.tpl]++; // Per-invariant count
         } else {
           // Add a new hypothesis to the set for the new bundle.
           int startPos = p.pos;
-          int nextPosInTpl = nextIdx(startPos, seq.size()); // The next expected transition
+          int nextPosInTpl =
+              nextIdx(startPos, invariantTemplate.size()); // The next expected transition
           newHypotheses.add(new InvariantTrackingInstance(p.tpl, nextPosInTpl, startPos));
         }
       }
       if (!newHypotheses.isEmpty()) {
-        activeBundles.add(new TrackerBundle(newHypotheses));
+        activeBundles.add(new TrackingInstanceBundle(newHypotheses));
       }
     }
   }
@@ -342,14 +379,27 @@ public class InvariantTracker {
     return (i + 1) % size;
   }
 
-  /** Builds an index mapping each transition to its positions in the invariant templates. */
-  private static Map<Integer, List<Pos>> buildIndex(List<ArrayList<Integer>> invs) {
+  /**
+   * Constructs an index that maps each transition to a list of its occurrences within the invariant
+   * templates.
+   *
+   * <p>For each transition found in the provided list of invariant templates, this method records
+   * all positions (template index and position within the template) where the transition appears.
+   * The resulting map allows efficient lookup of all locations for a given transition across all
+   * templates.
+   *
+   * @param transitionInvariants a list of invariant templates, each represented as a list of
+   *     transition integers
+   * @return a map from transition integer to a list of Pos objects indicating its positions in the
+   *     templates
+   */
+  private static Map<Integer, List<Pos>> buildIndex(List<ArrayList<Integer>> transitionInvariants) {
     Map<Integer, List<Pos>> idx = new HashMap<>();
-    for (int tpl = 0; tpl < invs.size(); tpl++) {
-      List<Integer> seq = invs.get(tpl);
+    for (int tpl = 0; tpl < transitionInvariants.size(); tpl++) {
+      List<Integer> seq = transitionInvariants.get(tpl);
       for (int pos = 0; pos < seq.size(); pos++) {
-        int t = seq.get(pos);
-        idx.computeIfAbsent(t, k -> new ArrayList<>()).add(new Pos(tpl, pos));
+        int transition = seq.get(pos);
+        idx.computeIfAbsent(transition, k -> new ArrayList<>()).add(new Pos(tpl, pos));
       }
     }
     return idx;
