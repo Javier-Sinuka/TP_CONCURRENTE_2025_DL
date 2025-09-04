@@ -123,9 +123,7 @@ public class Log {
       return;
     }
     try (BufferedWriter w = new BufferedWriter(new FileWriter(filePath, true))) {
-      String timeStamp = java.time.LocalDateTime.now().toString();
-      w.write("[" + timeStamp + "] T" + transitionNumber);
-      w.newLine();
+      w.write("T" + transitionNumber);
     } catch (IOException e) {
       System.out.println("Error while writing to the file: " + e.getMessage());
     }

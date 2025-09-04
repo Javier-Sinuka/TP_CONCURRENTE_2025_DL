@@ -84,13 +84,13 @@ public class SimulationManager {
    */
   private Map<Integer, Integer> readTransitionCountsFromLog() {
     Map<Integer, Integer> counts = new HashMap<>();
-    Pattern pattern = Pattern.compile("\\] T(\\d+)"); // Regex to find "T" followed by digits
+    Pattern pattern = Pattern.compile("T(\\d+)"); // Regex to find "T" followed by digits
 
     try (BufferedReader reader = new BufferedReader(new FileReader(TRANSITION_LOG_PATH))) {
       String line;
       while ((line = reader.readLine()) != null) {
         Matcher matcher = pattern.matcher(line);
-        if (matcher.find()) {
+        while (matcher.find()) { // Find all transitions in the line
           int transitionNumber = Integer.parseInt(matcher.group(1));
           counts.put(transitionNumber, counts.getOrDefault(transitionNumber, 0) + 1);
         }
