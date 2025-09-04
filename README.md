@@ -32,18 +32,18 @@ The project emphasizes a clean separation of concerns, with a core Petri Net eng
     ```
 2.  **Navigate to the project directory:**
     ```bash
-    cd TP_CONCURRENTE_2025_DL-feature-analyzer
+    cd TP_CONCURRENTE_2025_DL
     ```
 3.  **Build the project using the Maven Wrapper:**
     This command will format the code, compile the source, run tests, and package the application into a runnable JAR file located in the `target/` directory.
 
     *   On **Linux** or **macOS**:
         ```bash
-        ./mvnw verify
+        ./mvnw clean install
         ```
     *   On **Windows** (Command Prompt or PowerShell):
         ```bash
-        mvnw.cmd verify
+        .\mvnw.cmd clean install
         ```
     A `BUILD SUCCESS` message indicates the simulator is ready.
 
@@ -52,7 +52,7 @@ The simulator is run from the command line and controlled with flags. By default
 
 ### Basic Syntax
 ```bash
-java -jar target/petri-sim-0.1.0-SNAPSHOT.jar [options] [config_file_path]
+java -jar target/petri-sim-1.0.jar [options] [config_file_path]
 ```
 
 ### Command-Line Options
@@ -69,17 +69,17 @@ java -jar target/petri-sim-0.1.0-SNAPSHOT.jar [options] [config_file_path]
 ### Examples
 *   **Run both analysis and a single simulation (default behavior):**
     ```bash
-    java -jar target/petri-sim-0.1.0-SNAPSHOT.jar
+    java -jar target/petri-sim-1.0.jar
     ```
 
 *   **Run analysis only using a specific configuration:**
     ```bash
-    java -jar target/petri-sim-0.1.0-SNAPSHOT.jar --analysis simulation_configs/config_tp_2024.json
+    java -jar target/petri-sim-1.0.jar --analysis simulation_configs/config_tp_2024.json
     ```
 
 *   **Run 10 simulations with statistical reporting and debug logging:**
     ```bash
-    java -jar target/petri-sim-0.1.0-SNAPSHOT.jar --simulation --runs 10 --statistics --debug
+    java -jar target/petri-sim-1.0.jar --simulation --runs 10 --statistics --debug
     ```
 
 ## Configuration File Explained
@@ -146,9 +146,6 @@ Please see the [`CONTRIBUTING.md`](./CONTRIBUTING.md) file for detailed guidelin
 
 ### Code Style
 The project adheres to the **Google Java Style Guide**. The `spotless-maven-plugin` is used to automatically check and format the code. Run `./mvnw spotless:apply` before committing.
-
-## License
-This project is licensed under the Apache License 2.0. See the headers in the source files for more details.
 
 ## Contact
 For any inquiries or support, please open an issue on the GitHub repository.
