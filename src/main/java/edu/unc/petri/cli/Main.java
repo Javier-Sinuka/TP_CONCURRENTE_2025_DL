@@ -51,23 +51,32 @@ public final class Main {
   private static final Set<String> KNOWN_FLAGS =
       new HashSet<>(
           Arrays.asList(
-              "--analysis", "--simulation", "--statistics", "--debug", "--help", "--runs"));
+              "--analysis",
+              "--simulation",
+              "--statistics",
+              "--debug",
+              "--help",
+              "--runs",
+              "--regex-checker"));
 
   private static final class Cli {
+
     final boolean analysis;
     final boolean simulation;
     final boolean statistics;
     final boolean debug;
     final boolean help;
+    final boolean regexChecker;
     final int runs;
     final String configPath;
 
-    Cli(boolean a, boolean s, boolean st, boolean d, boolean h, int r, String c) {
+    Cli(boolean a, boolean s, boolean st, boolean d, boolean h, boolean rx, int r, String c) {
       this.analysis = a;
       this.simulation = s;
       this.statistics = st;
       this.debug = d;
       this.help = h;
+      this.regexChecker = rx;
       this.runs = r;
       this.configPath = c;
     }
@@ -79,6 +88,7 @@ public final class Main {
     boolean statistics = false;
     boolean debug = false;
     boolean help = false;
+    boolean regexChecker = false;
     String configArg = null;
     int runs = 1;
 
@@ -119,6 +129,9 @@ public final class Main {
           case "--debug":
             debug = true;
             break;
+          case "--regex-checker":
+            regexChecker = true;
+            break;
           case "--help":
             help = true;
             break;
@@ -146,7 +159,7 @@ public final class Main {
       System.out.println("Note: --statistics has no effect when --runs == 1.");
     }
 
-    return new Cli(analysis, simulation, statistics, debug, help, runs, configArg);
+    return new Cli(analysis, simulation, statistics, debug, help, regexChecker, runs, configArg);
   }
 
   /**
@@ -173,12 +186,19 @@ public final class Main {
       validateConfig(config);
 
       // Banner for traceability
-      System.out.println("== Petri-Sim ==");
+      System.out.println("============================= Petri-Sim =============================");
       System.out.println("Config:   " + configPath.getFileName());
       System.out.println("Runs:     " + cli.runs);
-      System.out.println("Analysis: " + cli.analysis + " | Simulation: " + cli.simulation);
-      System.out.println("Debug:    " + cli.debug + " | Statistics: " + cli.statistics);
-      System.out.println("==============");
+      System.out.println(
+          "Analysis: "
+              + cli.analysis
+              + " | Simulation: "
+              + cli.simulation
+              + " | Debug: "
+              + cli.debug
+              + " | Statistics: "
+              + cli.statistics);
+      System.out.println("=====================================================================");
 
       PetriNetAnalyzer analyzer = setupAnalyzer(config);
 
@@ -244,7 +264,12 @@ public final class Main {
             } else {
               reporter.generateReport(result);
             }
-          } catch (Throwable runEx) { // isolate per-run failures when running many times
+            // 5. Optional: run regex-based invariant checker
+            if (cli.regexChecker) {
+              runInvariantChecker();
+            }
+          } catch (Throwable runEx) {
+            // isolate per-run failures when running many times
             failedRuns++;
             System.err.println("Run " + (i + 1) + " failed: " + runEx);
             runEx.printStackTrace(System.err);
@@ -263,9 +288,10 @@ public final class Main {
           System.err.println("\nCompleted with " + failedRuns + " failed run(s).");
         }
 
+        System.out.println("=====================================================================");
+
         // If Log has a close(), you can call it here; otherwise it’s a no-op object by design.
       }
-
     } catch (IOException e) {
       System.err.println("Failed to load or run simulation: " + e.getMessage());
       System.exit(1);
@@ -301,6 +327,10 @@ public final class Main {
     System.out.println(
         "  --debug                  Enable detailed debug logging. The log file path is specified");
     System.out.println("                           in the JSON configuration.");
+    System.out.println(
+        "  --regex-checker          After each simulation run, execute"
+            + " scripts/invariant_checker.py");
+    System.out.println("                           on transition_log.txt and print its results.");
     System.out.println("  --help                   Display this help message and exit.");
     System.out.println();
     System.out.println("Arguments:");
@@ -359,6 +389,29 @@ public final class Main {
         System.out.println("Unknown policy '" + raw + "'. Defaulting to RandomPolicy.");
         return new RandomPolicy();
     }
+  }
+
+  private static void runInvariantChecker() {
+    String scriptPath = "scripts/invariant_checker.py";
+    String input = "transition_log.txt";
+    String[] interpreters = new String[] {"python3", "python"};
+
+    for (String py : interpreters) {
+      try {
+        // Directly inherit parent's IO; colors will work when attached to a TTY.
+        java.util.List<String> cmd = java.util.Arrays.asList(py, scriptPath, input);
+        ProcessBuilder pb = new ProcessBuilder(cmd);
+        pb.redirectErrorStream(true);
+        pb.inheritIO();
+        pb.start();
+        return; // success or script ran; do not try next interpreter
+      } catch (IOException e) {
+        // try next interpreter
+      }
+    }
+    System.err.println(
+        "[invariant_checker] Could not execute scripts/invariant_checker.py. Is Python installed"
+            + " and is 'script' available?");
   }
 
   /** Constructs the PetriNet instance from the configuration and transition log. */
