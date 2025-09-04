@@ -27,14 +27,21 @@ public class StateEquationUtils {
     if (incidenceMatrix == null || currentMarking == null) {
       throw new IllegalArgumentException("The parameter is null");
     }
+
     if (transition < 0 || transition >= incidenceMatrix.getTransitions()) {
       throw new IllegalArgumentException("Transition index is out of bounds");
     }
+
     if (incidenceMatrix.getPlaces() == 0
         || incidenceMatrix.getTransitions() == 0
         || currentMarking.getMarking().length == 0) {
       throw new IllegalArgumentException("Parameters size cannot be 0");
     }
+
+    if (incidenceMatrix.getPlaces() != currentMarking.getMarking().length) {
+      throw new IllegalArgumentException("Parameters size mismatch");
+    }
+
     byte[] transitionColumn = incidenceMatrix.getColumn(transition);
     int[] currentMarkingArray = currentMarking.getMarking();
     int[] nextMarking = new int[currentMarkingArray.length];

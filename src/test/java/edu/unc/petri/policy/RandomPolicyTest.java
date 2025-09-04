@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,18 +21,18 @@ class RandomPolicyTest {
 
   @Test
   void chooseValidTransition() {
-    int[] enabledTransitions = {2, 5, 8, 10};
+    ArrayList<Integer> enabledTransitions = new ArrayList<>(Arrays.asList(2, 5, 8, 10));
 
     int chosenTransition = randomPolicy.choose(enabledTransitions);
 
     assertTrue(
-        Arrays.stream(enabledTransitions).anyMatch(t -> t == chosenTransition),
+        enabledTransitions.contains(chosenTransition),
         "The chosen transition must be one of the enabled transitions.");
   }
 
   @Test
   void chooseWithSingleTransitionShouldReturnThatTransition() {
-    int[] enabledTransitions = {7};
+    ArrayList<Integer> enabledTransitions = new ArrayList<>(Arrays.asList(7));
 
     int chosenTransition = randomPolicy.choose(enabledTransitions);
 
@@ -50,7 +51,7 @@ class RandomPolicyTest {
 
   @Test
   void chooseShouldThrowExceptionForEmptyInput() {
-    int[] emptyTransitions = {};
+    ArrayList<Integer> emptyTransitions = new ArrayList<>();
 
     assertThrows(
         IllegalArgumentException.class,

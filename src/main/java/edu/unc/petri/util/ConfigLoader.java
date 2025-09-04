@@ -1,5 +1,6 @@
 package edu.unc.petri.util;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -14,7 +15,13 @@ import java.nio.file.Path;
  */
 public final class ConfigLoader {
 
-  private static final ObjectMapper MAPPER = new ObjectMapper();
+  /** The ObjectMapper instance used for JSON deserialization. */
+  private static final ObjectMapper MAPPER =
+      new ObjectMapper()
+          // Allow // and /* */ style comments
+          .enable(JsonParser.Feature.ALLOW_COMMENTS)
+          // Allow YAML-style # comments
+          .enable(JsonParser.Feature.ALLOW_YAML_COMMENTS);
 
   /** Private constructor to prevent instantiation of utility class. */
   private ConfigLoader() {}

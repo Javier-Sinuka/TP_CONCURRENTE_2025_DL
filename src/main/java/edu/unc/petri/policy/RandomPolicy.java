@@ -1,5 +1,6 @@
 package edu.unc.petri.policy;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -12,28 +13,25 @@ import java.util.Random;
  */
 public class RandomPolicy implements PolicyInterface {
 
-  /**
-   * An instance of {@link Random} used to generate random values for policy decisions. This random
-   * generator is initialized once and used throughout the lifetime of the policy.
-   */
+  /** A Random instance utilized for generating random values to guide policy decisions. */
   private final Random random = new Random();
 
   /**
-   * Chooses a transition to fire based on the enabled transitions with a random selection.
+   * Selects a transition to fire based on the enabled transitions using a random selection process.
    *
-   * @param n an array of integers representing the enabled transitions. Each element contains the
-   *     number of the enabled transition.
-   * @return the number of the chosen transition
+   * @param transitions a list of integers representing the enabled transitions. Each element
+   *     corresponds to an enabled transition identifier.
+   * @return the identifier of the chosen transition
    */
   @Override
-  public int choose(int[] n) {
+  public int choose(List<Integer> transitions) {
 
-    if (n == null || n.length == 0) {
+    if (transitions == null || transitions.size() == 0) {
       throw new IllegalArgumentException("The parameter is null or empty");
     }
 
-    int index = random.nextInt(n.length);
+    int index = random.nextInt(transitions.size());
 
-    return n[index];
+    return transitions.get(index);
   }
 }

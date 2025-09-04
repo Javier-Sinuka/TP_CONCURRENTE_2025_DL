@@ -15,6 +15,9 @@ import java.util.Map;
  */
 public final class PetriNetConfig {
 
+  /** The path to the log file where execution details will be recorded. */
+  public final String logPath;
+
   /**
    * The initial marking of the Petri Net. Represents the number of tokens in each place at the
    * start.
@@ -36,11 +39,17 @@ public final class PetriNetConfig {
   /** The segments of the Petri net, defining logical divisions and thread responsibilities. */
   public final List<Segment> segments;
 
+  /** The scheduling policy for the Petri Net (e.g., "Random", "Priority"). */
+  public final String policy;
+
   /**
    * The weights for each transition in the Petri Net. Represents the cost or priority of each
    * transition.
    */
   public final Map<Integer, Integer> transitionWeights;
+
+  /** The limit for invariant analysis, if applicable. */
+  public final Integer invariantLimit;
 
   /**
    * Constructs a PetriNetConfig object with the specified initial marking, incidence matrix, and
@@ -54,16 +63,21 @@ public final class PetriNetConfig {
    */
   @JsonCreator
   public PetriNetConfig(
+      @JsonProperty("logPath") String logPath,
       @JsonProperty("initialMarking") int[] initialMarking,
       @JsonProperty("incidence") byte[][] incidence,
       @JsonProperty("timeRanges") long[][] timeRanges,
       @JsonProperty("segments") List<Segment> segments,
-      @JsonProperty("transitionWeights") Map<Integer, Integer> transitionWeights) {
-
+      @JsonProperty("policy") String policy,
+      @JsonProperty("transitionWeights") Map<Integer, Integer> transitionWeights,
+      @JsonProperty("invariantLimit") Integer invariantLimit) {
+    this.logPath = logPath;
     this.initialMarking = initialMarking;
     this.incidence = incidence;
     this.timeRanges = timeRanges;
     this.segments = segments;
+    this.policy = policy;
     this.transitionWeights = transitionWeights;
+    this.invariantLimit = invariantLimit;
   }
 }

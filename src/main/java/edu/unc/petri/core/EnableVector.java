@@ -1,5 +1,6 @@
 package edu.unc.petri.core;
 
+import edu.unc.petri.exceptions.TransitionTimeNotReachedException;
 import edu.unc.petri.util.StateEquationUtils;
 
 /**
@@ -12,28 +13,44 @@ import edu.unc.petri.util.StateEquationUtils;
  * @since 2025-29-07
  */
 public class EnableVector {
-  /** The vector of enabled transitions, where each index corresponds to a transition. */
-  private boolean[] enabledTransitions;
+  /**
+   * Indicates which transitions are enabled token wise. Each index in the array corresponds to a
+   * transition; true means enabled, false means disabled.
+   */
+  private boolean[] tokenEnabledTransitions;
 
-  /** The times when each transition was enabled, corresponding to the enabledTransitions vector. */
-  private long[] enabledTransitionTimes;
+  /** The times in nanoseconds when each transition was enabled token wise. */
+  private long[] transitionTokenEnablementTimes;
+
+  /** The TimeRangeMatrix associated with this EnableVector. */
+  private TimeRangeMatrix timeRangeMatrix;
 
   /**
    * Constructs an EnableVector with a specified number of transitions.
    *
    * @param numberOfTransitions The number of transitions in the Petri net.
    */
-  public EnableVector(int numberOfTransitions) {
+  public EnableVector(int numberOfTransitions, TimeRangeMatrix timeRangeMatrix) {
     if (numberOfTransitions <= 0) {
       throw new IllegalArgumentException("Number of transitions must be greater than 0");
     }
-    this.enabledTransitions = new boolean[numberOfTransitions];
-    this.enabledTransitionTimes = new long[numberOfTransitions];
+    if (timeRangeMatrix == null) {
+      throw new IllegalArgumentException("TimeRangeMatrix cannot be null");
+    }
+    if (timeRangeMatrix.getTimeRangeMatrix().length != numberOfTransitions) {
+      throw new IllegalArgumentException(
+          "TimeRangeMatrix size must match the number of transitions");
+    }
+
+    this.tokenEnabledTransitions = new boolean[numberOfTransitions];
+    this.transitionTokenEnablementTimes = new long[numberOfTransitions];
 
     for (int i = 0; i < numberOfTransitions; i++) {
-      enabledTransitions[i] = false;
-      enabledTransitionTimes[i] = 0;
+      tokenEnabledTransitions[i] = false;
+      transitionTokenEnablementTimes[i] = 0;
     }
+
+    this.timeRangeMatrix = timeRangeMatrix;
   }
 
   /**
@@ -52,17 +69,25 @@ public class EnableVector {
       throw new IllegalArgumentException("Parameters size cannot be 0");
     }
 
-    // Set all transitions as disabled
-    for (int i = 0; i < incidenceMatrix.getTransitions(); i++) {
-      enabledTransitions[i] = false;
-    }
+    long now = System.nanoTime();
 
-    // Check which transitions are enabled
+    // Recompute enabled state and preserve/adjust timestamps correctly
     for (int i = 0; i < incidenceMatrix.getTransitions(); i++) {
-      if (checkMarking(
-          StateEquationUtils.calculateStateEquation(i, incidenceMatrix, currentMarking))) {
-        enabledTransitions[i] = true; // Enable transition
-        enabledTransitionTimes[i] = System.currentTimeMillis(); // Store enable time
+      boolean isNowEnable =
+          checkMarking(
+              StateEquationUtils.calculateStateEquation(i, incidenceMatrix, currentMarking));
+
+      if (isNowEnable) {
+        if (!tokenEnabledTransitions[i]) {
+          // Transition becomes enabled now
+          tokenEnabledTransitions[i] = true;
+          transitionTokenEnablementTimes[i] = now;
+        }
+        // If it was already enabled, keep previous timestamp
+      } else {
+        // Transition is not enabled: clear state and timestamp
+        tokenEnabledTransitions[i] = false;
+        transitionTokenEnablementTimes[i] = 0L;
       }
     }
   }
@@ -72,8 +97,8 @@ public class EnableVector {
    *
    * @return The vector of enabled transitions.
    */
-  public boolean[] getEnableVector() {
-    return enabledTransitions;
+  public boolean[] getTokenEnabledTransitions() {
+    return tokenEnabledTransitions;
   }
 
   /**
@@ -82,8 +107,36 @@ public class EnableVector {
    * @param transitionIndex The index of the transition to check.
    * @return true if the transition is enabled, false otherwise.
    */
-  public boolean isTransitionEnabled(int transitionIndex) {
-    return enabledTransitions[transitionIndex];
+  public boolean isTransitionEnabled(int transitionIndex) throws TransitionTimeNotReachedException {
+    if (transitionIndex < 0 || transitionIndex >= tokenEnabledTransitions.length) {
+      throw new IndexOutOfBoundsException("Transition index out of bounds");
+    }
+
+    boolean isTokenEnabled = tokenEnabledTransitions[transitionIndex];
+
+    // If the transition is not token-wise enabled, return false immediately
+    if (!isTokenEnabled) {
+      return false;
+    }
+
+    // If the transition is token-wise enabled, check the time range
+    boolean isTimeEnabled =
+        timeRangeMatrix.isInsideTimeRange(
+            transitionIndex, transitionTokenEnablementTimes[transitionIndex]);
+
+    if (!isTimeEnabled) {
+      if (timeRangeMatrix.isBeforeTimeRange(
+          transitionIndex, transitionTokenEnablementTimes[transitionIndex])) {
+        long sleepNanos =
+            timeRangeMatrix.getSleepTimeToFire(
+                transitionIndex, transitionTokenEnablementTimes[transitionIndex]);
+        throw new TransitionTimeNotReachedException(sleepNanos);
+      } else {
+        return false; // Transition has passed its time range
+      }
+    }
+
+    return true; // Transition is both token-wise and time-wise enabled
   }
 
   /**
@@ -93,7 +146,11 @@ public class EnableVector {
    * @return The time when the transition was enabled.
    */
   public long getEnableTransitionTime(int transitionIndex) {
-    return enabledTransitionTimes[transitionIndex];
+    if (transitionIndex < 0 || transitionIndex >= transitionTokenEnablementTimes.length) {
+      throw new IndexOutOfBoundsException("Transition index out of bounds");
+    }
+
+    return transitionTokenEnablementTimes[transitionIndex];
   }
 
   /**

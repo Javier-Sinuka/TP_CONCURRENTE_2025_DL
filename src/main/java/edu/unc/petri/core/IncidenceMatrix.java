@@ -28,6 +28,20 @@ public class IncidenceMatrix {
    * @param matrix A 2D byte array representing the incidence matrix of the Petri net.
    */
   public IncidenceMatrix(byte[][] matrix) {
+    if (matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length == 0) {
+      throw new IllegalArgumentException(
+          "Matrix must be non-null and have at least one row and one column");
+    }
+
+    // Check for rectangularity
+    int numCols = matrix[0].length;
+    for (int i = 1; i < matrix.length; i++) {
+      if (matrix[i] == null || matrix[i].length != numCols) {
+        throw new IllegalArgumentException(
+            "All rows in the matrix must have the same number of columns");
+      }
+    }
+
     this.matrix = matrix;
     this.places = matrix.length; // Number of places is the number of rows
     this.transitions = matrix[0].length; // Number of transitions is the number of columns
@@ -67,9 +81,13 @@ public class IncidenceMatrix {
    * @return The row as a byte array.
    */
   public byte[] getRow(int row) {
-    byte[] rowData = new byte[getPlaces()];
+    if (row < 0 || row >= places) {
+      throw new IndexOutOfBoundsException("Row index out of bounds");
+    }
 
-    for (int i = 0; i < getPlaces(); i++) {
+    byte[] rowData = new byte[getTransitions()];
+
+    for (int i = 0; i < getTransitions(); i++) {
       rowData[i] = matrix[row][i];
     }
 
@@ -83,9 +101,13 @@ public class IncidenceMatrix {
    * @return The column as a byte array.
    */
   public byte[] getColumn(int column) {
-    byte[] columnData = new byte[getTransitions()];
+    if (column < 0 || column >= transitions) {
+      throw new IndexOutOfBoundsException("Column index out of bounds");
+    }
 
-    for (int i = 0; i < getTransitions(); i++) {
+    byte[] columnData = new byte[getPlaces()];
+
+    for (int i = 0; i < getPlaces(); i++) {
       columnData[i] = matrix[i][column];
     }
 
@@ -100,6 +122,10 @@ public class IncidenceMatrix {
    * @return The element at the specified row and column as a byte.
    */
   public byte getElement(int row, int column) {
+    if (row < 0 || row >= places || column < 0 || column >= transitions) {
+      throw new IndexOutOfBoundsException("Row or column index out of bounds");
+    }
+
     return matrix[row][column];
   }
 
@@ -111,6 +137,10 @@ public class IncidenceMatrix {
    *     edge to the specified place.
    */
   public ArrayList<Integer> getInTransitionsForPlace(int place) {
+    if (place < 0 || place >= places) {
+      throw new IndexOutOfBoundsException("Place index out of bounds");
+    }
+
     ArrayList<Integer> inTransitions = new ArrayList<>();
 
     for (int i = 0; i < transitions; i++) {
@@ -130,6 +160,10 @@ public class IncidenceMatrix {
    *     edge from the specified place.
    */
   public ArrayList<Integer> getOutTransitionsForPlace(int place) {
+    if (place < 0 || place >= places) {
+      throw new IndexOutOfBoundsException("Place index out of bounds");
+    }
+
     ArrayList<Integer> outTransitions = new ArrayList<>();
 
     for (int i = 0; i < transitions; i++) {
@@ -149,6 +183,10 @@ public class IncidenceMatrix {
    *     to the specified transition.
    */
   public ArrayList<Integer> getInPlacesForTransition(int transition) {
+    if (transition < 0 || transition >= transitions) {
+      throw new IndexOutOfBoundsException("Transition index out of bounds");
+    }
+
     ArrayList<Integer> inPlaces = new ArrayList<>();
 
     for (int i = 0; i < places; i++) {
@@ -168,6 +206,10 @@ public class IncidenceMatrix {
    *     from the specified transition.
    */
   public ArrayList<Integer> getOutPlacesForTransition(int transition) {
+    if (transition < 0 || transition >= transitions) {
+      throw new IndexOutOfBoundsException("Transition index out of bounds");
+    }
+
     ArrayList<Integer> outPlaces = new ArrayList<>();
 
     for (int i = 0; i < places; i++) {

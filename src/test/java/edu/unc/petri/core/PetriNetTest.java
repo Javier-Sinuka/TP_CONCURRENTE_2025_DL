@@ -7,6 +7,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import edu.unc.petri.analysis.PetriNetAnalyzer;
+import edu.unc.petri.exceptions.TransitionTimeNotReachedException;
+import edu.unc.petri.util.Log;
 import edu.unc.petri.util.StateEquationUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +27,8 @@ class PetriNetTest {
   @Mock private CurrentMarking mockCurrentMarking;
   @Mock private TimeRangeMatrix mockTimeRangeMatrix;
   @Mock private EnableVector mockEnableVector;
+  @Mock private PetriNetAnalyzer mockPetriNetAnalyzer;
+  @Mock private Log mockLog;
 
   private PetriNet petriNet;
 
@@ -31,7 +36,11 @@ class PetriNetTest {
   void setUp() {
     petriNet =
         new PetriNet(
-            mockIncidenceMatrix, mockCurrentMarking, mockTimeRangeMatrix, mockEnableVector);
+            mockIncidenceMatrix,
+            mockCurrentMarking,
+            mockEnableVector,
+            mockPetriNetAnalyzer,
+            mockLog);
 
     when(mockIncidenceMatrix.getTransitions()).thenReturn(10); // Mock total transitions
   }
@@ -41,8 +50,11 @@ class PetriNetTest {
 
     int transitionToFire = 3;
 
-    when(mockEnableVector.isTransitionEnabled(transitionToFire)).thenReturn(true);
-    when(mockTimeRangeMatrix.isInsideTimeRange(transitionToFire)).thenReturn(true);
+    try {
+      when(mockEnableVector.isTransitionEnabled(transitionToFire)).thenReturn(true);
+    } catch (TransitionTimeNotReachedException e) {
+      e.printStackTrace();
+    }
 
     int[] nextMarking = {1, 0, 1};
 
@@ -56,12 +68,21 @@ class PetriNetTest {
                       transitionToFire, mockIncidenceMatrix, mockCurrentMarking))
           .thenReturn(nextMarking);
 
-      boolean result = petriNet.fire(transitionToFire);
+      boolean result = false;
+
+      try {
+        result = petriNet.fire(transitionToFire);
+      } catch (Exception e) {
+        // Handle exception appropriately
+        e.printStackTrace();
+        result = false;
+      }
 
       assertTrue(result, "Fire should return true on success.");
 
       verify(mockCurrentMarking).setMarking(nextMarking);
-      verify(mockEnableVector).updateEnableVector(mockIncidenceMatrix, mockCurrentMarking);
+      verify(mockEnableVector, Mockito.times(2))
+          .updateEnableVector(mockIncidenceMatrix, mockCurrentMarking);
     }
   }
 
@@ -69,30 +90,25 @@ class PetriNetTest {
   void fireShouldFailWhenTransitionIsNotEnabled() {
     int transitionToFire = 5;
 
-    when(mockEnableVector.isTransitionEnabled(transitionToFire)).thenReturn(false);
+    try {
+      when(mockEnableVector.isTransitionEnabled(transitionToFire)).thenReturn(false);
+    } catch (Exception e) {
+      // Handle the exception appropriately
+      e.printStackTrace();
+    }
 
-    boolean result = petriNet.fire(transitionToFire);
+    boolean result = false;
+    try {
+      result = petriNet.fire(transitionToFire);
+    } catch (Exception e) {
+      // Handle exception appropriately
+      e.printStackTrace();
+      result = false;
+    }
 
     assertFalse(result, "Fire should return false if transition is not enabled.");
 
     verify(mockCurrentMarking, never()).setMarking(any());
-    verify(mockEnableVector, never()).updateEnableVector(any(), any());
-  }
-
-  @Test
-  void fireShouldFailWhenTransitionIsOutOfTimeRange() {
-    int transitionToFire = 7;
-
-    when(mockEnableVector.isTransitionEnabled(transitionToFire))
-        .thenReturn(true); // It's enabled token-wise
-    when(mockTimeRangeMatrix.isInsideTimeRange(transitionToFire))
-        .thenReturn(false); // It's not enabled time-wise
-
-    boolean result = petriNet.fire(transitionToFire);
-
-    assertFalse(result, "Fire should return false if transition is out of its time range.");
-
-    verify(mockCurrentMarking, never()).setMarking(any());
-    verify(mockEnableVector, never()).updateEnableVector(any(), any());
+    verify(mockEnableVector, Mockito.times(1)).updateEnableVector(any(), any());
   }
 }

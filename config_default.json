@@ -1,0 +1,44 @@
+{
+  // Path to the log file where execution logs will be stored
+  "logPath": "log_default.txt",
+
+  "invariantLimit": 10, // Establishes a limit for invariants in the Petri net simulation
+
+  // Initial marking of the Petri net, depicting the initial state of tokens in each place
+  "initialMarking": [1, 0, 0, 0],
+
+  // Incidence matrix defining the relationship between places and transitions
+  "incidence": [
+    [-1, 0, 0, 1],
+    [1, -1, 0, 0],
+    [0, 1, -1, 0],
+    [0, 0, 1, -1]
+  ],
+
+  // Time ranges for each transition (min and max duration in milliseconds)
+  "timeRanges": [
+    [100, 100],
+    [100, 100],
+    [100, 100],
+    [100, 100]
+  ],
+
+  // Segments defining groups of transitions and the number of threads handling them
+  "segments": [
+    {
+      "name": "Default-Segment", // Name of the segment
+      "threadQuantity": 1, // Number of threads assigned to this segment
+      "transitions": [0, 1, 2, 3] // Transitions that belong to this segment
+    }
+  ],
+
+  "policy": "random", // Policy for selecting transitions (e.g., "random", "priority", etc.)
+
+  // Weights for each transition, indicating their relative priority or cost
+  "transitionWeights": {
+    "0": 1,
+    "1": 1,
+    "2": 1,
+    "3": 1
+  }
+}
