@@ -9,9 +9,14 @@ package edu.unc.petri.analysis;
  */
 public class Matrix {
 
+  /** The internal 2D array representing the matrix. */
   private final int[][] matrix;
+
+  /** Number of rows in the matrix. */
   private final int rowNumber;
-  private final int columnSize;
+
+  /** Number of columns in the matrix. */
+  private final int columnNumber;
 
   /**
    * Constructs a matrix with the specified number of rows and columns, initialized to zeros.
@@ -21,7 +26,7 @@ public class Matrix {
    */
   public Matrix(int rowNumber, int columnNumber) {
     this.rowNumber = rowNumber;
-    this.columnSize = columnNumber;
+    this.columnNumber = columnNumber;
     matrix = new int[rowNumber][columnNumber];
   }
 
@@ -34,14 +39,14 @@ public class Matrix {
   public Matrix(int[][] matrix) {
     if (matrix == null || matrix.length == 0) {
       this.rowNumber = 0;
-      this.columnSize = 0;
+      this.columnNumber = 0;
       this.matrix = new int[0][0];
       return;
     }
     this.rowNumber = matrix.length;
-    this.columnSize = matrix[0].length;
+    this.columnNumber = matrix[0].length;
     for (int i = 0; i < rowNumber; i++) {
-      if (matrix[i].length != columnSize) {
+      if (matrix[i].length != columnNumber) {
         throw new IllegalArgumentException("All rows must have the same length.");
       }
     }
@@ -74,7 +79,7 @@ public class Matrix {
   }
 
   public int getColumnDimension() {
-    return columnSize;
+    return columnNumber;
   }
 
   public int[][] getArray() {
@@ -112,10 +117,10 @@ public class Matrix {
    * @return a new Matrix object that is a deep copy of this matrix
    */
   public Matrix copy() {
-    Matrix copiedMatrix = new Matrix(rowNumber, columnSize);
+    Matrix copiedMatrix = new Matrix(rowNumber, columnNumber);
     int[][] arrayMatrix = copiedMatrix.getArray();
     for (int i = 0; i < rowNumber; i++) {
-      System.arraycopy(matrix[i], 0, arrayMatrix[i], 0, columnSize);
+      System.arraycopy(matrix[i], 0, arrayMatrix[i], 0, columnNumber);
     }
     return copiedMatrix;
   }
@@ -127,10 +132,10 @@ public class Matrix {
    * @return a transposed Matrix
    */
   public Matrix transpose() {
-    Matrix transposedMatrix = new Matrix(columnSize, rowNumber);
+    Matrix transposedMatrix = new Matrix(columnNumber, rowNumber);
     int[][] arrayMatrix = transposedMatrix.getArray();
     for (int i = 0; i < rowNumber; i++) {
-      for (int j = 0; j < columnSize; j++) {
+      for (int j = 0; j < columnNumber; j++) {
         arrayMatrix[j][i] = matrix[i][j];
       }
     }
@@ -144,7 +149,7 @@ public class Matrix {
    */
   public boolean isZeroMatrix() {
     for (int i = 0; i < rowNumber; i++) {
-      for (int j = 0; j < columnSize; j++) {
+      for (int j = 0; j < columnNumber; j++) {
         if (get(i, j) != 0) {
           return false;
         }
@@ -160,7 +165,7 @@ public class Matrix {
    * @return true if every element in row {@code r} is zero, false otherwise
    */
   private boolean isZeroRow(int r) {
-    for (int j = 0; j < columnSize; j++) {
+    for (int j = 0; j < columnNumber; j++) {
       if (matrix[r][j] != 0) {
         return false;
       }
@@ -178,7 +183,7 @@ public class Matrix {
     for (int i = 0; i < rowNumber; i++) {
       boolean hasPositive = false;
       boolean hasNegative = false;
-      for (int j = 0; j < columnSize; j++) {
+      for (int j = 0; j < columnNumber; j++) {
         if (matrix[i][j] > 0) {
           hasPositive = true;
         }
@@ -202,7 +207,7 @@ public class Matrix {
     for (int i = 0; i < rowNumber; i++) {
       int positiveCount = 0;
       int negativeCount = 0;
-      for (int j = 0; j < columnSize; j++) {
+      for (int j = 0; j < columnNumber; j++) {
         if (matrix[i][j] > 0) {
           positiveCount++;
         }
@@ -234,7 +239,7 @@ public class Matrix {
     int positiveIndex = -1;
     int negativeIndex = -1;
 
-    for (int j = 0; j < columnSize; j++) {
+    for (int j = 0; j < columnNumber; j++) {
       if (matrix[cardRow][j] > 0) {
         positiveCount++;
         positiveIndex = j;
@@ -280,9 +285,9 @@ public class Matrix {
    * @return An integer array of 1-based indices.
    */
   public int[] getPositiveIndices(int rowNumber) {
-    int[] positives = new int[columnSize];
+    int[] positives = new int[columnNumber];
     int count = 0;
-    for (int j = 0; j < columnSize; j++) {
+    for (int j = 0; j < columnNumber; j++) {
       if (matrix[rowNumber][j] > 0) {
         positives[count++] = j + 1;
       }
@@ -299,9 +304,9 @@ public class Matrix {
    * @return An integer array of 1-based indices.
    */
   public int[] getNegativeIndices(int rowNumber) {
-    int[] negatives = new int[columnSize];
+    int[] negatives = new int[columnNumber];
     int count = 0;
-    for (int j = 0; j < columnSize; j++) {
+    for (int j = 0; j < columnNumber; j++) {
       if (matrix[rowNumber][j] < 0) {
         negatives[count++] = j + 1;
       }
@@ -318,13 +323,13 @@ public class Matrix {
    * @return A new matrix with the specified column removed.
    */
   public Matrix eliminateCol(int columnToDelete) {
-    if (columnToDelete < 0 || columnToDelete >= columnSize) {
+    if (columnToDelete < 0 || columnToDelete >= columnNumber) {
       return this;
     }
-    Matrix reduced = new Matrix(rowNumber, columnSize - 1);
+    Matrix reduced = new Matrix(rowNumber, columnNumber - 1);
     for (int i = 0; i < rowNumber; i++) {
       int newCol = 0;
-      for (int j = 0; j < columnSize; j++) {
+      for (int j = 0; j < columnNumber; j++) {
         if (j != columnToDelete) {
           reduced.set(i, newCol++, get(i, j));
         }
@@ -398,7 +403,7 @@ public class Matrix {
    * @return The 0-based column index, or -1 if the row is all zeros.
    */
   public int firstNonZeroElementIndex(int h) {
-    for (int j = 0; j < columnSize; j++) {
+    for (int j = 0; j < columnNumber; j++) {
       if (get(h, j) != 0) {
         return j;
       }
@@ -414,10 +419,10 @@ public class Matrix {
    *     non-zero
    */
   public int[] findRemainingNonZeroIndices(int rowIndex) {
-    int[] k = new int[columnSize];
+    int[] k = new int[columnNumber];
     int count = 0;
     boolean firstSkipped = false;
-    for (int j = 0; j < columnSize; j++) {
+    for (int j = 0; j < columnNumber; j++) {
       if (get(rowIndex, j) != 0) {
         if (firstSkipped) {
           k[count++] = j;
@@ -439,10 +444,10 @@ public class Matrix {
    * @return an array containing all non-zero coefficients in row {@code h}, except the first one
    */
   public int[] findRemainingNonZeroCoefficients(int rowIndex) {
-    int[] k = new int[columnSize];
+    int[] k = new int[columnNumber];
     int count = 0;
     boolean firstSkipped = false;
-    for (int j = 0; j < columnSize; j++) {
+    for (int j = 0; j < columnNumber; j++) {
       if (get(rowIndex, j) != 0) {
         if (firstSkipped) {
           k[count++] = get(rowIndex, j);
@@ -464,7 +469,7 @@ public class Matrix {
    */
   public int rowWithNegativeElement() {
     for (int i = 0; i < rowNumber; i++) {
-      for (int j = 0; j < columnSize; j++) {
+      for (int j = 0; j < columnNumber; j++) {
         if (get(i, j) < 0) {
           return i;
         }
@@ -502,10 +507,10 @@ public class Matrix {
    * @return a new Matrix with the vector appended as the last column
    */
   public Matrix appendVector(Matrix x) {
-    Matrix r = new Matrix(rowNumber, columnSize + 1);
+    Matrix r = new Matrix(rowNumber, columnNumber + 1);
     for (int i = 0; i < rowNumber; i++) {
-      System.arraycopy(this.matrix[i], 0, r.matrix[i], 0, columnSize);
-      r.set(i, columnSize, x.get(i, 0));
+      System.arraycopy(this.matrix[i], 0, r.matrix[i], 0, columnNumber);
+      r.set(i, columnNumber, x.get(i, 0));
     }
     return r;
   }
@@ -542,7 +547,7 @@ public class Matrix {
       return;
     }
     for (int i = 0; i < rowNumber; i++) {
-      for (int j = 0; j < columnSize; j++) {
+      for (int j = 0; j < columnNumber; j++) {
         matrix[i][j] /= s;
       }
     }
@@ -557,9 +562,9 @@ public class Matrix {
    *     elsewhere
    */
   public Matrix nonZeroIndices() {
-    Matrix x = new Matrix(rowNumber, columnSize);
+    Matrix x = new Matrix(rowNumber, columnNumber);
     for (int i = 0; i < rowNumber; i++) {
-      for (int j = 0; j < columnSize; j++) {
+      for (int j = 0; j < columnNumber; j++) {
         x.set(i, j, get(i, j) == 0 ? 0 : i + 1);
       }
     }
@@ -575,8 +580,8 @@ public class Matrix {
    * @return the index of the non-minimal column if found, otherwise -1
    */
   public int findNonMinimal() {
-    for (int j = 0; j < columnSize; j++) {
-      for (int k = 0; k < columnSize; k++) {
+    for (int j = 0; j < columnNumber; j++) {
+      for (int k = 0; k < columnNumber; k++) {
         if (j == k) {
           continue;
         }
