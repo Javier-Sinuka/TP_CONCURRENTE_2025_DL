@@ -19,7 +19,7 @@ import java.util.Map;
  *
  * <p>The core algorithm is adapted from PIPE2's InvariantAnalysis.
  *
- * @author Manos Papantoniou & Michael Camacho (Original PIPE2 Authors)
+ * @author Manos Papantoniou and Michael Camacho (Original PIPE2 Authors)
  * @author Der Landsknecht (Adaptation for this project)
  * @version 1.0
  * @since 2025-28-08
