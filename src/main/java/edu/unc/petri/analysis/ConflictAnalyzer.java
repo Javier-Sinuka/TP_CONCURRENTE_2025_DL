@@ -18,6 +18,7 @@ import java.util.Map;
  */
 public class ConflictAnalyzer {
 
+  /** The incidence matrix representing the Petri net structure. */
   private final IncidenceMatrix incidenceMatrix;
 
   /**
