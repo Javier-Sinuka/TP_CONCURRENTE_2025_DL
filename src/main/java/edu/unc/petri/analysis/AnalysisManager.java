@@ -32,7 +32,10 @@ import java.util.stream.Collectors;
  * @since 2025-30-08
  */
 public class AnalysisManager {
+  /** The PetriNetAnalyzer instance used for performing calculations. */
   private final PetriNetAnalyzer analyzer;
+
+  /** The ConflictAnalyzer instance for analyzing structural conflicts. */
   private final ConflictAnalyzer conflictAnalyzer;
 
   /**
