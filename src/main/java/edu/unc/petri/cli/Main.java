@@ -392,26 +392,25 @@ public final class Main {
   }
 
   private static void runInvariantChecker() {
-    String scriptPath = "scripts/invariant_checker.py";
+    String scriptPath = Paths.get("scripts", "invariant_checker.py").toString();
     String input = "transition_log.txt";
-    String[] interpreters = new String[] {"python3", "python"};
+    String[] interpreters = new String[] {"python3", "python", "py"};
 
     for (String py : interpreters) {
       try {
-        // Directly inherit parent's IO; colors will work when attached to a TTY.
-        java.util.List<String> cmd = java.util.Arrays.asList(py, scriptPath, input);
-        ProcessBuilder pb = new ProcessBuilder(cmd);
+        ProcessBuilder pb = new ProcessBuilder(Arrays.asList(py, scriptPath, input));
         pb.redirectErrorStream(true);
         pb.inheritIO();
         pb.start();
-        return; // success or script ran; do not try next interpreter
+        return; // success, don't try others
       } catch (IOException e) {
         // try next interpreter
       }
     }
     System.err.println(
-        "[invariant_checker] Could not execute scripts/invariant_checker.py. Is Python installed"
-            + " and is 'script' available?");
+        "[invariant_checker] Could not execute "
+            + scriptPath
+            + ". Is Python installed and available in PATH?");
   }
 
   /** Constructs the PetriNet instance from the configuration and transition log. */
