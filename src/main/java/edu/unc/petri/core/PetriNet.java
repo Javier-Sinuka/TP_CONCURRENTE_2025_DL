@@ -69,10 +69,20 @@ public class PetriNet {
     }
 
     if (!enableVector.isTransitionEnabled(transitionIndex)) {
-      return false; // Transition is not enabled token wise
+      return false; // Transition is not enabled token wise or time wise or another thread is
+      // waiting for the transition
     }
 
-    // String markingBefore = currentMarking.toString();
+    boolean currentThreadWasWaiting = false;
+    long currentThreadId = Thread.currentThread().getId();
+
+    if (enableVector.isThereThreadWaitingForTransition(transitionIndex)) {
+      if (enableVector.getWaitingThreadId(transitionIndex) == currentThreadId) {
+        currentThreadWasWaiting = true; // Current thread was waiting for this transition
+      } else {
+        return false; // Another thread is waiting for this transition
+      }
+    }
 
     // Calculate the next marking based on the current marking and the incidence
     // matrix
@@ -85,9 +95,9 @@ public class PetriNet {
     // Check place invariants after firing the transition
     petriNetAnalyzer.checkPlaceInvariants(currentMarking.getMarking());
 
-    // String markingAfter = currentMarking.toString();
-
-    // log.logDebug("" + markingBefore + "->" + markingAfter + " by T" + transitionIndex);
+    if (currentThreadWasWaiting) {
+      enableVector.clearWaitingThreadId(transitionIndex); // Thread is no longer waiting
+    }
 
     enableVector.updateEnableVector(incidenceMatrix, currentMarking);
 
