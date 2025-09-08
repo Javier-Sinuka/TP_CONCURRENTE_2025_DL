@@ -484,12 +484,32 @@ public final class Main {
     if (cfg.incidence == null || cfg.incidence.length == 0) {
       throw new IllegalArgumentException("Config.incidence is missing or empty.");
     }
+    final int numPlaces = cfg.incidence.length;
+    final int numTransitions = cfg.incidence[0].length;
+    if (numTransitions == 0) {
+      throw new IllegalArgumentException("Config.incidence has 0 transitions.");
+    }
+
     if (cfg.initialMarking == null) {
       throw new IllegalArgumentException("Config.initialMarking is missing.");
     }
+    if (cfg.initialMarking.length != numPlaces) {
+      throw new IllegalArgumentException(
+          String.format(
+              "Config mismatch: initialMarking length (%d) does not match number of places (%d).",
+              cfg.initialMarking.length, numPlaces));
+    }
+
     if (cfg.timeRanges == null) {
       throw new IllegalArgumentException("Config.timeRanges is missing.");
     }
+    if (cfg.timeRanges.length != numTransitions) {
+      throw new IllegalArgumentException(
+          String.format(
+              "Config mismatch: timeRanges length (%d) does not match number of transitions (%d).",
+              cfg.timeRanges.length, numTransitions));
+    }
+
     if (cfg.segments == null || cfg.segments.isEmpty()) {
       throw new IllegalArgumentException("Config.segments is missing or empty.");
     }
@@ -503,7 +523,35 @@ public final class Main {
       if (s.threadQuantity < 0) {
         throw new IllegalArgumentException("Segment '" + s.name + "' has negative threadQuantity.");
       }
+      if (s.transitions != null) {
+        for (int t : s.transitions) {
+          if (t < 0 || t >= numTransitions) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Segment '%s' assigns an invalid transition index (%d). Valid indices are"
+                        + " 0-%d.",
+                    s.name, t, numTransitions - 1));
+          }
+        }
+      }
     }
+
+    if ("priority".equalsIgnoreCase(cfg.policy)) {
+      if (cfg.transitionWeights == null) {
+        throw new IllegalArgumentException(
+            "Config.transitionWeights is required for the 'priority' policy.");
+      }
+      for (Integer transition : cfg.transitionWeights.keySet()) {
+        if (transition < 0 || transition >= numTransitions) {
+          throw new IllegalArgumentException(
+              String.format(
+                  "Config.transitionWeights contains an invalid transition index (%d). Valid"
+                      + " indices are 0-%d.",
+                  transition, numTransitions - 1));
+        }
+      }
+    }
+
     if (cfg.invariantLimit < 0) {
       throw new IllegalArgumentException("Config.invariantLimit must be >= 0.");
     }
