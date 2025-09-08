@@ -109,6 +109,15 @@ public class Log {
   }
 
   /**
+   * Returns the file path where the log entries are being written.
+   *
+   * @return the file path as a {@code String}, or {@code null} if logging is disabled
+   */
+  public String getFilePath() {
+    return filePath;
+  }
+
+  /**
    * Logs a transition event to the specified file in the format "[YYYY-MM-DDTHH:mm:ss.SSS] TN".
    *
    * <p>The method appends a line containing the current local date and time and the given
