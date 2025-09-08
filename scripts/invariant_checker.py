@@ -8,7 +8,6 @@ This module provides functions to:
   regular expression.
 - Count occurrences of three distinct invariant branches.
 - Remove matched invariants from the input text and report any leftover content.
-- Optionally strip dashes from the input before final verification.
 
 Typical usage involves reading a log file, verifying invariants, and reporting
 counts and leftover content.
@@ -17,7 +16,7 @@ Functions:
     _apply_once(s: str) -> Tuple[str, int, int]:
         Finds and removes one invariant match from the string, returning the
         modified string, branch ID, and a flag indicating replacement.
-    verify_invariants_text(text: str, strip_dashes: bool = True)
+    verify_invariants_text(text: str)
         -> Tuple[bool, str, Tuple[int, int, int]]:
         Repeatedly removes invariant matches, counts each branch, and returns a
         success flag, leftover text, and branch counts.
@@ -26,7 +25,6 @@ Functions:
         prints counts, and displays warnings if leftover content remains.
 """
 import argparse
-import json
 import os
 import re
 import sys
@@ -47,7 +45,7 @@ _PATTERN = re.compile(
 
 
 # ------------------------------ UI helpers ------------------------------ #
-VERSION = "1.2.0"
+VERSION = "1.3.0"
 
 
 class Colors:  # pylint: disable=too-few-public-methods
@@ -185,9 +183,7 @@ def _apply_once(s: str) -> Tuple[str, int, int]:
     return new_s, branch, 1
 
 
-def verify_invariants_text(
-    text: str, strip_dashes: bool = True
-) -> Tuple[bool, str, Tuple[int, int, int]]:
+def verify_invariants_text(text: str) -> Tuple[bool, str, Tuple[int, int, int]]:
     """
     Repeatedly remove invariant matches and count each branch.
     Returns (ok, leftover, (count1, count2, count3)).
@@ -207,9 +203,6 @@ def verify_invariants_text(
         elif branch == 3:
             count3 += 1
 
-    if strip_dashes:
-        flat = re.sub(r"-", "", flat)
-
     leftover = flat.strip()
     ok = leftover == ""
     return ok, leftover, (count1, count2, count3)
@@ -227,11 +220,6 @@ def _create_parser() -> argparse.ArgumentParser:
         help="Path to the input log file, or '-' for stdin (default).",
     )
     parser.add_argument(
-        "--keep-dashes",
-        action="store_true",
-        help="Do not strip '-' before final check (default strips '-')",
-    )
-    parser.add_argument(
         "--no-color", action="store_true", help="Disable colorized output"
     )
     parser.add_argument(
@@ -244,23 +232,11 @@ def _create_parser() -> argparse.ArgumentParser:
         "-v", "--verbose", action="store_true", help="Show additional diagnostic output"
     )
     parser.add_argument(
-        "--leftover-preview",
-        type=int,
-        default=200,
-        metavar="N",
-        help="How many characters of leftover to show (default: 200)",
-    )
-    parser.add_argument(
         "--bar-width",
         type=int,
-        default=24,
+        default=40,
         metavar="N",
-        help="Width of the count bars (default: 24)",
-    )
-    parser.add_argument(
-        "--json",
-        action="store_true",
-        help="Print results as JSON (counts, total, ok, leftover) and exit",
+        help="Width of the count bars (default: 40)",
     )
     parser.add_argument("--version", action="store_true", help="Print version and exit")
     return parser
@@ -274,11 +250,11 @@ def _read_input(path: str) -> str:
         return f.read()
 
 
-def _render_bar(n: int, tot: int, width: int, color_fn, use_color: bool) -> str:
+def _render_bar(n: int, tot: int, width: int, color_fn) -> str:
     """Render a proportional bar with optional color."""
     filled = int(round((n / tot) * width)) if tot else 0
     empty = width - filled
-    return color_fn("█" * filled) + ((" " * empty) if use_color else ("." * empty))
+    return color_fn("█" * filled) + ("." * empty)
 
 
 def _print_counts(ui: UI, counts: Tuple[int, int, int], width: int) -> None:
@@ -291,24 +267,28 @@ def _print_counts(ui: UI, counts: Tuple[int, int, int], width: int) -> None:
         f"{emojis[2]} T0..T1..T7..T8..T9..T10..T11",
     )
     max_label = max(len(l) for l in labels)
-    fmt = f"  {{:<{max_label}}}  {{bar}}  {{count}}  ({{pct:.1f}}%)"
+    fmt = f"  {{:<{max_label}}}  {{invariant_bar}}  {{count}}  ({{pct:.1f}}%)"
 
     ui.info("")
     ui.info(ui.bold("Counts:"))
     for label, n in zip(labels, counts):
         pct = (n * 100.0 / total) if total else 0.0
-        bar = _render_bar(n, total, width, ui.green, ui.color)
-        ui.info(fmt.format(label, bar=bar, count=ui.green(str(n)), pct=pct))
+        invariant_bar = _render_bar(n, total, width, ui.green)
+        ui.info(
+            fmt.format(
+                label, invariant_bar=invariant_bar, count=ui.green(str(n)), pct=pct
+            )
+        )
     ui.info("")
     ui.info(ui.bold("Total invariants matched: ") + ui.green(str(total)))
 
 
-def _print_diagnostics(ui: UI, content: str, leftover: str, keep_dashes: bool) -> None:
+def _print_diagnostics(ui: UI, content: str, leftover: str) -> None:
     """Print optional verbose diagnostic details about consumption and tokens."""
     if not ui.verbose or ui.quiet:
         return
     flattened = "".join(part.strip() for part in content.splitlines())
-    flat_len = len(re.sub(r"-", "", flattened)) if not keep_dashes else len(flattened)
+    flat_len = len(flattened)
     left_len = len(leftover)
     ratio = (1.0 - (left_len / flat_len)) if flat_len else 1.0
     tok_in = len(re.findall(r"T\d+", content))
@@ -320,7 +300,12 @@ def _print_diagnostics(ui: UI, content: str, leftover: str, keep_dashes: bool) -
     ui.debug(f"Token occurrences in input: {tok_in}, in leftover: {tok_left}")
 
 
-def _preview_leftover(ui: UI, leftover: str, limit: int) -> None:
+DEFAULT_PREVIEW_LIMIT = 200
+
+
+def _preview_leftover(
+    ui: UI, leftover: str, limit: int = DEFAULT_PREVIEW_LIMIT
+) -> None:
     """Show a preview of leftover content with highlighted tokens if colored."""
     ui.info("")
     ui.warn("WARNING: leftover content not consumed.")
@@ -345,12 +330,10 @@ def main():
 
     Arguments:
         input (str): Path to the input log file, or '-' to read from stdin.
-        --keep-dashes (bool): If set, do not strip '-' before final check (default strips '-').
         --no-color: Disable ANSI colors (also respected if NO_COLOR env var is set).
         --no-fun: Disable banner and emojis.
         -q/--quiet: Suppress non-essential output.
         -v/--verbose: Print extra diagnostic information.
-        --leftover-preview N: Show up to N characters of leftover (default: 200).
         --version: Print version and exit.
 
     Reads the log file, verifies invariants, prints counts for each invariant, and displays a
@@ -378,31 +361,12 @@ def main():
         ui.warn(f"Could not read input: {e}")
         sys.exit(1)
 
-    ok, leftover, (c1, c2, c3) = verify_invariants_text(
-        content, strip_dashes=not args.keep_dashes
-    )
+    ok, leftover, (c1, c2, c3) = verify_invariants_text(content)
 
-    total = c1 + c2 + c3
-
-    # Optional JSON output
-    if getattr(args, "json", False):
-        print(
-            json.dumps(
-                {
-                    "counts": {"branch1": c1, "branch2": c2, "branch3": c3},
-                    "total": total,
-                    "ok": ok,
-                    "leftover": leftover,
-                },
-                ensure_ascii=False,
-            )
-        )
-        sys.exit(0 if ok else 2)
-
-    width = max(0, int(getattr(args, "bar_width", 24)))
+    width = max(0, int(getattr(args, "bar_width", 40)))
     _print_counts(ui, (c1, c2, c3), width)
 
-    _print_diagnostics(ui, content, leftover, keep_dashes=args.keep_dashes)
+    _print_diagnostics(ui, content, leftover)
 
     if ok:
         msg = "All invariants consumed."
@@ -412,7 +376,7 @@ def main():
         ui.info(ui.green(msg))
         sys.exit(0)
     else:
-        _preview_leftover(ui, leftover, args.leftover_preview)
+        _preview_leftover(ui, leftover)
         sys.exit(0)
 
 
