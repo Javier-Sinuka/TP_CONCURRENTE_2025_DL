@@ -117,6 +117,7 @@ public class PetriNet {
    *     enabled, false otherwise
    */
   public boolean[] getTimeEnabledTransitions() {
+    // Work on a copy to avoid mutating internal enable state
     boolean[] enabledTransitions = enableVector.getTokenEnabledTransitions();
 
     for (int i = 0; i < enabledTransitions.length; i++) {
