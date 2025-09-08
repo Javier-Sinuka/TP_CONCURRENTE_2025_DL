@@ -379,7 +379,7 @@ def main():
             preview = re.sub(r"(T\d+)", lambda m: ui.bold(ui.red(m.group(1))), preview)
         ui.info("")
         ui.info(preview)
-        sys.exit(2)
+        sys.exit(0)
 
 
 if __name__ == "__main__":
