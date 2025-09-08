@@ -1,5 +1,6 @@
 package edu.unc.petri.simulation;
 
+import edu.unc.petri.util.Log;
 import edu.unc.petri.util.PetriNetConfig;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -27,8 +28,8 @@ public class SimulationManager {
   /** List of worker threads executing the simulation. */
   private final List<Thread> workers;
 
-  /** Path to the transition log file. */
-  private static final String TRANSITION_LOG_PATH = "transition_log.txt";
+  /** The transition log for this specific run. */
+  private final Log transitionLog;
 
   /**
    * Constructs a new SimulationManager for a single execution.
@@ -36,10 +37,13 @@ public class SimulationManager {
    * @param invariantTracker The shared tracker used to determine when the simulation's goal is
    *     reached.
    * @param workers The list of worker threads created for this specific run.
+   * @param transitionLog The unique transition log for this run.
    */
-  public SimulationManager(InvariantTracker invariantTracker, List<Thread> workers) {
+  public SimulationManager(
+      InvariantTracker invariantTracker, List<Thread> workers, Log transitionLog) {
     this.invariantTracker = invariantTracker;
     this.workers = workers;
+    this.transitionLog = transitionLog;
   }
 
   /**
@@ -83,10 +87,14 @@ public class SimulationManager {
    * @return A map where the key is the transition number and the value is its fire count.
    */
   private Map<Integer, Integer> readTransitionCountsFromLog() {
+    if (this.transitionLog == null || this.transitionLog.getFilePath() == null) {
+      return new HashMap<>(); // Return empty map if logging is disabled
+    }
     Map<Integer, Integer> counts = new HashMap<>();
     Pattern pattern = Pattern.compile("T(\\d+)"); // Regex to find "T" followed by digits
 
-    try (BufferedReader reader = new BufferedReader(new FileReader(TRANSITION_LOG_PATH))) {
+    try (BufferedReader reader =
+        new BufferedReader(new FileReader(this.transitionLog.getFilePath()))) {
       String line;
       while ((line = reader.readLine()) != null) {
         Matcher matcher = pattern.matcher(line);
