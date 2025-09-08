@@ -524,6 +524,10 @@ public final class Main {
         throw new IllegalArgumentException("Segment '" + s.name + "' has negative threadQuantity.");
       }
       if (s.transitions != null) {
+        if (s.transitions.length == 0) {
+          throw new IllegalArgumentException(
+              String.format("Segment '%s' contains an empty 'transitions' array.", s.name));
+        }
         for (int t : s.transitions) {
           if (t < 0 || t >= numTransitions) {
             throw new IllegalArgumentException(
