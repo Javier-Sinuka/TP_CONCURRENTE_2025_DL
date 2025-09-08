@@ -216,9 +216,8 @@ public final class Main {
         }
         Log debugLog = new Log(debugLogPath); // Creates a "do-nothing" log if path is null
 
-        Log transitionLog = new Log(); // Creates a unique temporary file
+        Log transitionLog = new Log(); // Cleared each run
         PetriNet petriNet = buildPetriNet(config, analyzer, transitionLog);
-        PolicyInterface policy = choosePolicy(config);
         InvariantTracker invariantTracker = setupInvariantTracker(config, analyzer);
         Monitor monitor = null;
 
@@ -242,6 +241,7 @@ public final class Main {
             // 1. Reset state of shared components for a clean run
             petriNet.reset(config.initialMarking);
             invariantTracker.reset();
+            PolicyInterface policy = choosePolicy(config); // Create a new policy for each run
             monitor = setupMonitor(invariantTracker, petriNet, policy, debugLog);
             transitionLog.clearLog();
             debugLog.logHeader("Petri Net Simulation Log: Run " + (i + 1), configPath.toString());
