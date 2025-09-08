@@ -399,18 +399,32 @@ public final class Main {
     for (String py : interpreters) {
       try {
         ProcessBuilder pb = new ProcessBuilder(Arrays.asList(py, scriptPath, input));
-        pb.redirectErrorStream(true);
-        pb.inheritIO();
-        pb.start();
-        return; // success, don't try others
+        pb.inheritIO(); // Show script output directly in the console
+        System.out.println("\n--- Running Invariant Checker ---");
+        Process process = pb.start();
+        int exitCode = process.waitFor(); // Wait for the script to finish
+
+        if (exitCode == 0) {
+          System.out.println("--- Invariant Checker Passed ---");
+          return; // Success
+        } else {
+          // Script ran but failed
+          throw new RuntimeException(
+              "Invariant checker script failed with a non-zero exit code: " + exitCode);
+        }
       } catch (IOException e) {
-        // try next interpreter
+        // This interpreter failed to start, try the next one.
+      } catch (InterruptedException e) {
+        // The waiting was interrupted.
+        Thread.currentThread().interrupt(); // Preserve interrupt status
+        throw new RuntimeException("Invariant checker was interrupted.", e);
       }
     }
-    System.err.println(
+    // If the loop finishes, no interpreter was found
+    throw new RuntimeException(
         "[invariant_checker] Could not execute "
             + scriptPath
-            + ". Is Python installed and available in PATH?");
+            + ". Is Python installed and in PATH?");
   }
 
   /** Constructs the PetriNet instance from the configuration and transition log. */
