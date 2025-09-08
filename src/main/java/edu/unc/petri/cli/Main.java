@@ -216,7 +216,7 @@ public final class Main {
         }
         Log debugLog = new Log(debugLogPath); // Creates a "do-nothing" log if path is null
 
-        Log transitionLog = new Log(); // Cleared each run
+        Log transitionLog = new Log(); // Creates a unique temporary file
         PetriNet petriNet = buildPetriNet(config, analyzer, transitionLog);
         PolicyInterface policy = choosePolicy(config);
         InvariantTracker invariantTracker = setupInvariantTracker(config, analyzer);
@@ -224,7 +224,7 @@ public final class Main {
 
         StatisticsAggregator stats = new StatisticsAggregator();
         // Create a stateless manager instance for report generation
-        SimulationManager reporter = new SimulationManager(null, null);
+        SimulationManager reporter = new SimulationManager(null, null, null);
 
         // --- Main Execution Loop ---
         int failedRuns = 0;
@@ -255,7 +255,8 @@ public final class Main {
                 buildWorkers(config, invariantTracker, monitor, startBarrier, firstDoneSignal);
 
             // 3. Execute the simulation for one run
-            SimulationManager runner = new SimulationManager(invariantTracker, workers);
+            SimulationManager runner =
+                new SimulationManager(invariantTracker, workers, transitionLog);
             SimulationResult result = runner.execute(configPath, config, firstDoneSignal);
 
             // 4. Process the result
@@ -266,7 +267,7 @@ public final class Main {
             }
             // 5. Optional: run regex-based invariant checker
             if (cli.regexChecker) {
-              runInvariantChecker();
+              runInvariantChecker(transitionLog.getFilePath());
             }
           } catch (Throwable runEx) {
             // isolate per-run failures when running many times
@@ -391,14 +392,13 @@ public final class Main {
     }
   }
 
-  private static void runInvariantChecker() {
+  private static void runInvariantChecker(String transitionLogPath) {
     String scriptPath = Paths.get("scripts", "invariant_checker.py").toString();
-    String input = "transition_log.txt";
     String[] interpreters = new String[] {"python3", "python", "py"};
 
     for (String py : interpreters) {
       try {
-        ProcessBuilder pb = new ProcessBuilder(Arrays.asList(py, scriptPath, input));
+        ProcessBuilder pb = new ProcessBuilder(Arrays.asList(py, scriptPath, transitionLogPath));
         pb.inheritIO(); // Show script output directly in the console
         System.out.println("\n--- Running Invariant Checker ---");
         Process process = pb.start();
