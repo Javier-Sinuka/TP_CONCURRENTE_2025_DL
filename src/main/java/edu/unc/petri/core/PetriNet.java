@@ -69,26 +69,19 @@ public class PetriNet {
     }
 
     if (!enableVector.isTransitionEnabled(transitionIndex)) {
-      return false; // Transition is not enabled token wise
+      return false; // Transition is not enabled
     }
 
-    // String markingBefore = currentMarking.toString();
+    // Calculate the potential next marking
+    int[] nextMarking =
+        StateEquationUtils.calculateStateEquation(transitionIndex, incidenceMatrix, currentMarking);
 
-    // Calculate the next marking based on the current marking and the incidence
-    // matrix
-    currentMarking.setMarking(
-        StateEquationUtils.calculateStateEquation(
-            transitionIndex, incidenceMatrix, currentMarking));
+    // Validate the place invariants with the new marking
+    petriNetAnalyzer.checkPlaceInvariants(nextMarking);
 
+    // Update the current marking and enable vector
+    currentMarking.setMarking(nextMarking);
     log.logTransition(transitionIndex);
-
-    // Check place invariants after firing the transition
-    petriNetAnalyzer.checkPlaceInvariants(currentMarking.getMarking());
-
-    // String markingAfter = currentMarking.toString();
-
-    // log.logDebug("" + markingBefore + "->" + markingAfter + " by T" + transitionIndex);
-
     enableVector.updateEnableVector(incidenceMatrix, currentMarking);
 
     return true;
