@@ -50,7 +50,13 @@ _PATTERN = re.compile(
 VERSION = "1.2.0"
 
 
-class Colors:
+class Colors:  # pylint: disable=too-few-public-methods
+    """ANSI color escape codes for styled terminal output.
+
+    This class intentionally holds only constants; no public methods are needed.
+    The pylint rule is disabled to avoid forcing artificial methods here.
+    """
+
     RESET = "\033[0m"
     BOLD = "\033[1m"
     DIM = "\033[2m"
@@ -75,47 +81,60 @@ def _supports_color(stream) -> bool:
 
 @dataclass
 class UI:
+    """Lightweight console UI with optional colors, banner, and verbosity."""
+
     color: bool = True
     fun: bool = True
     quiet: bool = False
     verbose: bool = False
 
     def style(self, text: str, color_code: str) -> str:
+        """Apply a color style to text if colors are enabled."""
         if self.color:
             return f"{color_code}{text}{Colors.RESET}"
         return text
 
     def bold(self, text: str) -> str:
+        """Return bold-styled text when colors are enabled."""
         return self.style(text, Colors.BOLD)
 
     def dim(self, text: str) -> str:
+        """Return dim-styled text when colors are enabled."""
         return self.style(text, Colors.DIM)
 
     def green(self, text: str) -> str:
+        """Return green-styled text when colors are enabled."""
         return self.style(text, Colors.GREEN)
 
     def yellow(self, text: str) -> str:
+        """Return yellow-styled text when colors are enabled."""
         return self.style(text, Colors.YELLOW)
 
     def red(self, text: str) -> str:
+        """Return red-styled text when colors are enabled."""
         return self.style(text, Colors.RED)
 
     def cyan(self, text: str) -> str:
+        """Return cyan-styled text when colors are enabled."""
         return self.style(text, Colors.CYAN)
 
     def info(self, text: str = "") -> None:
+        """Print informational text respecting the quiet flag."""
         if not self.quiet:
             print(text)
 
     def debug(self, text: str) -> None:
+        """Print debug text when verbose and not quiet."""
         if self.verbose and not self.quiet:
             print(self.dim(text))
 
     def warn(self, text: str) -> None:
+        """Print a warning (yellow) respecting the quiet flag."""
         if not self.quiet:
             print(self.yellow(text))
 
     def banner(self) -> None:
+        """Print a fun banner unless disabled or in quiet mode."""
         if self.quiet or not self.fun:
             return
         logo = [
@@ -196,24 +215,8 @@ def verify_invariants_text(
     return ok, leftover, (count1, count2, count3)
 
 
-def main():
-    """
-    Parses command-line arguments to verify T-invariants in a log file and count how many times each
-    invariant appears.
-
-    Arguments:
-        input (str): Path to the input log file, or '-' to read from stdin.
-        --keep-dashes (bool): If set, do not strip '-' before final check (default strips '-').
-        --no-color: Disable ANSI colors (also respected if NO_COLOR env var is set).
-        --no-fun: Disable banner and emojis.
-        -q/--quiet: Suppress non-essential output.
-        -v/--verbose: Print extra diagnostic information.
-        --leftover-preview N: Show up to N characters of leftover (default: 200).
-        --version: Print version and exit.
-
-    Reads the log file, verifies invariants, prints counts for each invariant, and displays a
-    warning if leftover content remains.
-    """
+def _create_parser() -> argparse.ArgumentParser:
+    """Create and return the CLI argument parser."""
     parser = argparse.ArgumentParser(
         description="Verify T-invariants in a log and count how many times each invariant appears.",
     )
@@ -260,6 +263,100 @@ def main():
         help="Print results as JSON (counts, total, ok, leftover) and exit",
     )
     parser.add_argument("--version", action="store_true", help="Print version and exit")
+    return parser
+
+
+def _read_input(path: str) -> str:
+    """Read content from the given path, or stdin if path is '-'."""
+    if path == "-":
+        return sys.stdin.read()
+    with open(path, "r", encoding="utf-8") as f:
+        return f.read()
+
+
+def _render_bar(n: int, tot: int, width: int, color_fn, use_color: bool) -> str:
+    """Render a proportional bar with optional color."""
+    filled = int(round((n / tot) * width)) if tot else 0
+    empty = width - filled
+    return color_fn("█" * filled) + ((" " * empty) if use_color else ("." * empty))
+
+
+def _print_counts(ui: UI, counts: Tuple[int, int, int], width: int) -> None:
+    """Print formatted counts, percentages, and bars for each branch."""
+    total = sum(counts)
+    emojis = ("①", "②", "③") if ui.fun else ("1", "2", "3")
+    labels = (
+        f"{emojis[0]} T0..T1..T2..T3..T4..T11",
+        f"{emojis[1]} T0..T1..T5..T6..T11",
+        f"{emojis[2]} T0..T1..T7..T8..T9..T10..T11",
+    )
+    max_label = max(len(l) for l in labels)
+    fmt = f"  {{:<{max_label}}}  {{bar}}  {{count}}  ({{pct:.1f}}%)"
+
+    ui.info("")
+    ui.info(ui.bold("Counts:"))
+    for label, n in zip(labels, counts):
+        pct = (n * 100.0 / total) if total else 0.0
+        bar = _render_bar(n, total, width, ui.green, ui.color)
+        ui.info(fmt.format(label, bar=bar, count=ui.green(str(n)), pct=pct))
+    ui.info("")
+    ui.info(ui.bold("Total invariants matched: ") + ui.green(str(total)))
+
+
+def _print_diagnostics(ui: UI, content: str, leftover: str, keep_dashes: bool) -> None:
+    """Print optional verbose diagnostic details about consumption and tokens."""
+    if not ui.verbose or ui.quiet:
+        return
+    flattened = "".join(part.strip() for part in content.splitlines())
+    flat_len = len(re.sub(r"-", "", flattened)) if not keep_dashes else len(flattened)
+    left_len = len(leftover)
+    ratio = (1.0 - (left_len / flat_len)) if flat_len else 1.0
+    tok_in = len(re.findall(r"T\d+", content))
+    tok_left = len(re.findall(r"T\d+", leftover))
+    ui.info("")
+    ui.debug(
+        f"Flat length: {flat_len}, leftover length: {left_len}, consumed: {ratio:.1%}"
+    )
+    ui.debug(f"Token occurrences in input: {tok_in}, in leftover: {tok_left}")
+
+
+def _preview_leftover(ui: UI, leftover: str, limit: int) -> None:
+    """Show a preview of leftover content with highlighted tokens if colored."""
+    ui.info("")
+    ui.warn("WARNING: leftover content not consumed.")
+    if limit <= 0:
+        preview = ""
+    elif len(leftover) <= limit:
+        preview = leftover
+    else:
+        head = leftover[: max(1, limit // 2)]
+        tail = leftover[-max(1, limit - len(head)) :]
+        preview = head + " … " + tail
+    if ui.color:
+        preview = re.sub(r"(T\d+)", lambda m: ui.bold(ui.red(m.group(1))), preview)
+    ui.info("")
+    ui.info(preview)
+
+
+def main():
+    """
+    Parses command-line arguments to verify T-invariants in a log file and count how many times each
+    invariant appears.
+
+    Arguments:
+        input (str): Path to the input log file, or '-' to read from stdin.
+        --keep-dashes (bool): If set, do not strip '-' before final check (default strips '-').
+        --no-color: Disable ANSI colors (also respected if NO_COLOR env var is set).
+        --no-fun: Disable banner and emojis.
+        -q/--quiet: Suppress non-essential output.
+        -v/--verbose: Print extra diagnostic information.
+        --leftover-preview N: Show up to N characters of leftover (default: 200).
+        --version: Print version and exit.
+
+    Reads the log file, verifies invariants, prints counts for each invariant, and displays a
+    warning if leftover content remains.
+    """
+    parser = _create_parser()
     args = parser.parse_args()
 
     if args.version:
@@ -273,11 +370,7 @@ def main():
     ui.banner()
 
     try:
-        if args.input == "-":
-            content = sys.stdin.read()
-        else:
-            with open(args.input, "r", encoding="utf-8") as f:
-                content = f.read()
+        content = _read_input(args.input)
     except FileNotFoundError:
         ui.warn("Input file not found. Please check the path.")
         sys.exit(1)
@@ -290,8 +383,6 @@ def main():
     )
 
     total = c1 + c2 + c3
-
-    emoji1, emoji2, emoji3 = ("①", "②", "③") if ui.fun else ("1", "2", "3")
 
     # Optional JSON output
     if getattr(args, "json", False):
@@ -308,53 +399,10 @@ def main():
         )
         sys.exit(0 if ok else 2)
 
-    # Compute percentages and bars
-    def pct(n, tot):
-        return (n * 100.0 / tot) if tot else 0.0
-
     width = max(0, int(getattr(args, "bar_width", 24)))
+    _print_counts(ui, (c1, c2, c3), width)
 
-    def bar(n, tot, color_fn):
-        filled = int(round((n / tot) * width)) if tot else 0
-        empty = width - filled
-        # Use colored filled blocks and pad with spaces (or dots when no color)
-        return color_fn("█" * filled) + ((" " * empty) if ui.color else ("." * empty))
-
-    p1, p2, p3 = pct(c1, total), pct(c2, total), pct(c3, total)
-    b1 = bar(c1, total, ui.green)
-    b2 = bar(c2, total, ui.green)
-    b3 = bar(c3, total, ui.green)
-
-    label1 = f"{emoji1} T0..T1..T2..T3..T4..T11"
-    label2 = f"{emoji2} T0..T1..T5..T6..T11"
-    label3 = f"{emoji3} T0..T1..T7..T8..T9..T10..T11"
-
-    max_label = max(len(label1), len(label2), len(label3))
-    fmt = f"  {{:<{max_label}}}  {{bar}}  {{count}}  ({{pct:.1f}}%)"
-
-    ui.info("")
-    ui.info(ui.bold("Counts:"))
-    ui.info(fmt.format(label1, bar=b1, count=ui.green(str(c1)), pct=p1))
-    ui.info(fmt.format(label2, bar=b2, count=ui.green(str(c2)), pct=p2))
-    ui.info(fmt.format(label3, bar=b3, count=ui.green(str(c3)), pct=p3))
-    ui.info("")
-    ui.info(ui.bold("Total invariants matched: ") + ui.green(str(total)))
-
-    if ui.verbose and not ui.quiet:
-        # Diagnostics
-        flattened = "".join(part.strip() for part in content.splitlines())
-        flat_len = (
-            len(re.sub(r"-", "", flattened)) if not args.keep_dashes else len(flattened)
-        )
-        left_len = len(leftover)
-        ratio = (1.0 - (left_len / flat_len)) if flat_len else 1.0
-        tok_in = len(re.findall(r"T\d+", content))
-        tok_left = len(re.findall(r"T\d+", leftover))
-        ui.info("")
-        ui.debug(
-            f"Flat length: {flat_len}, leftover length: {left_len}, consumed: {ratio:.1%}"
-        )
-        ui.debug(f"Token occurrences in input: {tok_in}, in leftover: {tok_left}")
+    _print_diagnostics(ui, content, leftover, keep_dashes=args.keep_dashes)
 
     if ok:
         msg = "All invariants consumed."
@@ -364,21 +412,7 @@ def main():
         ui.info(ui.green(msg))
         sys.exit(0)
     else:
-        ui.info("")
-        ui.warn("WARNING: leftover content not consumed.")
-        prev_len = args.leftover_preview
-        if prev_len <= 0:
-            preview = ""
-        elif len(leftover) <= prev_len:
-            preview = leftover
-        else:
-            head = leftover[: max(1, prev_len // 2)]
-            tail = leftover[-max(1, prev_len - len(head)) :]
-            preview = head + " … " + tail
-        if ui.color:
-            preview = re.sub(r"(T\d+)", lambda m: ui.bold(ui.red(m.group(1))), preview)
-        ui.info("")
-        ui.info(preview)
+        _preview_leftover(ui, leftover, args.leftover_preview)
         sys.exit(0)
 
 
