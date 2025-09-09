@@ -21,7 +21,7 @@ El proyecto enfatiza una clara separación de responsabilidades, con un motor de
 - **Objetivos de Simulación Basados en Invariantes**: Defina una condición de finalización clara para las simulaciones estableciendo un `invariantLimit` en el archivo de configuración.
 - **Loggeo Completo**: Genera archivos de log detallados tanto para las secuencias de transición como para la información de depuración.
 
-## Instalación y Construcción
+## Instalación y Compilación
 
 ### Prerrequisitos
 - **Java Development Kit (JDK)**: Versión 8 o superior.
