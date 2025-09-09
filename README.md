@@ -28,7 +28,7 @@ The project emphasizes a clean separation of concerns, with a core Petri Net eng
 ### Steps
 1.  **Clone the repository:**
     ```bash
-    git clone <repository URL>
+    git clone https://github.com/Javier-Sinuka/TP_CONCURRENTE_2025_DL.git
     ```
 2.  **Navigate to the project directory:**
     ```bash
