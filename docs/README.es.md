@@ -1,9 +1,9 @@
-# Simulador de Redes de Petri
+# Petri Net Simulator
 
 [![en](https://img.shields.io/badge/lang-en-red.svg)](../README.md)
 
 ## Introducción
-El Simulador de Redes de Petri es un framework de simulación concurrente y configurable escrito en Java. Proporciona un entorno robusto para modelar, simular y analizar sistemas con procesos concurrentes y paralelos utilizando Redes de Petri.
+Petri Net Simulator es un framework de simulación concurrente y configurable escrito en Java. Proporciona un entorno robusto para modelar, simular y analizar sistemas con procesos concurrentes y paralelos utilizando Redes de Petri.
 
 El proyecto enfatiza una clara separación de responsabilidades, con un motor de Red de Petri central, una capa de sincronización basada en un monitor para manejar la concurrencia y un sistema de políticas intercambiables para definir la lógica de disparo de transiciones ante un conflicto. Toda la simulación, incluida la estructura de la red, la temporización y el modelo de hilos, se define a través de archivos de configuración JSON externos. Además, cuenta con un conjunto de herramientas de análisis estático para calcular e informar sobre las propiedades estructurales de la red.
 
