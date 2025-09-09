@@ -36,18 +36,18 @@ release/*   ← pre-release hardening branches
 ### Linux / macOS
 
 ```bash
-git clone https://github.com/<org>/petri-sim.git
-cd petri-sim
-./mvnw spotless:apply   # auto-format to Google Java Style
-./mvnw clean install    # compile, test, and package the application
+git clone https://github.com/Javier-Sinuka/TP_CONCURRENTE_2025_DL.git
+cd TP_CONCURRENTE_2025_DL
+./mvnw spotless:apply                     # auto-format to Google Java Style
+./mvnw clean install                      # compile, test, and package the application
 java -jar target/petri-sim-1.0.jar --help # run the application
 ````
 
 ### Windows (Command Prompt or PowerShell)
 
 ```powershell
-git clone https://github.com/<org>/petri-sim.git
-cd petri-sim
+git clone https://github.com/Javier-Sinuka/TP_CONCURRENTE_2025_DL.git
+cd TP_CONCURRENTE_2025_DL
 .\mvnw.cmd spotless:apply
 .\mvnw.cmd clean install
 java -jar target/petri-sim-1.0.jar --help
