@@ -1,13 +1,15 @@
 # Petri Net Simulator
 
-## Introduction
-The Petri Net Simulator is a concurrent, configurable simulation framework written in Java. It provides a robust environment for modeling, simulating, and analyzing systems with parallel processes using Petri Nets.
+[![es](https://img.shields.io/badge/lang-es-yellow.svg)](./docs/README.es.md)
 
-The project emphasizes a clean separation of concerns, with a core Petri Net engine, a monitor-based synchronization layer for handling concurrency, and a pluggable policy system for defining transition firing logic. The entire simulation, including the net's structure, timing, and threading model, is defined through external JSON configuration files. Additionally, it features a powerful static analysis toolkit to compute and report on structural properties of the net.
+## Introduction
+The Petri Net Simulator is a concurrent, configurable simulation framework written in Java. It provides a robust environment for modeling, simulating, and analyzing systems with concurrent and parallel processes using Petri Nets.
+
+The project emphasizes a clean separation of concerns, with a core Petri Net engine, a monitor-based synchronization layer for handling concurrency, and a pluggable policy system for defining transition firing logic in case of conflicts. The entire simulation, including the net's structure, timing, and threading model, is defined through external JSON configuration files. Additionally, it features a static analysis toolkit to compute and report on structural properties of the net.
 
 ## Features
 - **JSON Configuration**: Dynamically configure the entire Petri Net, including its structure (places, transitions, incidence matrix), initial state, transition timings, and threading model from a single JSON file.
-- **Advanced Analysis Tools**: A built-in static analyzer computes key structural properties of the Petri net, including:
+- **Analysis Tools**: A built-in static analyzer computes key structural properties of the Petri net, including:
     - **P-Invariants (Place Invariants)**: Identifies sets of places where the weighted sum of tokens remains constant, crucial for verifying conservation properties.
     - **T-Invariants (Transition Invariants)**: Finds sequences of transition firings that restore the net to a previous state, useful for detecting cycles and verifying liveness.
     - **Structural Conflicts**: Detects which transitions compete for the same input resources (places).
