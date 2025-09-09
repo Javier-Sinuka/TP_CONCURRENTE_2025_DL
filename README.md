@@ -3,7 +3,7 @@
 [![es](https://img.shields.io/badge/lang-es-yellow.svg)](./docs/README.es.md)
 
 ## Introduction
-The Petri Net Simulator is a concurrent, configurable simulation framework written in Java. It provides a robust environment for modeling, simulating, and analyzing systems with concurrent and parallel processes using Petri Nets.
+Petri Net Simulator is a concurrent, configurable simulation framework written in Java. It provides a robust environment for modeling, simulating, and analyzing systems with concurrent and parallel processes using Petri Nets.
 
 The project emphasizes a clean separation of concerns, with a core Petri Net engine, a monitor-based synchronization layer for handling concurrency, and a pluggable policy system for defining transition firing logic in case of conflicts. The entire simulation, including the net's structure, timing, and threading model, is defined through external JSON configuration files. Additionally, it features a static analysis toolkit to compute and report on structural properties of the net.
 
