@@ -141,4 +141,20 @@ public class StatisticsAggregator {
     System.out.println("Configuration File Name: " + configPath.getFileName());
     System.out.println("Policy Used: " + policy);
   }
+
+  public int getRunCount() {
+    return runCount;
+  }
+
+  public long getTotalSimulationTime() {
+    return totalSimulationTime;
+  }
+
+  public Map<Integer, Long> getTotalTransitionCounts() {
+    return totalTransitionCounts;
+  }
+
+  public Map<Integer, Long> getTotalInvariantCompletionCounts() {
+    return totalInvariantCompletionCounts;
+  }
 }
