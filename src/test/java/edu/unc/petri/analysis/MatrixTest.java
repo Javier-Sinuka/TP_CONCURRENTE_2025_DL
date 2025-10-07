@@ -3,7 +3,6 @@ package edu.unc.petri.analysis;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -57,15 +56,6 @@ class MatrixTest {
   }
 
   @Test
-  void copy_createsDeepCopy() {
-    Matrix copiedMatrix = matrix.copy();
-    assertNotSame(matrix, copiedMatrix);
-    assertArrayEquals(matrix.getArray(), copiedMatrix.getArray());
-    copiedMatrix.set(0, 0, 99);
-    assertEquals(1, matrix.get(0, 0));
-  }
-
-  @Test
   void transpose_flipsMatrix() {
     Matrix transposed = matrix.transpose();
     assertEquals(3, transposed.getRowDimension());
@@ -110,14 +100,6 @@ class MatrixTest {
     assertEquals(0, matrix.get(0, 0)); // 1/2 = 0
     assertEquals(1, matrix.get(0, 1)); // 2/2 = 1
     assertEquals(2, matrix.get(1, 0)); // 4/2 = 2
-  }
-
-  @Test
-  void nonZeroIndices() {
-    Matrix indices = matrix.nonZeroIndices();
-    assertEquals(1, indices.get(0, 0));
-    assertEquals(1, indices.get(0, 1));
-    assertEquals(2, indices.get(1, 0));
   }
 
   @Test

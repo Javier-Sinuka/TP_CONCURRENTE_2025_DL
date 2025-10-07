@@ -109,23 +109,6 @@ public class Matrix {
   }
 
   /**
-   * Returns a deep copy of this matrix.
-   *
-   * <p>The returned Matrix object contains a new internal array with the same values as this
-   * matrix, ensuring that changes to the copy do not affect the original.
-   *
-   * @return a new Matrix object that is a deep copy of this matrix
-   */
-  public Matrix copy() {
-    Matrix copiedMatrix = new Matrix(rowNumber, columnNumber);
-    int[][] arrayMatrix = copiedMatrix.getArray();
-    for (int i = 0; i < rowNumber; i++) {
-      System.arraycopy(matrix[i], 0, arrayMatrix[i], 0, columnNumber);
-    }
-    return copiedMatrix;
-  }
-
-  /**
    * Returns a new Matrix that is the transpose of this matrix. The transpose operation flips the
    * matrix over its diagonal, switching the row and column indices of each element.
    *
@@ -551,24 +534,6 @@ public class Matrix {
         matrix[i][j] /= s;
       }
     }
-  }
-
-  /**
-   * Returns a matrix indicating the row indices (1-based) of non-zero elements. For each element in
-   * the original matrix, if it is non-zero, the corresponding element in the returned matrix will
-   * be set to its row index + 1; otherwise, it will be 0.
-   *
-   * @return a Matrix with non-zero elements replaced by their row indices (1-based), zeros
-   *     elsewhere
-   */
-  public Matrix nonZeroIndices() {
-    Matrix x = new Matrix(rowNumber, columnNumber);
-    for (int i = 0; i < rowNumber; i++) {
-      for (int j = 0; j < columnNumber; j++) {
-        x.set(i, j, get(i, j) == 0 ? 0 : i + 1);
-      }
-    }
-    return x;
   }
 
   /**
