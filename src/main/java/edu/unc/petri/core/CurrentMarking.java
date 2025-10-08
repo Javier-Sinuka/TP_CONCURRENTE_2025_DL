@@ -43,42 +43,11 @@ public class CurrentMarking {
   }
 
   /**
-   * Sets the number of tokens in a specific place.
-   *
-   * @param placeIndex The index of the place to set the token count for.
-   * @param tokenCount The number of tokens to set in the specified place.
-   */
-  void setPlaceMarking(int placeIndex, int tokenCount) {
-
-    if (placeIndex < 0 || placeIndex >= tokens.length) {
-      throw new IndexOutOfBoundsException("Invalid index " + placeIndex);
-    }
-    if (tokenCount < 0) {
-      throw new IllegalArgumentException("Tokens cannot be negative");
-    }
-    tokens[placeIndex] = tokenCount;
-  }
-
-  /**
    * Retrieves the current marking of the Petri net.
    *
    * @return An array of integers representing the number of tokens in each place.
    */
   public int[] getMarking() {
     return tokens;
-  }
-
-  /**
-   * Retrieves the number of tokens in a specific place.
-   *
-   * @param placeIndex The index of the place to retrieve the token count for.
-   * @return The number of tokens in the specified place.
-   */
-  public int getPlaceMarking(int placeIndex) {
-    if (placeIndex < 0 || placeIndex >= tokens.length) {
-      throw new IndexOutOfBoundsException("Index out of range " + placeIndex);
-    }
-
-    return tokens[placeIndex];
   }
 }
