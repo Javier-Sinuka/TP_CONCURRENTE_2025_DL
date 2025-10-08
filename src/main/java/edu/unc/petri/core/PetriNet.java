@@ -110,41 +110,6 @@ public class PetriNet {
   }
 
   /**
-   * Returns an array indicating which transitions are currently enabled, considering both token and
-   * time constraints.
-   *
-   * @return a boolean array where each index corresponds to a transition; true if the transition is
-   *     enabled, false otherwise
-   */
-  public boolean[] getTimeEnabledTransitions() {
-    // Work on a copy to avoid mutating internal enable state
-    boolean[] enabledTransitions = enableVector.getTokenEnabledTransitions();
-
-    for (int i = 0; i < enabledTransitions.length; i++) {
-      if (enabledTransitions[i]) {
-        try {
-          if (!enableVector.isTransitionEnabled(i)) {
-            enabledTransitions[i] = false; // Transition time not reached
-          }
-        } catch (TransitionTimeNotReachedException e) {
-          enabledTransitions[i] = false; // Transition time not reached
-        }
-      }
-    }
-
-    return enabledTransitions;
-  }
-
-  /**
-   * Return the number of places in the Petri net.
-   *
-   * @return the number of places
-   */
-  public int getNumberOfPlaces() {
-    return incidenceMatrix.getPlaces();
-  }
-
-  /**
    * Return the number of transitions in the Petri net.
    *
    * @return the number of transitions
