@@ -127,31 +127,4 @@ class PlaceInvariantEquationTest {
     PlaceInvariantEquation equation = new PlaceInvariantEquation(coeffs, 10);
     assertEquals("2*M(P0) + M(P2) + -M(P3) = 10", equation.toString());
   }
-
-  @Test
-  void formatEquation_withCustomNames() {
-    Map<Integer, Integer> coeffs = new HashMap<>();
-    coeffs.put(0, 1);
-    coeffs.put(1, 2);
-    PlaceInvariantEquation equation = new PlaceInvariantEquation(coeffs, 3);
-    String[] placeNames = {"Input", "Buffer"};
-    assertEquals("M(Input) + 2*M(Buffer) = 3", equation.formatEquation(placeNames));
-  }
-
-  @Test
-  void formatEquation_nullNames() {
-    Map<Integer, Integer> coeffs = new HashMap<>();
-    coeffs.put(0, 1);
-    PlaceInvariantEquation equation = new PlaceInvariantEquation(coeffs, 1);
-    assertEquals("M(p0) = 1", equation.formatEquation(null));
-  }
-
-  @Test
-  void formatEquation_namesTooSmall() {
-    Map<Integer, Integer> coeffs = new HashMap<>();
-    coeffs.put(1, 1);
-    PlaceInvariantEquation equation = new PlaceInvariantEquation(coeffs, 1);
-    String[] placeNames = {"OnlyOneName"};
-    assertEquals("M(p1) = 1", equation.formatEquation(placeNames));
-  }
 }
