@@ -309,7 +309,7 @@ public final class Main {
     System.out.println("Usage: java -jar petri-sim.jar [options] [config_file_path]");
     System.out.println();
     System.out.println(
-        "Executes a Petri net analysis and/or simulation based on a JSON configuration file.");
+        "Executes a Petri net analysis and/or simulation based on a YAML configuration file.");
     System.out.println(
         "If no options are specified, both analysis and simulation are run for a single"
             + " iteration.");
@@ -327,7 +327,7 @@ public final class Main {
         "                           and displays a final statistical report with averages.");
     System.out.println(
         "  --debug                  Enable detailed debug logging. The log file path is specified");
-    System.out.println("                           in the JSON configuration.");
+    System.out.println("                           in the YAML configuration.");
     System.out.println(
         "  --regex-checker          After each simulation run, execute"
             + " scripts/invariant_checker.py");
@@ -336,15 +336,15 @@ public final class Main {
     System.out.println();
     System.out.println("Arguments:");
     System.out.println(
-        "  config_file_path         Optional. The path to the JSON configuration file.");
+        "  config_file_path         Optional. The path to the YAML configuration file.");
     System.out.println(
-        "                           Defaults to 'config_default.json' if not provided.");
+        "                           Defaults to 'config_default.yaml' if not provided.");
     System.out.println();
     System.out.println("Examples:");
     System.out.println("  java -jar petri-sim.jar");
-    System.out.println("  java -jar petri-sim.jar --analysis my_config.json");
+    System.out.println("  java -jar petri-sim.jar --analysis my_config.yaml");
     System.out.println(
-        "  java -jar petri-sim.jar --simulation --runs 10 --statistics --debug my_config.json");
+        "  java -jar petri-sim.jar --simulation --runs 10 --statistics --debug my_config.yaml");
   }
 
   // --- Setup and Construction Helpers ---
@@ -373,7 +373,7 @@ public final class Main {
 
   /** Resolves the configuration file path from the command-line argument or defaults. */
   private static Path resolveConfigPath(String arg) {
-    String file = (arg != null) ? arg : "config_default.json";
+    String file = (arg != null) ? arg : "config_default.yaml";
     return Paths.get(file).toAbsolutePath().normalize();
   }
 
