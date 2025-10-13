@@ -1,13 +1,13 @@
 package edu.unc.petri.util;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.IOException;
 import java.nio.file.Path;
 
 /**
- * The ConfigLoader class is responsible for loading Petri Net configurations from JSON files. It
- * uses the Jackson library to deserialize JSON content into a PetriNetConfig object.
+ * The ConfigLoader class is responsible for loading Petri Net configurations from YAML files. It
+ * uses the Jackson library to deserialize YAML content into a PetriNetConfig object.
  *
  * @author Der Landsknecht
  * @version 1.0
@@ -15,13 +15,8 @@ import java.nio.file.Path;
  */
 public final class ConfigLoader {
 
-  /** The ObjectMapper instance used for JSON deserialization. */
-  private static final ObjectMapper MAPPER =
-      new ObjectMapper()
-          // Allow // and /* */ style comments
-          .enable(JsonParser.Feature.ALLOW_COMMENTS)
-          // Allow YAML-style # comments
-          .enable(JsonParser.Feature.ALLOW_YAML_COMMENTS);
+  /** The ObjectMapper instance used for YAML deserialization. */
+  private static final ObjectMapper MAPPER = new ObjectMapper(new YAMLFactory());
 
   /** Private constructor to prevent instantiation of utility class. */
   private ConfigLoader() {}

@@ -20,22 +20,25 @@ class ConfigLoaderTest {
   @Test
   public void load_validConfigFile_returnsPetriNetConfig() throws IOException {
     // Given
-    File configFile = new File(tempDir, "config.json");
+    File configFile = new File(tempDir, "config.yaml");
 
-    String json =
-        "{\n"
-            + "  \"logPath\": \"test.log\",\n"
-            + "  \"initialMarking\": [1, 0, 0],\n"
-            + "  \"incidence\": [[-1, 1, 0], [0, -1, 1]],\n"
-            + "  \"timeRanges\": [[0, 0], [0, 0], [0, 0]],\n"
-            + "  \"segments\": [],\n"
-            + "  \"policy\": \"Random\",\n"
-            + "  \"transitionWeights\": {},\n"
-            + "  \"invariantLimit\": 100\n"
-            + "}\n";
+    String yaml =
+        "logPath: test.log\n"
+            + "initialMarking: [1, 0, 0]\n"
+            + "incidence:\n"
+            + "  - [-1, 1, 0]\n"
+            + "  - [0, -1, 1]\n"
+            + "timeRanges:\n"
+            + "  - [0, 0]\n"
+            + "  - [0, 0]\n"
+            + "  - [0, 0]\n"
+            + "segments: []\n"
+            + "policy: Random\n"
+            + "transitionWeights: {}\n"
+            + "invariantLimit: 100\n";
 
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFile))) {
-      writer.write(json);
+      writer.write(yaml);
     }
 
     // When
@@ -50,7 +53,7 @@ class ConfigLoaderTest {
   @Test
   void load_nonExistentFile_throwsIoException() {
     // Given
-    Path nonExistentPath = Paths.get(tempDir.getAbsolutePath(), "nonexistent.json");
+    Path nonExistentPath = Paths.get(tempDir.getAbsolutePath(), "nonexistent.yaml");
 
     // When & Then
     assertThrows(IOException.class, () -> ConfigLoader.load(nonExistentPath));
