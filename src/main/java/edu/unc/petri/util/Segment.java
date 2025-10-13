@@ -22,10 +22,7 @@ public class Segment {
    */
   public final int threadQuantity;
 
-  /**
-   * A JSON array of integers, listing the specific indices of the transitions that are part of this
-   * segment.
-   */
+  /** A YAML sequence of integers listing the specific indices of the transitions in this segment. */
   public final int[] transitions;
 
   /**
