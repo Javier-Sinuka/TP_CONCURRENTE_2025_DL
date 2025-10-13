@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
-import json
 import re
 import sys
 from typing import Dict, List, Set, Tuple
+
+try:
+    import yaml
+except ImportError:  # pragma: no cover - dependency optional
+    yaml = None  # type: ignore
+import json
 
 DEFAULT_SOURCE: Dict[str, Tuple[int, ...]] = {
     "S0": (3, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0),
@@ -72,11 +77,12 @@ def check_token_limit(
 
 def load_source(path: str) -> Dict[str, Tuple[int, ...]]:
     with open(path, "r") as f:
-        raw = json.load(f)
+        if yaml is not None:
+            raw = yaml.safe_load(f)
+        else:
+            raw = json.load(f)
     if not isinstance(raw, dict):
-        raise ValueError(
-            "Source JSON must be an object mapping labels to 12-int arrays"
-        )
+        raise ValueError("Source YAML must map labels to 12-int arrays")
     source: Dict[str, Tuple[int, ...]] = {}
     for k, v in raw.items():
         if not isinstance(k, str):
@@ -94,7 +100,10 @@ def load_source(path: str) -> Dict[str, Tuple[int, ...]]:
 def write_default_source(path: str) -> None:
     payload = {k: list(v) for k, v in DEFAULT_SOURCE.items()}
     with open(path, "w") as f:
-        json.dump(payload, f, indent=2)
+        if yaml is not None:
+            yaml.safe_dump(payload, f, sort_keys=True)
+        else:
+            json.dump(payload, f, indent=2)
     print(f"Wrote default source to {path}")
 
 
@@ -102,13 +111,13 @@ def main() -> None:
     # CLI
     if len(sys.argv) >= 2 and sys.argv[1] == "--init-source":
         if len(sys.argv) != 3:
-            print(f"Usage: {sys.argv[0]} --init-source <source.json>")
+            print(f"Usage: {sys.argv[0]} --init-source <source.yaml>")
             sys.exit(1)
         write_default_source(sys.argv[2])
         sys.exit(0)
 
     if len(sys.argv) != 3:
-        print(f"Usage: {sys.argv[0]} <source.json> <log_file>")
+        print(f"Usage: {sys.argv[0]} <source.yaml> <log_file>")
         sys.exit(1)
 
     source_path = sys.argv[1]
