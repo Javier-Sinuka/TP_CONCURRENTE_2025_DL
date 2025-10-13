@@ -5,10 +5,10 @@
 ## Introducción
 Petri Net Simulator es un framework de simulación concurrente y configurable escrito en Java. Proporciona un entorno robusto para modelar, simular y analizar sistemas con procesos concurrentes y paralelos utilizando Redes de Petri.
 
-El proyecto enfatiza una clara separación de responsabilidades, con un motor de Red de Petri central, una capa de sincronización basada en un monitor para manejar la concurrencia y un sistema de políticas intercambiables para definir la lógica de disparo de transiciones ante un conflicto. Toda la simulación, incluida la estructura de la red, la temporización y el modelo de hilos, se define a través de archivos de configuración JSON externos. Además, cuenta con un conjunto de herramientas de análisis estático para calcular e informar sobre las propiedades estructurales de la red.
+El proyecto enfatiza una clara separación de responsabilidades, con un motor de Red de Petri central, una capa de sincronización basada en un monitor para manejar la concurrencia y un sistema de políticas intercambiables para definir la lógica de disparo de transiciones ante un conflicto. Toda la simulación, incluida la estructura de la red, la temporización y el modelo de hilos, se define a través de archivos de configuración YAML externos. Además, cuenta con un conjunto de herramientas de análisis estático para calcular e informar sobre las propiedades estructurales de la red.
 
 ## Características
-- **Configuración JSON**: Configura dinámicamente toda la Red de Petri, incluida su estructura (plazas, transiciones, matriz de incidencia), estado inicial, temporización de transiciones y modelo de hilos desde un único archivo JSON.
+- **Configuración YAML**: Configura dinámicamente toda la Red de Petri, incluida su estructura (plazas, transiciones, matriz de incidencia), estado inicial, temporización de transiciones y modelo de hilos desde un único archivo YAML.
 - **Herramientas de Análisis**: Un analizador estático incorporado calcula las propiedades estructurales clave de la red de Petri, que incluyen:
     - **P-Invariantes (Invariantes de Plaza)**: Identifica conjuntos de plazas donde la suma ponderada de tokens permanece constante, crucial para verificar las propiedades de conservación.
     - **T-Invariantes (Invariantes de Transición)**: Encuentra secuencias de disparos de transiciones que restauran la red a un estado anterior, útil para detectar ciclos y verificar la vivacidad.
@@ -50,7 +50,7 @@ El proyecto enfatiza una clara separación de responsabilidades, con un motor de
     Un mensaje de `BUILD SUCCESS` indica que el simulador está listo.
 
 ## Uso
-El simulador se ejecuta desde la línea de comandos y se controla con flags. Por defecto, ejecuta tanto un análisis estático como una única simulación utilizando `config_default.json` si no se especifica ningún archivo de configuración.
+El simulador se ejecuta desde la línea de comandos y se controla con flags. Por defecto, ejecuta tanto un análisis estático como una única simulación utilizando `config_default.yaml` si no se especifica ningún archivo de configuración.
 
 ### Sintaxis Básica
 ```bash
@@ -65,7 +65,7 @@ java -jar target/petri-sim-1.0.jar [opciones] [ruta_del_archivo_de_configuració
 | `--simulation`    | Ejecutar solo la simulación.                                                                                  |
 | `--runs <N>`      | Ejecutar la simulación `N` veces. Por defecto es 1.                                                           |
 | `--statistics`    | Cuando `--runs > 1`, suprime los informes de ejecución individuales y muestra un informe estadístico final con promedios. |
-| `--debug`         | Habilitar el log de depuración detallado. El archivo de log se especifica mediante `logPath` en la configuración JSON. |
+| `--debug`         | Habilitar el log de depuración detallado. El archivo de log se especifica mediante `logPath` en la configuración YAML. |
 | `--regex-checker` | Después de cada ejecución de la simulación, ejecutar `scripts/invariant_checker.py`.                               |
 | `--help`          | Mostrar el mensaje de ayuda y salir.                                                                          |
 
@@ -77,7 +77,7 @@ java -jar target/petri-sim-1.0.jar [opciones] [ruta_del_archivo_de_configuració
 
 *   **Ejecutar solo el análisis usando una configuración específica:**
     ```bash
-    java -jar target/petri-sim-1.0.jar --analysis simulation_configs/config_tp_2024.json
+    java -jar target/petri-sim-1.0.jar --analysis simulation_configs/config_tp_2024.yaml
     ```
 
 *   **Ejecutar 10 simulaciones con informes estadísticos y registro de depuración:**
@@ -86,62 +86,51 @@ java -jar target/petri-sim-1.0.jar [opciones] [ruta_del_archivo_de_configuració
     ```
 
 ## Archivo de Configuración
-El comportamiento de la simulación está completamente controlado por un archivo JSON. A continuación se muestra un desglose de su estructura.
+El comportamiento de la simulación está completamente controlado por un archivo YAML. A continuación se muestra un desglose de su estructura.
 
-```json
-{
-  // Ruta para el archivo de log de depuración.
-  "logPath": "log_default.txt",
+```yaml
+logPath: log_default.txt # Ruta para el archivo de log de depuración.
 
-  // La simulación se detendrá después de que se hayan completado esta cantidad de T-invariantes.
-  "invariantLimit": 10,
+invariantLimit: 10 # La simulación se detendrá tras completar esta cantidad de T-invariantes.
 
-  // Un array que representa el número inicial de tokens en cada plaza (P0, P1, ...).
-  "initialMarking": [1, 0, 0, 0],
+initialMarking: [1, 0, 0, 0] # Número inicial de tokens en cada plaza (P0, P1, ...).
 
-  // La matriz de incidencia (I). Las filas son plazas, las columnas son transiciones.
-  // -1: El token se consume.
-  //  1: El token se produce.
-  //  0: No hay conexión.
-  "incidence": [
-    [-1, 0, 0, 1],
-    [1, -1, 0, 0],
-    [0, 1, -1, 0],
-    [0, 0, 1, -1]
-  ],
+# La matriz de incidencia (I). Las filas son plazas, las columnas son transiciones.
+# -1: El token se consume.
+#  1: El token se produce.
+#  0: No hay conexión.
+incidence:
+  - [-1, 0, 0, 1]
+  - [1, -1, 0, 0]
+  - [0, 1, -1, 0]
+  - [0, 0, 1, -1]
 
-  // Rangos de tiempo [min, max] en milisegundos para cada transición.
-  // Una transición solo puede dispararse si el tiempo desde que se habilitó por última vez cae dentro de este rango.
-  // [0, 0] representa una transición inmediata.
-  "timeRanges": [
-    [100, 100],
-    [100, 100],
-    [100, 100],
-    [100, 100]
-  ],
+# Rangos de tiempo [min, max] en milisegundos para cada transición.
+# Una transición solo puede dispararse si el tiempo desde que se habilitó por última vez cae dentro de este rango.
+# [0, 0] representa una transición inmediata.
+timeRanges:
+  - [100, 100]
+  - [100, 100]
+  - [100, 100]
+  - [100, 100]
 
-  // Define el modelo de hilos. Cada objeto es un "Segmento".
-  "segments": [
-    {
-      "name": "Default-Segment",
-      "threadQuantity": 1,
-      "transitions": [0, 1, 2, 3]
-    }
-  ],
+# Define el modelo de hilos. Cada objeto es un "Segmento".
+segments:
+  - name: Default-Segment
+    threadQuantity: 1
+    transitions: [0, 1, 2, 3]
 
-  // Política para elegir qué transición disparar cuando varias están habilitadas.
-  // Opciones: "random", "priority".
-  "policy": "random",
+# Política para elegir qué transición disparar cuando varias están habilitadas.
+# Opciones: random, priority.
+policy: random
 
-  // Un mapa de pesos de transición utilizado por la política de "prioridad". Números más altos significan mayor prioridad.
-  // Requerido solo si la política es "priority".
-  "transitionWeights": {
-    "0": 1,
-    "1": 1,
-    "2": 1,
-    "3": 1
-  }
-}
+# Mapa de pesos de transición usado por la política "priority". Números más altos implican mayor prioridad.
+# Solo es necesario si la política es "priority".
+transitionWeights:
+  0: 1
+  1: 1
+  2: 1
+  3: 1
 ```
 
 ## Contribuciones

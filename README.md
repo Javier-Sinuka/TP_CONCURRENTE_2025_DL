@@ -5,10 +5,10 @@
 ## Introduction
 Petri Net Simulator is a concurrent, configurable simulation framework written in Java. It provides a robust environment for modeling, simulating, and analyzing systems with concurrent and parallel processes using Petri Nets.
 
-The project emphasizes a clean separation of concerns, with a core Petri Net engine, a monitor-based synchronization layer for handling concurrency, and a pluggable policy system for defining transition firing logic in case of conflicts. The entire simulation, including the net's structure, timing, and threading model, is defined through external JSON configuration files. Additionally, it features a static analysis toolkit to compute and report on structural properties of the net.
+The project emphasizes a clean separation of concerns, with a core Petri Net engine, a monitor-based synchronization layer for handling concurrency, and a pluggable policy system for defining transition firing logic in case of conflicts. The entire simulation, including the net's structure, timing, and threading model, is defined through external YAML configuration files. Additionally, it features a static analysis toolkit to compute and report on structural properties of the net.
 
 ## Features
-- **JSON Configuration**: Dynamically configure the entire Petri Net, including its structure (places, transitions, incidence matrix), initial state, transition timings, and threading model from a single JSON file.
+- **YAML Configuration**: Dynamically configure the entire Petri Net, including its structure (places, transitions, incidence matrix), initial state, transition timings, and threading model from a single YAML file.
 - **Analysis Tools**: A built-in static analyzer computes key structural properties of the Petri net, including:
     - **P-Invariants (Place Invariants)**: Identifies sets of places where the weighted sum of tokens remains constant, crucial for verifying conservation properties.
     - **T-Invariants (Transition Invariants)**: Finds sequences of transition firings that restore the net to a previous state, useful for detecting cycles and verifying liveness.
@@ -50,7 +50,7 @@ The project emphasizes a clean separation of concerns, with a core Petri Net eng
     A `BUILD SUCCESS` message indicates the simulator is ready.
 
 ## Usage
-The simulator is run from the command line and controlled with flags. By default, it runs both a static analysis and a single simulation using `config_default.json` if no configuration file is specified.
+The simulator is run from the command line and controlled with flags. By default, it runs both a static analysis and a single simulation using `config_default.yaml` if no configuration file is specified.
 
 ### Basic Syntax
 ```bash
@@ -65,7 +65,7 @@ java -jar target/petri-sim-1.0.jar [options] [config_file_path]
 | `--simulation`    | Run only the simulation.                                                                                      |
 | `--runs <N>`      | Execute the simulation `N` times. Defaults to 1.                                                              |
 | `--statistics`    | When `--runs > 1`, suppresses individual run reports and shows a final statistical report with averages.      |
-| `--debug`         | Enable detailed debug logging. The log file is specified by `logPath` in the JSON configuration.              |
+| `--debug`         | Enable detailed debug logging. The log file is specified by `logPath` in the YAML configuration.              |
 | `--regex-checker` | After each simulation run, execute `scripts/invariant_checker.py`.                                            |
 | `--help`          | Display the help message and exit.                                                                            |
 
@@ -77,7 +77,7 @@ java -jar target/petri-sim-1.0.jar [options] [config_file_path]
 
 *   **Run analysis only using a specific configuration:**
     ```bash
-    java -jar target/petri-sim-1.0.jar --analysis simulation_configs/config_tp_2024.json
+    java -jar target/petri-sim-1.0.jar --analysis simulation_configs/config_tp_2024.yaml
     ```
 
 *   **Run 10 simulations with statistical reporting and debug logging:**
@@ -86,62 +86,50 @@ java -jar target/petri-sim-1.0.jar [options] [config_file_path]
     ```
 
 ## Configuration File Explained
-The simulation's behavior is entirely controlled by a JSON file. Below is a breakdown of its structure.
+The simulation's behavior is entirely controlled by a YAML file. Below is a breakdown of its structure.
 
-```json
-{
-  // Path for the debug output log file.
-  "logPath": "log_default.txt",
+```yaml
+logPath: log_default.txt # Path for the debug output log file.
 
-  // The simulation will stop after this many T-invariants have completed.
-  "invariantLimit": 10,
+invariantLimit: 10 # The simulation will stop after this many T-invariants have completed.
 
-  // An array representing the initial number of tokens in each place (P0, P1, ...).
-  "initialMarking": [1, 0, 0, 0],
+initialMarking: [1, 0, 0, 0] # Initial tokens per place (P0, P1, ...).
 
-  // The incidence matrix (I). Rows are places, columns are transitions.
-  // -1: Token is consumed.
-  //  1: Token is produced.
-  //  0: No connection.
-  "incidence": [
-    [-1, 0, 0, 1],
-    [1, -1, 0, 0],
-    [0, 1, -1, 0],
-    [0, 0, 1, -1]
-  ],
+# The incidence matrix (I). Rows are places, columns are transitions.
+# -1: Token is consumed.
+#  1: Token is produced.
+#  0: No connection.
+incidence:
+  - [-1, 0, 0, 1]
+  - [1, -1, 0, 0]
+  - [0, 1, -1, 0]
+  - [0, 0, 1, -1]
 
-  // Time ranges [min, max] in milliseconds for each transition.
-  // A transition can only fire if the time since it was last enabled falls within this range.
-  // [0, 0] represents an immediate transition.
-  "timeRanges": [
-    [100, 100],
-    [100, 100],
-    [100, 100],
-    [100, 100]
-  ],
+# Time ranges [min, max] in milliseconds for each transition.
+# A transition can only fire if the time since it was last enabled falls within this range.
+# [0, 0] represents an immediate transition.
+timeRanges:
+  - [100, 100]
+  - [100, 100]
+  - [100, 100]
+  - [100, 100]
 
-  // Defines the threading model. Each object is a "Segment".
-  "segments": [
-    {
-      "name": "Default-Segment",
-      "threadQuantity": 1,
-      "transitions": [0, 1, 2, 3]
-    }
-  ],
+# Defines the threading model. Each object is a "Segment".
+segments:
+  - name: Default-Segment
+    threadQuantity: 1
+    transitions: [0, 1, 2, 3]
 
-  // Policy for choosing which transition to fire when multiple are enabled.
-  // Options: "random", "priority".
-  "policy": "random",
+# Policy for choosing which transition to fire when multiple are enabled.
+# Options: random, priority.
+policy: random
 
-  // A map of transition weights used by the "priority" policy. Higher numbers mean higher priority.
-  // Required only if policy is "priority".
-  "transitionWeights": {
-    "0": 1,
-    "1": 1,
-    "2": 1,
-    "3": 1
-  }
-}
+# Transition weights used by the "priority" policy. Higher numbers mean higher priority.
+transitionWeights:
+  0: 1
+  1: 1
+  2: 1
+  3: 1
 ```
 
 ## Contributing
