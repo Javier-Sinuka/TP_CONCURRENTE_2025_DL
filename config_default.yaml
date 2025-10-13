@@ -1,0 +1,40 @@
+# Path to the debug log captured during simulation runs.
+logPath: log_default.txt
+
+# Maximum number of T-invariant completions before the simulation stops.
+invariantLimit: 10
+
+# Initial distribution of tokens across places (P0..Pn) at time zero.
+initialMarking: [1, 0, 0, 0]
+
+# Incidence matrix describing how transitions consume (-1) and produce (+1) tokens.
+incidence:
+  - [-1, 0, 0, 1]
+  - [1, -1, 0, 0]
+  - [0, 1, -1, 0]
+  - [0, 0, 1, -1]
+
+# Allowed firing windows [min, max] in milliseconds for each transition.
+timeRanges:
+  - [100, 100]
+  - [100, 100]
+  - [100, 100]
+  - [100, 100]
+
+# Threading model: each segment groups transitions handled by a worker pool.
+segments:
+  - name: Default-Segment
+    # Number of worker threads assigned to this segment.
+    threadQuantity: 1
+    # Transition indices managed by this segment.
+    transitions: [0, 1, 2, 3]
+
+# Strategy used when multiple transitions are enabled (random|priority).
+policy: random
+
+# Priority weights per transition (used only when policy == priority).
+transitionWeights:
+  0: 1
+  1: 1
+  2: 1
+  3: 1

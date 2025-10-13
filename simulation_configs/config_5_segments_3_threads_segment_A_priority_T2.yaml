@@ -1,0 +1,73 @@
+# Scenario: 5 segments, priority policy, 7 total threads, invariant limit 200.
+# Segment layout: Segment-A(3), Segment-B(1), Segment-C(1), Segment-D(1), Segment-E(1).
+
+logPath: log_5_segments_3_threads_segment_A_priority_T2.txt
+
+invariantLimit: 200
+
+initialMarking: [3, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+
+incidence:
+  - [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+  - [1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  - [-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  - [0, 1, -1, 0, 0, -1, 0, -1, 0, 0, 0, 0]
+  - [0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0]
+  - [0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0]
+  - [0, 0, -1, 0, 1, -1, 1, -1, 0, 0, 1, 0]
+  - [0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0]
+  - [0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0]
+  - [0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0]
+  - [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0]
+  - [0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, -1]
+
+timeRanges:
+  - [0, 0]
+  - [100, 1000]
+  - [0, 0]
+  - [75, 1000]
+  - [75, 1000]
+  - [0, 0]
+  - [100, 1000]
+  - [0, 0]
+  - [50, 1000]
+  - [50, 1000]
+  - [50, 1000]
+  - [0, 0]
+
+segments:
+  - name: Segment-A
+    threadQuantity: 3
+    transitions: [0, 1]
+
+  - name: Segment-B
+    threadQuantity: 1
+    transitions: [2, 3, 4]
+
+  - name: Segment-C
+    threadQuantity: 1
+    transitions: [5, 6]
+
+  - name: Segment-D
+    threadQuantity: 1
+    transitions: [7, 8, 9, 10]
+
+  - name: Segment-E
+    threadQuantity: 1
+    transitions: [11]
+
+policy: priority
+
+transitionWeights:
+  0: 1
+  1: 1
+  2: 2
+  3: 2
+  4: 2
+  5: 1
+  6: 1
+  7: 1
+  8: 1
+  9: 1
+  10: 1
+  11: 1

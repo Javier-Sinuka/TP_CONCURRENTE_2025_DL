@@ -1,0 +1,55 @@
+# Scenario: 4 segments, random policy, 4 total threads, invariant limit 200.
+# Segment layout: Segment-A(1), Segment-B(1), Segment-C(1), Segment-D(1).
+
+logPath: log_4_segments_1_thread_segment_A_random.txt
+
+invariantLimit: 200
+
+initialMarking: [1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0]
+
+incidence:
+  - [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+  - [1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  - [-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  - [0, 1, -1, 0, 0, -1, 0, -1, 0, 0, 0, 0]
+  - [0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0]
+  - [0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0]
+  - [0, 0, -1, 0, 1, -1, 1, -1, 0, 0, 1, 0]
+  - [0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0]
+  - [0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0]
+  - [0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0]
+  - [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0]
+  - [0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, -1]
+
+timeRanges:
+  - [0, 0]
+  - [100, 1000]
+  - [0, 0]
+  - [75, 1000]
+  - [75, 1000]
+  - [0, 0]
+  - [100, 1000]
+  - [0, 0]
+  - [50, 1000]
+  - [50, 1000]
+  - [50, 1000]
+  - [0, 0]
+
+segments:
+  - name: Segment-A
+    threadQuantity: 1
+    transitions: [0, 1, 11]
+
+  - name: Segment-B
+    threadQuantity: 1
+    transitions: [2, 3, 4]
+
+  - name: Segment-C
+    threadQuantity: 1
+    transitions: [6, 5]
+
+  - name: Segment-D
+    threadQuantity: 1
+    transitions: [7, 8, 9, 10]
+
+policy: random
