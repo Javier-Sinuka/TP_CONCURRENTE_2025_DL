@@ -33,7 +33,7 @@ class StatisticsAggregatorTest {
     transitionCounts1.put(0, 10);
     when(result1.getTransitionCounts()).thenReturn(transitionCounts1);
     when(result1.getInvariantCompletionCounts()).thenReturn(new int[] {1, 2});
-    when(result1.getConfigPath()).thenReturn(Paths.get("config.json"));
+    when(result1.getConfigPath()).thenReturn(Paths.get("config.yaml"));
     when(result1.getPolicy()).thenReturn("Random");
     when(result1.getOriginalInvariants()).thenReturn(new ArrayList<>());
 
