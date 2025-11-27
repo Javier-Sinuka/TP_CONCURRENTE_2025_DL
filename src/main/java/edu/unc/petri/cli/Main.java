@@ -151,8 +151,7 @@ public final class Main {
 
     // Default: run both if neither explicitly requested
     if (!analysis && !simulation) {
-      analysis = true;
-      simulation = true;
+      simulation = true; // Run simulation by default
     }
 
     if (statistics && runs == 1) {
@@ -373,7 +372,8 @@ public final class Main {
 
   /** Resolves the configuration file path from the command-line argument or defaults. */
   private static Path resolveConfigPath(String arg) {
-    String file = (arg != null) ? arg : "config_default.json";
+    String file =
+        (arg != null) ? arg : "simulation_configs/config_5_segments_1_thread_segment_A_random.json";
     return Paths.get(file).toAbsolutePath().normalize();
   }
 
