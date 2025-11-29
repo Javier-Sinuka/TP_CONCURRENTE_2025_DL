@@ -182,7 +182,7 @@ public class InvariantTracker {
   }
 
   public synchronized int[] getInvariantCompletionCounts() {
-    return invariantCompletionCounts;
+    return invariantCompletionCounts.clone();
   }
 
   public List<ArrayList<Integer>> getOriginalInvariants() {

@@ -1,7 +1,5 @@
 package edu.unc.petri.core;
 
-import java.util.ArrayList;
-
 /**
  * The IncidenceMatrix class represents the incidence matrix of a Petri net. It provides methods to
  * access the matrix, the number of places and transitions, and to retrieve specific rows, columns,
@@ -75,26 +73,6 @@ public class IncidenceMatrix {
   }
 
   /**
-   * Retrieves a specific row from the incidence matrix.
-   *
-   * @param row The index of the row to retrieve.
-   * @return The row as a byte array.
-   */
-  public byte[] getRow(int row) {
-    if (row < 0 || row >= places) {
-      throw new IndexOutOfBoundsException("Row index out of bounds");
-    }
-
-    byte[] rowData = new byte[getTransitions()];
-
-    for (int i = 0; i < getTransitions(); i++) {
-      rowData[i] = matrix[row][i];
-    }
-
-    return rowData;
-  }
-
-  /**
    * Retrieves a specific column from the incidence matrix.
    *
    * @param column The index of the column to retrieve.
@@ -127,98 +105,5 @@ public class IncidenceMatrix {
     }
 
     return matrix[row][column];
-  }
-
-  /**
-   * Retrieves the indices of transitions that have an incoming edge to a specific place.
-   *
-   * @param place The index of the place.
-   * @return An ArrayList of integers representing the indices of transitions that have an incoming
-   *     edge to the specified place.
-   */
-  public ArrayList<Integer> getInTransitionsForPlace(int place) {
-    if (place < 0 || place >= places) {
-      throw new IndexOutOfBoundsException("Place index out of bounds");
-    }
-
-    ArrayList<Integer> inTransitions = new ArrayList<>();
-
-    for (int i = 0; i < transitions; i++) {
-      if (matrix[place][i] > 0) { // Positive value indicates an incoming edge from a transition
-        inTransitions.add(i);
-      }
-    }
-
-    return inTransitions;
-  }
-
-  /**
-   * Retrieves the indices of transitions that have an outgoing edge from a specific place.
-   *
-   * @param place The index of the place.
-   * @return An ArrayList of integers representing the indices of transitions that have an outgoing
-   *     edge from the specified place.
-   */
-  public ArrayList<Integer> getOutTransitionsForPlace(int place) {
-    if (place < 0 || place >= places) {
-      throw new IndexOutOfBoundsException("Place index out of bounds");
-    }
-
-    ArrayList<Integer> outTransitions = new ArrayList<>();
-
-    for (int i = 0; i < transitions; i++) {
-      if (matrix[place][i] < 0) { // Negative value indicates an outgoing edge from a place
-        outTransitions.add(i);
-      }
-    }
-
-    return outTransitions;
-  }
-
-  /**
-   * Retrieves the indices of places that have an incoming edge to a specific transition.
-   *
-   * @param transition The index of the transition.
-   * @return An ArrayList of integers representing the indices of places that have an incoming edge
-   *     to the specified transition.
-   */
-  public ArrayList<Integer> getInPlacesForTransition(int transition) {
-    if (transition < 0 || transition >= transitions) {
-      throw new IndexOutOfBoundsException("Transition index out of bounds");
-    }
-
-    ArrayList<Integer> inPlaces = new ArrayList<>();
-
-    for (int i = 0; i < places; i++) {
-      if (matrix[i][transition] < 0) { // Negative value indicates an incoming edge from a place
-        inPlaces.add(i);
-      }
-    }
-
-    return inPlaces;
-  }
-
-  /**
-   * Retrieves the indices of places that have an outgoing edge from a specific transition.
-   *
-   * @param transition The index of the transition.
-   * @return An ArrayList of integers representing the indices of places that have an outgoing edge
-   *     from the specified transition.
-   */
-  public ArrayList<Integer> getOutPlacesForTransition(int transition) {
-    if (transition < 0 || transition >= transitions) {
-      throw new IndexOutOfBoundsException("Transition index out of bounds");
-    }
-
-    ArrayList<Integer> outPlaces = new ArrayList<>();
-
-    for (int i = 0; i < places; i++) {
-      if (matrix[i][transition]
-          > 0) { // Positive value indicates an outgoing edge from a transition
-        outPlaces.add(i);
-      }
-    }
-
-    return outPlaces;
   }
 }

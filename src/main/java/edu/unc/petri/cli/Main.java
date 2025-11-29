@@ -151,8 +151,7 @@ public final class Main {
 
     // Default: run both if neither explicitly requested
     if (!analysis && !simulation) {
-      analysis = true;
-      simulation = true;
+      simulation = true; // Run simulation by default
     }
 
     if (statistics && runs == 1) {
@@ -218,13 +217,12 @@ public final class Main {
 
         Log transitionLog = new Log(); // Cleared each run
         PetriNet petriNet = buildPetriNet(config, analyzer, transitionLog);
-        PolicyInterface policy = choosePolicy(config);
         InvariantTracker invariantTracker = setupInvariantTracker(config, analyzer);
         Monitor monitor = null;
 
         StatisticsAggregator stats = new StatisticsAggregator();
         // Create a stateless manager instance for report generation
-        SimulationManager reporter = new SimulationManager(null, null);
+        SimulationManager reporter = new SimulationManager(null, null, null);
 
         // --- Main Execution Loop ---
         int failedRuns = 0;
@@ -242,6 +240,7 @@ public final class Main {
             // 1. Reset state of shared components for a clean run
             petriNet.reset(config.initialMarking);
             invariantTracker.reset();
+            PolicyInterface policy = choosePolicy(config); // Create a new policy for each run
             monitor = setupMonitor(invariantTracker, petriNet, policy, debugLog);
             transitionLog.clearLog();
             debugLog.logHeader("Petri Net Simulation Log: Run " + (i + 1), configPath.toString());
@@ -255,7 +254,8 @@ public final class Main {
                 buildWorkers(config, invariantTracker, monitor, startBarrier, firstDoneSignal);
 
             // 3. Execute the simulation for one run
-            SimulationManager runner = new SimulationManager(invariantTracker, workers);
+            SimulationManager runner =
+                new SimulationManager(invariantTracker, workers, transitionLog);
             SimulationResult result = runner.execute(configPath, config, firstDoneSignal);
 
             // 4. Process the result
@@ -266,7 +266,7 @@ public final class Main {
             }
             // 5. Optional: run regex-based invariant checker
             if (cli.regexChecker) {
-              runInvariantChecker();
+              runInvariantChecker(transitionLog.getFilePath());
             }
           } catch (Throwable runEx) {
             // isolate per-run failures when running many times
@@ -372,7 +372,8 @@ public final class Main {
 
   /** Resolves the configuration file path from the command-line argument or defaults. */
   private static Path resolveConfigPath(String arg) {
-    String file = (arg != null) ? arg : "config_default.json";
+    String file =
+        (arg != null) ? arg : "simulation_configs/config_5_segments_1_thread_segment_A_random.json";
     return Paths.get(file).toAbsolutePath().normalize();
   }
 
@@ -391,26 +392,39 @@ public final class Main {
     }
   }
 
-  private static void runInvariantChecker() {
+  private static void runInvariantChecker(String transitionLogPath) {
     String scriptPath = Paths.get("scripts", "invariant_checker.py").toString();
-    String input = "transition_log.txt";
     String[] interpreters = new String[] {"python3", "python", "py"};
 
     for (String py : interpreters) {
       try {
-        ProcessBuilder pb = new ProcessBuilder(Arrays.asList(py, scriptPath, input));
-        pb.redirectErrorStream(true);
-        pb.inheritIO();
-        pb.start();
-        return; // success, don't try others
+        ProcessBuilder pb = new ProcessBuilder(Arrays.asList(py, scriptPath, transitionLogPath));
+        pb.inheritIO(); // Show script output directly in the console
+        System.out.println("\n--- Running Invariant Checker ---");
+        Process process = pb.start();
+        int exitCode = process.waitFor(); // Wait for the script to finish
+
+        if (exitCode == 0) {
+          System.out.println("--- Invariant Checker Passed ---");
+          return; // Success
+        } else {
+          // Script ran but failed
+          throw new RuntimeException(
+              "Invariant checker script failed with a non-zero exit code: " + exitCode);
+        }
       } catch (IOException e) {
-        // try next interpreter
+        // This interpreter failed to start, try the next one.
+      } catch (InterruptedException e) {
+        // The waiting was interrupted.
+        Thread.currentThread().interrupt(); // Preserve interrupt status
+        throw new RuntimeException("Invariant checker was interrupted.", e);
       }
     }
-    System.err.println(
+    // If the loop finishes, no interpreter was found
+    throw new RuntimeException(
         "[invariant_checker] Could not execute "
             + scriptPath
-            + ". Is Python installed and available in PATH?");
+            + ". Is Python installed and in PATH?");
   }
 
   /** Constructs the PetriNet instance from the configuration and transition log. */
@@ -470,12 +484,32 @@ public final class Main {
     if (cfg.incidence == null || cfg.incidence.length == 0) {
       throw new IllegalArgumentException("Config.incidence is missing or empty.");
     }
+    final int numPlaces = cfg.incidence.length;
+    final int numTransitions = cfg.incidence[0].length;
+    if (numTransitions == 0) {
+      throw new IllegalArgumentException("Config.incidence has 0 transitions.");
+    }
+
     if (cfg.initialMarking == null) {
       throw new IllegalArgumentException("Config.initialMarking is missing.");
     }
+    if (cfg.initialMarking.length != numPlaces) {
+      throw new IllegalArgumentException(
+          String.format(
+              "Config mismatch: initialMarking length (%d) does not match number of places (%d).",
+              cfg.initialMarking.length, numPlaces));
+    }
+
     if (cfg.timeRanges == null) {
       throw new IllegalArgumentException("Config.timeRanges is missing.");
     }
+    if (cfg.timeRanges.length != numTransitions) {
+      throw new IllegalArgumentException(
+          String.format(
+              "Config mismatch: timeRanges length (%d) does not match number of transitions (%d).",
+              cfg.timeRanges.length, numTransitions));
+    }
+
     if (cfg.segments == null || cfg.segments.isEmpty()) {
       throw new IllegalArgumentException("Config.segments is missing or empty.");
     }
@@ -489,7 +523,39 @@ public final class Main {
       if (s.threadQuantity < 0) {
         throw new IllegalArgumentException("Segment '" + s.name + "' has negative threadQuantity.");
       }
+      if (s.transitions != null) {
+        if (s.transitions.length == 0) {
+          throw new IllegalArgumentException(
+              String.format("Segment '%s' contains an empty 'transitions' array.", s.name));
+        }
+        for (int t : s.transitions) {
+          if (t < 0 || t >= numTransitions) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Segment '%s' assigns an invalid transition index (%d). Valid indices are"
+                        + " 0-%d.",
+                    s.name, t, numTransitions - 1));
+          }
+        }
+      }
     }
+
+    if ("priority".equalsIgnoreCase(cfg.policy)) {
+      if (cfg.transitionWeights == null) {
+        throw new IllegalArgumentException(
+            "Config.transitionWeights is required for the 'priority' policy.");
+      }
+      for (Integer transition : cfg.transitionWeights.keySet()) {
+        if (transition < 0 || transition >= numTransitions) {
+          throw new IllegalArgumentException(
+              String.format(
+                  "Config.transitionWeights contains an invalid transition index (%d). Valid"
+                      + " indices are 0-%d.",
+                  transition, numTransitions - 1));
+        }
+      }
+    }
+
     if (cfg.invariantLimit < 0) {
       throw new IllegalArgumentException("Config.invariantLimit must be >= 0.");
     }

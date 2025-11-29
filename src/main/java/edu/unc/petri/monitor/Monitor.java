@@ -73,9 +73,18 @@ public class Monitor implements MonitorInterface {
    */
   @Override
   public boolean fireTransition(int t) {
-
+    boolean holdsMutex = false;
     try {
       mutex.acquire();
+      holdsMutex = true;
+
+      // Guard to prevent firing transitions after the simulation limit has been reached
+      if (invariantTracker.isInvariantLimitReached()) {
+        holdsMutex = false;
+        mutex.release();
+        return false;
+      }
+
       log.logDebug("Thread " + Thread.currentThread().getName() + " enters monitor to fire " + t);
       while (true) {
         try {
@@ -89,8 +98,9 @@ public class Monitor implements MonitorInterface {
                   "Thread "
                       + Thread.currentThread().getName()
                       + " detected simulation limit reached. Terminating simulation.");
+              holdsMutex = false;
+              mutex.release(); // Release the mutex before returning
               return false; // Exit if the simulation limit has been reached
-              // We do not release the mutex here because the simulation is ending
             }
 
             boolean[] waitingThreads = conditionQueues.areThereWaitingThreads();
@@ -139,9 +149,12 @@ public class Monitor implements MonitorInterface {
                       + " chooses to wake up the thread waiting for "
                       + transition);
 
+              log.logDebug("Thread " + Thread.currentThread().getName() + " leaves monitor");
+
               conditionQueues.wakeUpThread(transition);
 
-              log.logDebug("Thread " + Thread.currentThread().getName() + " leaves monitor");
+              holdsMutex = false; // This thread is no the one that holds the mutex
+
               return true;
             } else {
               log.logDebug(
@@ -153,8 +166,10 @@ public class Monitor implements MonitorInterface {
           } else {
             log.logDebug("Thread " + Thread.currentThread().getName() + " could not fire " + t);
             log.logDebug("Thread " + Thread.currentThread().getName() + " goes to wait for " + t);
+            holdsMutex = false;
             mutex.release();
             conditionQueues.waitForTransition(t);
+            holdsMutex = true; // This thread holds the mutex again after being signaled
             log.logDebug(
                 "Thread "
                     + Thread.currentThread().getName()
@@ -183,6 +198,7 @@ public class Monitor implements MonitorInterface {
                     + remainingNanos
                     + " ns.");
 
+            holdsMutex = false;
             mutex.release(); // Release the mutex before sleeping
             try {
               Thread.sleep(sleepMillis, remainingNanos); // Use high-precision sleep
@@ -191,6 +207,7 @@ public class Monitor implements MonitorInterface {
               return false; // Exit if interrupted during sleep
             }
             mutex.acquire(); // Reacquire the mutex after waking up
+            holdsMutex = true;
             log.logDebug(
                 "Thread "
                     + Thread.currentThread().getName()
@@ -209,10 +226,13 @@ public class Monitor implements MonitorInterface {
       }
 
       log.logDebug("Thread " + Thread.currentThread().getName() + " leaves monitor");
+      holdsMutex = false;
       mutex.release();
       return true;
     } catch (InterruptedException e) {
-      mutex.release(); // Ensure the mutex is released if an interruption occurs
+      if (holdsMutex) {
+        mutex.release(); // Ensure the mutex is released if an interruption occurs
+      }
       return false;
     }
   }

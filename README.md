@@ -1,13 +1,15 @@
 # Petri Net Simulator
 
-## Introduction
-The Petri Net Simulator is a concurrent, configurable simulation framework written in Java. It provides a robust environment for modeling, simulating, and analyzing systems with parallel processes using Petri Nets.
+[![es](https://img.shields.io/badge/lang-es-yellow.svg)](./docs/README.es.md)
 
-The project emphasizes a clean separation of concerns, with a core Petri Net engine, a monitor-based synchronization layer for handling concurrency, and a pluggable policy system for defining transition firing logic. The entire simulation, including the net's structure, timing, and threading model, is defined through external JSON configuration files. Additionally, it features a powerful static analysis toolkit to compute and report on structural properties of the net.
+## Introduction
+Petri Net Simulator is a concurrent, configurable simulation framework written in Java. It provides a robust environment for modeling, simulating, and analyzing systems with concurrent and parallel processes using Petri Nets.
+
+The project emphasizes a clean separation of concerns, with a core Petri Net engine, a monitor-based synchronization layer for handling concurrency, and a pluggable policy system for defining transition firing logic in case of conflicts. The entire simulation, including the net's structure, timing, and threading model, is defined through external JSON configuration files. Additionally, it features a static analysis toolkit to compute and report on structural properties of the net.
 
 ## Features
 - **JSON Configuration**: Dynamically configure the entire Petri Net, including its structure (places, transitions, incidence matrix), initial state, transition timings, and threading model from a single JSON file.
-- **Advanced Analysis Tools**: A built-in static analyzer computes key structural properties of the Petri net, including:
+- **Analysis Tools**: A built-in static analyzer computes key structural properties of the Petri net, including:
     - **P-Invariants (Place Invariants)**: Identifies sets of places where the weighted sum of tokens remains constant, crucial for verifying conservation properties.
     - **T-Invariants (Transition Invariants)**: Finds sequences of transition firings that restore the net to a previous state, useful for detecting cycles and verifying liveness.
     - **Structural Conflicts**: Detects which transitions compete for the same input resources (places).
@@ -28,14 +30,14 @@ The project emphasizes a clean separation of concerns, with a core Petri Net eng
 ### Steps
 1.  **Clone the repository:**
     ```bash
-    git clone <repository URL>
+    git clone https://github.com/Javier-Sinuka/TP_CONCURRENTE_2025_DL.git
     ```
 2.  **Navigate to the project directory:**
     ```bash
     cd TP_CONCURRENTE_2025_DL
     ```
 3.  **Build the project using the Maven Wrapper:**
-    This command will format the code, compile the source, run tests, and package the application into a runnable JAR file located in the `target/` directory.
+    This command will compile the source, run tests, and package the application into a runnable JAR file located in the `target/` directory.
 
     *   On **Linux** or **macOS**:
         ```bash
@@ -48,7 +50,7 @@ The project emphasizes a clean separation of concerns, with a core Petri Net eng
     A `BUILD SUCCESS` message indicates the simulator is ready.
 
 ## Usage
-The simulator is run from the command line and controlled with flags. By default, it runs both a static analysis and a single simulation.
+The simulator is run from the command line and controlled with flags. By default, it runs both a static analysis and a single simulation using `config_default.json` if no configuration file is specified.
 
 ### Basic Syntax
 ```bash
@@ -57,14 +59,15 @@ java -jar target/petri-sim-1.0.jar [options] [config_file_path]
 
 ### Command-Line Options
 
-| Option         | Description                                                                                                   |
-|----------------|---------------------------------------------------------------------------------------------------------------|
-| `--analysis`   | Run only the static Petri net analysis (P/T invariants, conflicts).                                           |
-| `--simulation` | Run only the simulation.                                                                                      |
-| `--runs <N>`   | Execute the simulation `N` times. Defaults to 1.                                                              |
-| `--statistics` | When `--runs > 1`, suppresses individual run reports and shows a final statistical report with averages.      |
-| `--debug`      | Enable detailed debug logging. The log file is specified by `logPath` in the JSON configuration.              |
-| `--help`       | Display the help message and exit.                                                                            |
+| Option            | Description                                                                                                   |
+|-------------------|---------------------------------------------------------------------------------------------------------------|
+| `--analysis`      | Run only the static Petri net analysis (P/T invariants, conflicts).                                           |
+| `--simulation`    | Run only the simulation.                                                                                      |
+| `--runs <N>`      | Execute the simulation `N` times. Defaults to 1.                                                              |
+| `--statistics`    | When `--runs > 1`, suppresses individual run reports and shows a final statistical report with averages.      |
+| `--debug`         | Enable detailed debug logging. The log file is specified by `logPath` in the JSON configuration.              |
+| `--regex-checker` | After each simulation run, execute `scripts/invariant_checker.py`.                                            |
+| `--help`          | Display the help message and exit.                                                                            |
 
 ### Examples
 *   **Run both analysis and a single simulation (default behavior):**
@@ -145,7 +148,7 @@ The simulation's behavior is entirely controlled by a JSON file. Below is a brea
 Please see the [`CONTRIBUTING.md`](./CONTRIBUTING.md) file for detailed guidelines on the development workflow, coding standards, and branching model.
 
 ### Code Style
-The project adheres to the **Google Java Style Guide**. The `spotless-maven-plugin` is used to automatically check and format the code. Run `./mvnw spotless:apply` before committing.
+The project adheres to the **Google Java Style Guide**. The `spotless-maven-plugin` is used to automatically check and format the code. For more information, see the [Contributing Guidelines](./CONTRIBUTING.md).
 
 ## Contact
 For any inquiries or support, please open an issue on the GitHub repository.

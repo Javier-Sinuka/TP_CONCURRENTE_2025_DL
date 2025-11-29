@@ -84,12 +84,15 @@ public class PetriNet {
       }
     }
 
-    // Calculate the next marking based on the current marking and the incidence
-    // matrix
-    currentMarking.setMarking(
-        StateEquationUtils.calculateStateEquation(
-            transitionIndex, incidenceMatrix, currentMarking));
+    // Calculate the potential next marking
+    int[] nextMarking =
+        StateEquationUtils.calculateStateEquation(transitionIndex, incidenceMatrix, currentMarking);
 
+    // Validate the place invariants with the new marking
+    petriNetAnalyzer.checkPlaceInvariants(nextMarking);
+
+    // Update the current marking and enable vector
+    currentMarking.setMarking(nextMarking);
     log.logTransition(transitionIndex);
 
     // Check place invariants after firing the transition
@@ -124,40 +127,6 @@ public class PetriNet {
    */
   public boolean[] getTokenEnabledTransitions() {
     return enableVector.getTokenEnabledTransitions();
-  }
-
-  /**
-   * Returns an array indicating which transitions are currently enabled, considering both token and
-   * time constraints.
-   *
-   * @return a boolean array where each index corresponds to a transition; true if the transition is
-   *     enabled, false otherwise
-   */
-  public boolean[] getTimeEnabledTransitions() {
-    boolean[] enabledTransitions = enableVector.getTokenEnabledTransitions();
-
-    for (int i = 0; i < enabledTransitions.length; i++) {
-      if (enabledTransitions[i]) {
-        try {
-          if (!enableVector.isTransitionEnabled(i)) {
-            enabledTransitions[i] = false; // Transition time not reached
-          }
-        } catch (TransitionTimeNotReachedException e) {
-          enabledTransitions[i] = false; // Transition time not reached
-        }
-      }
-    }
-
-    return enabledTransitions;
-  }
-
-  /**
-   * Return the number of places in the Petri net.
-   *
-   * @return the number of places
-   */
-  public int getNumberOfPlaces() {
-    return incidenceMatrix.getPlaces();
   }
 
   /**

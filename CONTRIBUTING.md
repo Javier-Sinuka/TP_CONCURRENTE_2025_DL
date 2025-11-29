@@ -10,24 +10,24 @@ Please read this short guide **before** opening a pull-request.
 ```
 
 main        ← always production-ready
-dev     ← integration branch for the upcoming release
-feature/\*   ← new code (one per ticket or user-story)
-hotfix/\*    ← urgent patches to main
-release/\*   ← pre-release hardening branches
+dev         ← integration branch for the upcoming release
+feature/*   ← new code (one per ticket or user-story)
+hotfix/*    ← urgent patches to main
+release/*   ← pre-release hardening branches
 
 ````
 
 * **Never** commit directly to `main` or `dev`.  
-* **One feature, one branch, one PR**.  
+* **One feature, one branch, one PR**.
 * Delete your local & remote feature branch after merge.
 
 ### Naming tips
 
 | Purpose      | Branch prefix | Example                      |
-|--------------|--------------|------------------------------|
-| New feature  | `feature/`   | `feature/incidence-matrix`   |
-| Bug fix      | `hotfix/`    | `hotfix/null-pointer-#42`    |
-| Release prep | `release/`   | `release/v1.0.0-rc`          |
+|--------------|---------------|------------------------------|
+| New feature  | `feature/`    | `feature/incidence-matrix`   |
+| Bug fix      | `hotfix/`     | `hotfix/null-pointer-#42`    |
+| Release prep | `release/`    | `release/v1.0.0-rc`          |
 
 ---
 
@@ -36,21 +36,21 @@ release/\*   ← pre-release hardening branches
 ### Linux / macOS
 
 ```bash
-git clone https://github.com/<org>/petri-sim.git
-cd petri-sim
-./mvnw spotless:apply   # auto-format to Google Java Style
-./mvnw verify           # compile + Spotless check
-java -cp target/classes edu.unc.petri.cli.Main
+git clone https://github.com/Javier-Sinuka/TP_CONCURRENTE_2025_DL.git
+cd TP_CONCURRENTE_2025_DL
+./mvnw spotless:apply                     # auto-format to Google Java Style
+./mvnw clean install                      # compile, test, and package the application
+java -jar target/petri-sim-1.0.jar --help # run the application
 ````
 
 ### Windows (Command Prompt or PowerShell)
 
 ```powershell
-git clone https://github.com/<org>/petri-sim.git
-cd petri-sim
-mvnw.cmd spotless:apply
-mvnw.cmd verify
-java -cp target\classes edu.unc.petri.cli.Main
+git clone https://github.com/Javier-Sinuka/TP_CONCURRENTE_2025_DL.git
+cd TP_CONCURRENTE_2025_DL
+.\mvnw.cmd spotless:apply
+.\mvnw.cmd clean install
+java -jar target/petri-sim-1.0.jar --help
 ```
 
 *Requires JDK 8 (set `JAVA_HOME`) — no separate Maven install needed.*
@@ -62,7 +62,7 @@ java -cp target\classes edu.unc.petri.cli.Main
 Before opening or merging a PR, make sure:
 
 * [ ] Branch is up-to-date with `dev` (`git pull --rebase origin dev`).
-* [ ] `./mvnw spotless:apply && ./mvnw verify` succeeds without changes.
+* [ ] `./mvnw spotless:apply && ./mvnw clean install` succeeds without changes.
 * [ ] **Javadoc comments for every public class, method, and field**.
 * [ ] PR description links the related GitHub Issue (`Fixes #123`).
 * [ ] All *new* files include the Apache 2.0 header (see other files).
@@ -74,7 +74,7 @@ Before opening or merging a PR, make sure:
 | ---------------- | ------------------------------------------------------------------------------------------------- |
 | ≤ 1 day of work  | Open the PR **same day**, even if draft — early feedback matters.                                 |
 | Ongoing > 1 day  | Create a **draft PR** once the branch compiles; mark “Ready for review” when feature is finished. |
-| Hotfix to `main` | Branch from `main` → PR back to `main`, then merge down into `dev`.                           |
+| Hotfix to `main` | Branch from `main` → PR back to `main`, then merge down into `dev`.                               |
 
 ---
 
@@ -124,15 +124,15 @@ Follow this 9-step loop to stay in sync, keep history clean, and minimise merge 
 
 | #                                              | Command(s)                                                            | Why                                                          |
 | ---------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------ |
-| **1. Sync**                                    | `git switch dev`<br>`git pull --ff-only`                          | Start from the latest integration branch.                    |
+| **1. Sync**                                    | `git switch dev`<br>`git pull --ff-only`                              | Start from the latest integration branch.                    |
 | **2. Create / pick issue**                     | Assign yourself on the Project board                                  | One owner avoids overlaps.                                   |
 | **3. Branch off**                              | `git switch -c feature/<slug>`                                        | New branch isolated from others.                             |
-| **4. Code + build loop**                       | `./mvnw spotless:apply`<br>`./mvnw verify`                            | Format, compile, repeat—no IDE surprises.                    |
+| **4. Code + build loop**                       | `./mvnw spotless:apply`<br>`./mvnw clean install`                     | Format, compile, repeat—no IDE surprises.                    |
 | **5. Commit early & often**                    | `git add <files>`<br>`git commit -m "core: calc enable vector (#45)"` | Small commits help reviews & bisects.                        |
 | **6. Push regularly**                          | `git push -u origin feature/<slug>`                                   | Remote backup + enables early PR review.                     |
 | **7. Draft PR**                                | GitHub “Create draft pull request”                                    | Reviewer can comment while you finish coding.                |
-| **8. Rebase if dev moved**                 | `git fetch origin`<br>`git rebase origin/dev`                     | Keeps history linear; resolve conflicts locally.             |
-| **9. Mark PR “Ready” → Review → Squash-merge** | GitHub UI                                                             | Merge into `dev`, then delete branch locally & remotely. |
+| **8. Rebase if dev moved**                     | `git fetch origin`<br>`git rebase origin/dev`                         | Keeps history linear; resolve conflicts locally.             |
+| **9. Mark PR “Ready” → Review → Squash-merge** | GitHub UI                                                             | Merge into `dev`, then delete branch locally & remotely.     |
 
 
 ---

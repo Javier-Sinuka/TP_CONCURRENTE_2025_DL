@@ -103,7 +103,8 @@ public class EnableVector {
    * @return The vector of enabled transitions.
    */
   public boolean[] getTokenEnabledTransitions() {
-    return tokenEnabledTransitions;
+    // Return a defensive copy to avoid external mutation of internal state
+    return tokenEnabledTransitions.clone();
   }
 
   /**

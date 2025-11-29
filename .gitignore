@@ -54,3 +54,6 @@ spotless.*.backup
 # Coverage (JaCoCo) — keep even if not used yet; harmless
 jacoco*.exec
 
+# Python
+__pycache__/
+
