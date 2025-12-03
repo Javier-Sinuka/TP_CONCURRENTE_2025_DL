@@ -73,17 +73,6 @@ public class PetriNet {
       // waiting for the transition
     }
 
-    boolean currentThreadWasWaiting = false;
-    long currentThreadId = Thread.currentThread().getId();
-
-    if (enableVector.isThereThreadWaitingForTransition(transitionIndex)) {
-      if (enableVector.getWaitingThreadId(transitionIndex) == currentThreadId) {
-        currentThreadWasWaiting = true; // Current thread was waiting for this transition
-      } else {
-        return false; // Another thread is waiting for this transition
-      }
-    }
-
     // Calculate the potential next marking
     int[] nextMarking =
         StateEquationUtils.calculateStateEquation(transitionIndex, incidenceMatrix, currentMarking);
@@ -98,8 +87,15 @@ public class PetriNet {
     // Check place invariants after firing the transition
     petriNetAnalyzer.checkPlaceInvariants(currentMarking.getMarking());
 
-    if (currentThreadWasWaiting) {
-      enableVector.clearWaitingThreadId(transitionIndex); // Thread is no longer waiting
+    if (enableVector.isThereThreadWaitingForTransition(transitionIndex)) {
+      if (enableVector.getWaitingThreadId(transitionIndex) == Thread.currentThread().getId()) {
+        // This transition is enabled both in terms of tokens and timing, and the current thread was
+        // previously waiting for it to become time enabled
+        enableVector.clearWaitingThreadId(transitionIndex);
+      } else {
+        throw new IllegalStateException(
+            "Another thread is waiting for this transition: " + transitionIndex);
+      }
     }
 
     enableVector.updateEnableVector(incidenceMatrix, currentMarking);
@@ -117,6 +113,7 @@ public class PetriNet {
     this.currentMarking = new CurrentMarking(initialMarking);
     // Recalculate which transitions are enabled from this initial state
     this.enableVector.updateEnableVector(this.incidenceMatrix, this.currentMarking);
+    this.enableVector.resetWaitingThreads();
   }
 
   /**
