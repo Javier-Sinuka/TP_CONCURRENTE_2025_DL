@@ -242,9 +242,9 @@ class EnableVectorTest {
     assertFalse(enableVector.isTransitionEnabled(0));
 
     Mockito.verify(mockTimeRangeMatrix, Mockito.never())
-        .isInsideTimeRange(Mockito.anyInt(), Mockito.anyLong());
+        .isInsideTimeRange(Mockito.anyInt(), Mockito.anyLong(), Mockito.anyLong());
     Mockito.verify(mockTimeRangeMatrix, Mockito.never())
-        .isBeforeTimeRange(Mockito.anyInt(), Mockito.anyLong());
+        .isBeforeTimeRange(Mockito.anyInt(), Mockito.anyLong(), Mockito.anyLong());
     Mockito.verify(mockTimeRangeMatrix, Mockito.never())
         .getSleepTimeToFire(Mockito.anyInt(), Mockito.anyLong());
   }
@@ -269,13 +269,15 @@ class EnableVectorTest {
       enableVector.updateEnableVector(mockIncidenceMatrix, mockCurrentMarking);
     }
 
-    Mockito.when(mockTimeRangeMatrix.isInsideTimeRange(Mockito.eq(0), Mockito.anyLong()))
+    Mockito.when(
+            mockTimeRangeMatrix.isInsideTimeRange(
+                Mockito.eq(0), Mockito.anyLong(), Mockito.anyLong()))
         .thenReturn(true);
 
     assertTrue(enableVector.isTransitionEnabled(0));
 
     Mockito.verify(mockTimeRangeMatrix, Mockito.never())
-        .isBeforeTimeRange(Mockito.anyInt(), Mockito.anyLong());
+        .isBeforeTimeRange(Mockito.anyInt(), Mockito.anyLong(), Mockito.anyLong());
     Mockito.verify(mockTimeRangeMatrix, Mockito.never())
         .getSleepTimeToFire(Mockito.anyInt(), Mockito.anyLong());
   }
@@ -300,9 +302,13 @@ class EnableVectorTest {
       enableVector.updateEnableVector(mockIncidenceMatrix, mockCurrentMarking);
     }
 
-    Mockito.when(mockTimeRangeMatrix.isInsideTimeRange(Mockito.eq(0), Mockito.anyLong()))
+    Mockito.when(
+            mockTimeRangeMatrix.isInsideTimeRange(
+                Mockito.eq(0), Mockito.anyLong(), Mockito.anyLong()))
         .thenReturn(false);
-    Mockito.when(mockTimeRangeMatrix.isBeforeTimeRange(Mockito.eq(0), Mockito.anyLong()))
+    Mockito.when(
+            mockTimeRangeMatrix.isBeforeTimeRange(
+                Mockito.eq(0), Mockito.anyLong(), Mockito.anyLong()))
         .thenReturn(true);
     Mockito.when(mockTimeRangeMatrix.getSleepTimeToFire(Mockito.eq(0), Mockito.anyLong()))
         .thenReturn(50L);
@@ -336,9 +342,12 @@ class EnableVectorTest {
       enableVector.updateEnableVector(mockIncidenceMatrix, mockCurrentMarking);
     }
 
-    Mockito.when(mockTimeRangeMatrix.isInsideTimeRange(Mockito.eq(0), Mockito.anyLong()))
+    Mockito.when(
+            mockTimeRangeMatrix.isInsideTimeRange(
+                Mockito.eq(0), Mockito.anyLong(), Mockito.anyLong()))
         .thenReturn(false);
-    Mockito.when(mockTimeRangeMatrix.isBeforeTimeRange(Mockito.eq(0), anyLong())).thenReturn(false);
+    Mockito.when(mockTimeRangeMatrix.isBeforeTimeRange(Mockito.eq(0), anyLong(), Mockito.anyLong()))
+        .thenReturn(false);
 
     assertFalse(enableVector.isTransitionEnabled(0));
 

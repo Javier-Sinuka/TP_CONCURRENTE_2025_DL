@@ -70,12 +70,12 @@ public class TimeRangeMatrix {
    * @param enabledTime The time when the transition was enabled.
    * @return true if the transition is inside the time range, false otherwise.
    */
-  public boolean isInsideTimeRange(int transition, long enabledTime) {
+  public boolean isInsideTimeRange(int transition, long enabledTime, long currentTime) {
     if (transition < 0 || transition >= timeRangeMatrix.length) {
       throw new IndexOutOfBoundsException("Invalid transition index: " + transition);
     }
 
-    long timePassed = System.nanoTime() - enabledTime;
+    long timePassed = currentTime - enabledTime;
 
     long startRange = timeRangeMatrix[transition][0];
     long endRange = timeRangeMatrix[transition][1];
@@ -103,13 +103,13 @@ public class TimeRangeMatrix {
    * @param enabledTime The time when the transition was enabled.
    * @return true if the elapsed time is less than the transition's start time.
    */
-  public boolean isBeforeTimeRange(int transition, long enabledTime) {
+  public boolean isBeforeTimeRange(int transition, long enabledTime, long currentTime) {
     if (transition < 0 || transition >= timeRangeMatrix.length) {
       throw new IndexOutOfBoundsException("Invalid transition index: " + transition);
     }
 
     long startRange = timeRangeMatrix[transition][0];
-    long timePassed = System.nanoTime() - enabledTime;
+    long timePassed = currentTime - enabledTime;
 
     return timePassed < startRange;
   }

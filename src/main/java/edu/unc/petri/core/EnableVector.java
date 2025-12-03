@@ -125,15 +125,16 @@ public class EnableVector {
       return false;
     }
 
+    long currentTime = System.nanoTime();
+
     // If the transition is token-wise enabled, check the time range
     boolean isTimeEnabled =
         timeRangeMatrix.isInsideTimeRange(
-            transitionIndex, transitionTokenEnablementTimes[transitionIndex]);
+            transitionIndex, transitionTokenEnablementTimes[transitionIndex], currentTime);
 
     if (!isTimeEnabled) {
       if (timeRangeMatrix.isBeforeTimeRange(
-          transitionIndex, transitionTokenEnablementTimes[transitionIndex])) {
-
+          transitionIndex, transitionTokenEnablementTimes[transitionIndex], currentTime)) {
         if (!isThereThreadWaitingForTransition(transitionIndex)) {
           waitingThreadsIds[transitionIndex] =
               Thread.currentThread()
