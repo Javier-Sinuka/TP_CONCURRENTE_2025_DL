@@ -122,6 +122,11 @@ public class EnableVector {
 
     // If the transition is not token-wise enabled, return false immediately
     if (!isTokenEnabled) {
+      if (isThereThreadWaitingForTransition(transitionIndex)) {
+        if (getWaitingThreadId(transitionIndex) == Thread.currentThread().getId()) {
+          clearWaitingThreadId(transitionIndex);
+        }
+      }
       return false;
     }
 
@@ -140,7 +145,7 @@ public class EnableVector {
               Thread.currentThread()
                   .getId(); // if there is not a thread waiting for the transition, set the current
           // thread as waiting
-        } else {
+        } else if (getWaitingThreadId(transitionIndex) != Thread.currentThread().getId()) {
           return false; // Another thread is already waiting for this transition
         }
 
@@ -154,7 +159,18 @@ public class EnableVector {
       }
     }
 
-    return true; // Transition is both token-wise and time-wise enabled
+    if (isThereThreadWaitingForTransition(transitionIndex)) {
+      if (getWaitingThreadId(transitionIndex) == Thread.currentThread().getId()) {
+        // This transition is enabled both in terms of tokens and timing, and the current thread was
+        // previously waiting for it to become time enabled
+        return true;
+      } else {
+        return false; // Another thread is waiting for this transition
+      }
+    }
+
+    // The transition is enabled both by tokens and timing, and no other thread is currently waiting
+    return true;
   }
 
   /**
@@ -221,6 +237,21 @@ public class EnableVector {
     }
 
     waitingThreadsIds[transitionIndex] = -1L;
+  }
+
+  /**
+   * Resets all waiting thread IDs.
+   *
+   * <p>This method iterates through the {@code waitingThreadsIds} array and sets each element to
+   * {@code -1L}, effectively clearing any thread IDs that may have been stored. After calling this
+   * method, no thread will be marked as waiting for any transition.
+   *
+   * @throws NullPointerException if {@code waitingThreadsIds} is {@code null}
+   */
+  public void resetWaitingThreads() {
+    for (int i = 0; i < waitingThreadsIds.length; i++) {
+      waitingThreadsIds[i] = -1L;
+    }
   }
 
   /**
