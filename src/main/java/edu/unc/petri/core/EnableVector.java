@@ -141,12 +141,11 @@ public class EnableVector {
       if (timeRangeMatrix.isBeforeTimeRange(
           transitionIndex, transitionTokenEnablementTimes[transitionIndex], currentTime)) {
         if (!isThereThreadWaitingForTransition(transitionIndex)) {
-          waitingThreadsIds[transitionIndex] =
-              Thread.currentThread()
-                  .getId(); // if there is not a thread waiting for the transition, set the current
-          // thread as waiting
-        } else if (getWaitingThreadId(transitionIndex) != Thread.currentThread().getId()) {
-          return false; // Another thread is already waiting for this transition
+          registerId(transitionIndex);
+        } else {
+          if (getWaitingThreadId(transitionIndex) != Thread.currentThread().getId()) {
+            return false; // Another thread is already waiting for this transition
+          }
         }
 
         long sleepNanos =
@@ -160,11 +159,7 @@ public class EnableVector {
     }
 
     if (isThereThreadWaitingForTransition(transitionIndex)) {
-      if (getWaitingThreadId(transitionIndex) == Thread.currentThread().getId()) {
-        // This transition is enabled both in terms of tokens and timing, and the current thread was
-        // previously waiting for it to become time enabled
-        return true;
-      } else {
+      if (getWaitingThreadId(transitionIndex) != Thread.currentThread().getId()) {
         return false; // Another thread is waiting for this transition
       }
     }
@@ -268,5 +263,17 @@ public class EnableVector {
       }
     }
     return true;
+  }
+
+  /**
+   * Registers the ID of the current thread at the specified transition index.
+   *
+   * @param transitionIndex The index where the thread ID is to be registered.
+   */
+  private void registerId(int transitionIndex) {
+    waitingThreadsIds[transitionIndex] =
+        Thread.currentThread()
+            .getId(); // if there is not a thread waiting for the transition, set the current
+    // thread as waiting
   }
 }
