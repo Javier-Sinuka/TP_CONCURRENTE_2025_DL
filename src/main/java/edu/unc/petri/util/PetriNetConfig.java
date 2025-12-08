@@ -48,6 +48,12 @@ public final class PetriNetConfig {
    */
   public final Map<Integer, Integer> transitionWeights;
 
+  /**
+   * The probability weights (percentages) for each transition used by the probabilistic priority
+   * policy.
+   */
+  public final Map<Integer, Integer> transitionProbabilities;
+
   /** The limit for invariant analysis, if applicable. */
   public final Integer invariantLimit;
 
@@ -70,6 +76,7 @@ public final class PetriNetConfig {
       @JsonProperty("segments") List<Segment> segments,
       @JsonProperty("policy") String policy,
       @JsonProperty("transitionWeights") Map<Integer, Integer> transitionWeights,
+      @JsonProperty("transitionProbabilities") Map<Integer, Integer> transitionProbabilities,
       @JsonProperty("invariantLimit") Integer invariantLimit) {
     this.logPath = logPath;
     this.initialMarking = initialMarking;
@@ -78,6 +85,7 @@ public final class PetriNetConfig {
     this.segments = segments;
     this.policy = policy;
     this.transitionWeights = transitionWeights;
+    this.transitionProbabilities = transitionProbabilities;
     this.invariantLimit = invariantLimit;
   }
 }
