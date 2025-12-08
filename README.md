@@ -130,7 +130,7 @@ The simulation's behavior is entirely controlled by a JSON file. Below is a brea
   ],
 
   // Policy for choosing which transition to fire when multiple are enabled.
-  // Options: "random", "priority".
+  // Options: "random", "priority", "priority-probabilistic".
   "policy": "random",
 
   // A map of transition weights used by the "priority" policy. Higher numbers mean higher priority.
@@ -140,6 +140,15 @@ The simulation's behavior is entirely controlled by a JSON file. Below is a brea
     "1": 1,
     "2": 1,
     "3": 1
+  },
+
+  // A map of firing probabilities (0-100 integers) used by the "priority-probabilistic" policy.
+  // For each structural conflict set, the configured values must sum to 100.
+  "transitionProbabilities": {
+    "0": 25,
+    "1": 25,
+    "2": 25,
+    "3": 25
   }
 }
 ```
