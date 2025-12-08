@@ -60,6 +60,7 @@ class SimulationResultTest {
             new ArrayList<>(),
             POLICY,
             new HashMap<>(),
+            new HashMap<>(),
             100);
 
     simulationResult =
