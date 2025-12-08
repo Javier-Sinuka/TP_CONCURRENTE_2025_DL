@@ -33,9 +33,10 @@ class TimeRangeMatrixTest {
   void isInsideTimeRangeShouldReturnTrueForInstantaneousTransition() {
     int transition = 3; // [0, 0]
     long enabledTime = System.currentTimeMillis();
+    long currentTime = System.nanoTime();
 
     assertTrue(
-        timeRangeMatrix.isInsideTimeRange(transition, enabledTime),
+        timeRangeMatrix.isInsideTimeRange(transition, enabledTime, currentTime),
         "Should be inside time range for instantaneous transition [0,0].");
   }
 
@@ -47,8 +48,10 @@ class TimeRangeMatrixTest {
     // Simulate that 100ms and 20ns have passed since the transition was enabled.
     Thread.sleep(100, 20);
 
+    long currentTime = System.nanoTime();
+
     assertTrue(
-        timeRangeMatrix.isInsideTimeRange(transition, enabledTime),
+        timeRangeMatrix.isInsideTimeRange(transition, enabledTime, currentTime),
         "Should be inside time range as ~100ms is equal to 100.");
   }
 
@@ -60,8 +63,10 @@ class TimeRangeMatrixTest {
     // Simulate that 100ms have passed since the transition was enabled.
     Thread.sleep(100);
 
+    long currentTime = System.nanoTime();
+
     assertTrue(
-        timeRangeMatrix.isInsideTimeRange(transition, enabledTime),
+        timeRangeMatrix.isInsideTimeRange(transition, enabledTime, currentTime),
         "Should be inside time range as ~100ms is between 50 and 150.");
   }
 
@@ -69,9 +74,10 @@ class TimeRangeMatrixTest {
   void isInsideTimeRangeShouldReturnFalseWhenTimePassedIsBeforeIntervalForIntervalTransitions() {
     int transition = 1; // [200, 300]
     long enabledTime = System.currentTimeMillis();
+    long currentTime = System.nanoTime();
 
     assertFalse(
-        timeRangeMatrix.isInsideTimeRange(transition, enabledTime),
+        timeRangeMatrix.isInsideTimeRange(transition, enabledTime, currentTime),
         "Should be outside time range as ~0ms is less than 200.");
   }
 
@@ -84,8 +90,10 @@ class TimeRangeMatrixTest {
     // Simulate that 80ms have passed.
     Thread.sleep(80);
 
+    long currentTime = System.nanoTime();
+
     assertFalse(
-        timeRangeMatrix.isInsideTimeRange(transition, enabledTime),
+        timeRangeMatrix.isInsideTimeRange(transition, enabledTime, currentTime),
         "Should be outside time range as ~80ms is greater than 50.");
   }
 
@@ -98,8 +106,10 @@ class TimeRangeMatrixTest {
     // Simulate that 30ms have passed since the transition was enabled.
     Thread.sleep(30);
 
+    long currentTime = System.nanoTime();
+
     assertTrue(
-        timeRangeMatrix.isBeforeTimeRange(transition, enabledTime),
+        timeRangeMatrix.isBeforeTimeRange(transition, enabledTime, currentTime),
         "Should be before time range as ~30ms is less than 50.");
   }
 
@@ -111,8 +121,10 @@ class TimeRangeMatrixTest {
     // Simulate that 100ms have passed since the transition was enabled.
     Thread.sleep(100);
 
+    long currentTime = System.nanoTime();
+
     assertFalse(
-        timeRangeMatrix.isBeforeTimeRange(transition, enabledTime),
+        timeRangeMatrix.isBeforeTimeRange(transition, enabledTime, currentTime),
         "Should not be before time range as ~100ms is between 50 and 150.");
   }
 
@@ -125,8 +137,10 @@ class TimeRangeMatrixTest {
     // Simulate that 200ms have passed since the transition was enabled.
     Thread.sleep(200);
 
+    long currentTime = System.nanoTime();
+
     assertFalse(
-        timeRangeMatrix.isBeforeTimeRange(transition, enabledTime),
+        timeRangeMatrix.isBeforeTimeRange(transition, enabledTime, currentTime),
         "Should not be before time range as ~200ms is greater than 150.");
   }
 

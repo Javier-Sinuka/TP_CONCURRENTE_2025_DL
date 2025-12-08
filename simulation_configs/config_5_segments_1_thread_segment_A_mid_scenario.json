@@ -1,7 +1,7 @@
 {
-  "logPath": "log_4_segments_1_thread_segment_A_random.txt",
+  "logPath": "log_5_segments_1_threads_segment_A_random.txt",
   "invariantLimit": 200,
-  "initialMarking": [1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0], // different initial marking
+  "initialMarking": [3, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
   "incidence": [
     [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -23,18 +23,18 @@
     [75, 75],
     [75, 75],
     [0, 0],
-    [50, 50],
     [0, 0],
-    [60, 60],
-    [70, 70],
-    [70, 70],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
     [0, 0]
   ],
   "segments": [
     {
       "name": "Segment-A",
       "threadQuantity": 1,
-      "transitions": [0, 1, 11]
+      "transitions": [0, 1]
     },
     {
       "name": "Segment-B",
@@ -42,14 +42,9 @@
       "transitions": [2, 3, 4]
     },
     {
-      "name": "Segment-C",
+      "name": "Segment-E",
       "threadQuantity": 1,
-      "transitions": [6, 5] // IMPORTANT: changed order of transitions, if we don't do this, the thread will be blocked waiting for the P6 resource
-    },
-    {
-      "name": "Segment-D",
-      "threadQuantity": 1,
-      "transitions": [7, 8, 9, 10]
+      "transitions": [11]
     }
   ],
   "policy": "random"
