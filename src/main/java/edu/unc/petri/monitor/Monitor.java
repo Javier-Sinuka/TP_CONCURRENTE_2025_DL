@@ -1,0 +1,262 @@
+package edu.unc.petri.monitor;
+
+import edu.unc.petri.core.PetriNet;
+import edu.unc.petri.exceptions.NotEqualToPlaceInvariantEquationException;
+import edu.unc.petri.exceptions.SimulationLimitReachedException;
+import edu.unc.petri.exceptions.TransitionTimeNotReachedException;
+import edu.unc.petri.policy.PolicyInterface;
+import edu.unc.petri.simulation.InvariantTracker;
+import edu.unc.petri.util.Log;
+import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * The Monitor class is responsible for monitoring the Petri net simulation. It implements the
+ * MonitorInterface, which defines the methods for monitoring the simulation's progress and
+ * significant events.
+ *
+ * @author Der Landsknecht
+ * @version 1.0
+ * @since 2025-29-07
+ */
+public class Monitor implements MonitorInterface {
+
+  /** The simulation manager to check for shutdown signals. */
+  private final InvariantTracker invariantTracker;
+
+  /** The number of permits for the semaphore used for mutual exclusion. */
+  private static final int PERMITS = 1;
+
+  /** The Petri net being monitored. */
+  private PetriNet petriNet;
+
+  /** The policy used to choose transitions. */
+  private PolicyInterface policy;
+
+  /** The mutex used for mutual exclusion. */
+  private Semaphore mutex;
+
+  /** The condition queues used for synchronization. */
+  private ConditionQueues conditionQueues;
+
+  /** The log for recording events in the simulation. */
+  private Log log;
+
+  /**
+   * Constructor for the Monitor class.
+   *
+   * @param petriNet the Petri net to be monitored
+   * @param policy the policy used to choose transitions
+   * @param log the log for recording events in the simulation
+   */
+  public Monitor(
+      InvariantTracker invariantTracker,
+      PetriNet petriNet,
+      ConditionQueues conditionQueues,
+      PolicyInterface policy,
+      Log log) {
+    this.invariantTracker = invariantTracker;
+    this.petriNet = petriNet;
+    this.conditionQueues = conditionQueues;
+    this.policy = policy;
+    this.mutex = new Semaphore(PERMITS);
+    this.log = log;
+  }
+
+  /**
+   * Fires a transition in the Petri net. This method is called to execute a transition based on the
+   * policy defined.
+   *
+   * @param t the transition to fire
+   * @return true if the transition was successfully fired, false otherwise
+   */
+  @Override
+  public boolean fireTransition(int t) {
+    boolean holdsMutex = false;
+    try {
+      mutex.acquire();
+      holdsMutex = true;
+
+      // Guard to prevent firing transitions after the simulation limit has been reached
+      if (invariantTracker.isInvariantLimitReached()) {
+        holdsMutex = false;
+        mutex.release();
+        return false;
+      }
+
+      log.logDebug("Thread " + Thread.currentThread().getName() + " enters monitor to fire " + t);
+      while (true) {
+        try {
+          if (petriNet.fire(t)) {
+            log.logDebug("Thread " + Thread.currentThread().getName() + " successfully fired " + t);
+
+            try {
+              invariantTracker.updateInvariantTracker(t);
+            } catch (SimulationLimitReachedException e) {
+              log.logDebug(
+                  "Thread "
+                      + Thread.currentThread().getName()
+                      + " detected simulation limit reached. Terminating simulation.");
+              holdsMutex = false;
+              mutex.release(); // Release the mutex before returning
+              return false; // Exit if the simulation limit has been reached
+            }
+
+            boolean[] waitingThreads = conditionQueues.areThereWaitingThreads();
+
+            for (int i = 0; i < waitingThreads.length; i++) {
+              if (waitingThreads[i]) {
+                log.logDebug(
+                    "Thread "
+                        + Thread.currentThread().getName()
+                        + " finds threads waiting for transition "
+                        + i);
+              }
+            }
+
+            boolean[] enableTransitions = petriNet.getTokenEnabledTransitions();
+
+            for (int i = 0; i < enableTransitions.length; i++) {
+              if (enableTransitions[i]) {
+                log.logDebug(
+                    "Thread "
+                        + Thread.currentThread().getName()
+                        + " finds transition "
+                        + i
+                        + " enabled");
+              }
+            }
+
+            ArrayList<Integer> transitionsThatCouldBeFired =
+                getTransitionsThatCouldBeFired(waitingThreads, enableTransitions);
+
+            log.logDebug(
+                "Thread "
+                    + Thread.currentThread().getName()
+                    + " checks if there are waiting threads for enabled transitions");
+
+            if (transitionsThatCouldBeFired.size() > 0) {
+              log.logDebug(
+                  "Thread "
+                      + Thread.currentThread().getName()
+                      + " finds waiting threads for enabled transitions");
+              int transition = policy.choose(transitionsThatCouldBeFired);
+
+              log.logDebug(
+                  "Thread "
+                      + Thread.currentThread().getName()
+                      + " chooses to wake up the thread waiting for "
+                      + transition);
+
+              log.logDebug("Thread " + Thread.currentThread().getName() + " leaves monitor");
+
+              conditionQueues.wakeUpThread(transition);
+
+              holdsMutex = false; // This thread is no the one that holds the mutex
+
+              return true;
+            } else {
+              log.logDebug(
+                  "Thread "
+                      + Thread.currentThread().getName()
+                      + " finds no waiting threads for enabled transitions");
+              break;
+            }
+          } else {
+            log.logDebug("Thread " + Thread.currentThread().getName() + " could not fire " + t);
+            log.logDebug("Thread " + Thread.currentThread().getName() + " goes to wait for " + t);
+            holdsMutex = false;
+            mutex.release();
+            conditionQueues.waitForTransition(t);
+            holdsMutex = true; // This thread holds the mutex again after being signaled
+            log.logDebug(
+                "Thread "
+                    + Thread.currentThread().getName()
+                    + " wakes up and re-enters monitor to fire "
+                    + t);
+
+            // When a thread wakes up, it is already inside the monitor and tries to fire the
+            // transition
+            // again, but it doesn't reacquire the mutex because it was handed to it by the
+            // signaler.
+          }
+        } catch (TransitionTimeNotReachedException e) {
+          long sleepNanos = e.getSleepTimeNanos();
+          if (sleepNanos > 0) {
+            long sleepMillis = TimeUnit.NANOSECONDS.toMillis(sleepNanos);
+            int remainingNanos = (int) (sleepNanos % 1_000_000);
+
+            log.logDebug(
+                "Thread "
+                    + Thread.currentThread().getName()
+                    + " could not fire "
+                    + t
+                    + " because the transition time has not been reached. Sleeping for "
+                    + sleepMillis
+                    + " ms and "
+                    + remainingNanos
+                    + " ns.");
+
+            holdsMutex = false;
+            mutex.release(); // Release the mutex before sleeping
+            try {
+              Thread.sleep(sleepMillis, remainingNanos); // Use high-precision sleep
+            } catch (InterruptedException ie) {
+              Thread.currentThread().interrupt(); // Restore the interrupted status
+              return false; // Exit if interrupted during sleep
+            }
+            mutex.acquire(); // Reacquire the mutex after waking up
+            holdsMutex = true;
+            log.logDebug(
+                "Thread "
+                    + Thread.currentThread().getName()
+                    + " wakes up and re-enters monitor to fire "
+                    + t);
+          }
+        } catch (NotEqualToPlaceInvariantEquationException e) {
+          log.logDebug(
+              "Thread "
+                  + Thread.currentThread().getName()
+                  + " could not fire "
+                  + t
+                  + " because a place-invariant equation was violated. Terminating simulation.");
+          throw new RuntimeException(e); // Rethrow as unchecked to terminate the simulation
+        }
+      }
+
+      log.logDebug("Thread " + Thread.currentThread().getName() + " leaves monitor");
+      holdsMutex = false;
+      mutex.release();
+      return true;
+    } catch (InterruptedException e) {
+      if (holdsMutex) {
+        mutex.release(); // Ensure the mutex is released if an interruption occurs
+      }
+      return false;
+    }
+  }
+
+  /**
+   * Returns a list of transition indices that could be fired based on the current state. A
+   * transition is considered for firing if its corresponding thread is waiting and the transition
+   * is enabled.
+   *
+   * @param waitingThreads an array indicating which threads are currently waiting for each
+   *     transition
+   * @param enableTransitions an array indicating which transitions are currently enabled
+   * @return a list of transition indices that could be fired
+   */
+  private ArrayList<Integer> getTransitionsThatCouldBeFired(
+      boolean[] waitingThreads, boolean[] enableTransitions) {
+    ArrayList<Integer> transitions = new ArrayList<>();
+
+    for (int i = 0; i < petriNet.getNumberOfTransitions(); i++) {
+      if (waitingThreads[i] && enableTransitions[i]) {
+        transitions.add(i);
+      }
+    }
+
+    return transitions;
+  }
+}

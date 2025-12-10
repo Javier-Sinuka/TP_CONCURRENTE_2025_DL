@@ -1,0 +1,59 @@
+# ───── Java / Maven build artifacts ───────────────────────────
+logs/
+target/
+*.class
+dependency-reduced-pom.xml
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+buildNumber.properties
+.mvn/timestamps.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# ───── IDE & editor folders ───────────────────────────────────
+# IntelliJ / Android Studio
+.idea/
+*.iml
+*.iws
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VS Code
+.vscode/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# ───── OS-specific junk ───────────────────────────────────────
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+._*
+
+# ───── Logs & runtime files ───────────────────────────────────
+*.log
+hs_err_pid*
+replay_pid*
+*.txt
+
+# ───── Misc tools ─────────────────────────────────────────────
+# Spotless, Checkstyle temp
+spotless.*.backup
+
+# Coverage (JaCoCo) — keep even if not used yet; harmless
+jacoco*.exec
+
+# Python
+__pycache__/
+
