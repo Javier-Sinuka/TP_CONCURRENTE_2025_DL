@@ -129,18 +129,27 @@ El comportamiento de la simulación está completamente controlado por un archiv
     }
   ],
 
-  // Política para elegir qué transición disparar cuando varias están habilitadas.
-  // Opciones: "random", "priority".
-  "policy": "random",
+// Política para elegir qué transición disparar cuando varias están habilitadas.
+// Opciones: "random", "priority", "priority-probabilistic".
+"policy": "random",
 
-  // Un mapa de pesos de transición utilizado por la política de "prioridad". Números más altos significan mayor prioridad.
-  // Requerido solo si la política es "priority".
-  "transitionWeights": {
-    "0": 1,
-    "1": 1,
-    "2": 1,
-    "3": 1
-  }
+// Un mapa de pesos de transición utilizado por la política de "prioridad". Números más altos significan mayor prioridad.
+// Requerido solo si la política es "priority".
+"transitionWeights": {
+  "0": 1,
+  "1": 1,
+  "2": 1,
+  "3": 1
+},
+
+// Mapa de probabilidades (en enteros de 0 a 100) usado por "priority-probabilistic".
+// Los valores de las transiciones en conflicto estructural deben sumar 100.
+"transitionProbabilities": {
+  "0": 25,
+  "1": 25,
+  "2": 25,
+  "3": 25
+}
 }
 ```
 

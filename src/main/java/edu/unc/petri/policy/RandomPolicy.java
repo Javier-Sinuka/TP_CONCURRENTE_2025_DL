@@ -29,6 +29,9 @@ public class RandomPolicy implements PolicyInterface {
     if (transitions == null || transitions.size() == 0) {
       throw new IllegalArgumentException("The parameter is null or empty");
     }
+    if (transitions.size() == 1) {
+      return transitions.get(0);
+    }
 
     int index = random.nextInt(transitions.size());
 

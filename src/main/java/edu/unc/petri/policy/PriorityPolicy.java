@@ -57,6 +57,9 @@ public class PriorityPolicy implements PolicyInterface {
     if (transitions.isEmpty()) {
       throw new IllegalArgumentException("The given list of transitions is empty");
     }
+    if (transitions.size() == 1) {
+      return transitions.get(0); // Only one transition available
+    }
 
     int maxTransitionWeight = Integer.MIN_VALUE;
     List<Integer> bestTransitions = new ArrayList<>();
