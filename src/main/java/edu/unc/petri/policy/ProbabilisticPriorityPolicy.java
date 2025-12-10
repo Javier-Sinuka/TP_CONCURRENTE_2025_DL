@@ -67,8 +67,8 @@ public class ProbabilisticPriorityPolicy implements PolicyInterface {
     }
 
     double conflictTotal = 0.0;
-    List<Integer> weightedCandidates = new java.util.ArrayList<>();
-    List<Integer> nonConflictCandidates = new java.util.ArrayList<>();
+    List<Integer> weightedTransitions = new java.util.ArrayList<>();
+    List<Integer> nonWeightedTransitions = new java.util.ArrayList<>();
     for (Integer t : transitions) {
       Integer weight = transitionProbabilities.get(t);
       if (weight != null) { // Only conflict transitions are expected to be configured
@@ -76,22 +76,22 @@ public class ProbabilisticPriorityPolicy implements PolicyInterface {
           throw new IllegalArgumentException(
               "Transition " + t + " has a non-positive probability weight");
         }
-        weightedCandidates.add(t);
+        weightedTransitions.add(t);
         conflictTotal += weight;
       } else {
-        nonConflictCandidates.add(t);
+        nonWeightedTransitions.add(t);
       }
     }
 
     // If no configured conflicts are present, pick uniformly at random.
-    if (weightedCandidates.isEmpty()) {
+    if (weightedTransitions.isEmpty()) {
       return transitions.get(random.nextInt(transitions.size()));
     }
 
     // Normalize over present conflict transitions only; non-conflicts do not participate.
     double r = random.nextDouble() * conflictTotal; // uniform in [0, sum(conflict weights))
     double cumulative = 0.0;
-    for (Integer t : weightedCandidates) {
+    for (Integer t : weightedTransitions) {
       cumulative += transitionProbabilities.get(t);
       if (r < cumulative) {
         return t;
@@ -99,6 +99,6 @@ public class ProbabilisticPriorityPolicy implements PolicyInterface {
     }
 
     // Defensive fallback; logic should always return inside the loop.
-    return weightedCandidates.get(weightedCandidates.size() - 1);
+    return weightedTransitions.get(weightedTransitions.size() - 1);
   }
 }
