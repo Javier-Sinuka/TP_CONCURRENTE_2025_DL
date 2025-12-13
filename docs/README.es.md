@@ -66,7 +66,7 @@ java -jar target/petri-sim-1.0.jar [opciones] [ruta_del_archivo_de_configuració
 | `--runs <N>`      | Ejecutar la simulación `N` veces. Por defecto es 1.                                                           |
 | `--statistics`    | Cuando `--runs > 1`, suprime los informes de ejecución individuales y muestra un informe estadístico final con promedios. |
 | `--debug`         | Habilitar el log de depuración detallado. El archivo de log se especifica mediante `logPath` en la configuración JSON. |
-| `--regex-checker` | Después de cada ejecución de la simulación, ejecutar `scripts/invariant_checker.py`.                               |
+| `--regex-checker` | Después de cada ejecución de la simulación, ejecutar `invariant_checker/invariant_checker.py`.                    |
 | `--help`          | Mostrar el mensaje de ayuda y salir.                                                                          |
 
 ### Ejemplos
