@@ -48,7 +48,7 @@ deactivate Monitor
 |||
 EnableVector -> EnableVector: currentTime : System.nanoTime()
 |||
-EnableVector -> TimeRangeMatrix: isInsideTimeRange (int transition, long enabledTime, long currentTime)
+EnableVector -> TimeRangeMatrix: isInsideTimeRange (int transition, long transitionTokenEnablementTimes[transitionIndex], long currentTime)
 activate TimeRangeMatrix
 TimeRangeMatrix --> EnableVector: isTimeEnabled
 deactivate TimeRangeMatrix
@@ -58,7 +58,7 @@ deactivate TimeRangeMatrix
 ' ===== !isTimeEnable CONTROL ======='
 opt [!isTimeEnabled]
   |||
-  EnableVector -> TimeRangeMatrix: isBeforeTimeRange (int transition,long enableTime, long currentTime)
+  EnableVector -> TimeRangeMatrix: isBeforeTimeRange (int transition, long transitionTokenEnablementTimes[transitionIndex], long currentTime)
   activate TimeRangeMatrix
   TimeRangeMatrix --> EnableVector: boolean
   deactivate TimeRangeMatrix
@@ -90,11 +90,11 @@ opt [!isTimeEnabled]
 
     EnableVector -> TimeRangeMatrix: getSleepTimeToFire (int transition,long enableTime)
     activate TimeRangeMatrix
-    TimeRangeMatrix --> EnableVector: sleepNanos
+    TimeRangeMatrix --> EnableVector: long sleepNanos
     deactivate TimeRangeMatrix
     |||
-    EnableVector -> EnableVector: throw new TransitionTimeNotReachedException (int sleepNanos)
-    break TransitionTimeNotReachedException (int sleepNanos)
+    EnableVector -> EnableVector: throw new TransitionTimeNotReachedException (long sleepNanos)
+    break TransitionTimeNotReachedException (long sleepNanos)
       |||
       EnableVector --> Monitor:
       activate Monitor
