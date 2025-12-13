@@ -121,7 +121,7 @@ segments:
     transitions: [0, 1, 2, 3]
 
 # Policy for choosing which transition to fire when multiple are enabled.
-# Options: random, priority.
+# Options: random, priority and priority-probabilistic.
 policy: random
 
 # Transition weights used by the "priority" policy. Higher numbers mean higher priority.
@@ -130,6 +130,13 @@ transitionWeights:
   1: 1
   2: 1
   3: 1
+
+# Transition firing probabilities (0-100 integers) used by the "priority-probabilistic" policy.
+transitionProbabilities:
+  0: 25
+  1: 25
+  2: 25
+  3: 25
 ```
 
 ## Contributing

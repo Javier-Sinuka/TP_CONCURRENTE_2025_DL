@@ -59,15 +59,15 @@ java -jar target/petri-sim-1.0.jar [opciones] [ruta_del_archivo_de_configuració
 
 ### Opciones de Línea de Comandos
 
-| Opción            | Descripción                                                                                                   |
-|-------------------|---------------------------------------------------------------------------------------------------------------|
-| `--analysis`      | Ejecutar solo el análisis estático de la red de Petri (invariantes P/T, conflictos).                           |
-| `--simulation`    | Ejecutar solo la simulación.                                                                                  |
-| `--runs <N>`      | Ejecutar la simulación `N` veces. Por defecto es 1.                                                           |
+| Opción            | Descripción                                                                                                               |
+|-------------------|---------------------------------------------------------------------------------------------------------------------------|
+| `--analysis`      | Ejecutar solo el análisis estático de la red de Petri (invariantes P/T, conflictos).                                      |
+| `--simulation`    | Ejecutar solo la simulación.                                                                                              |
+| `--runs <N>`      | Ejecutar la simulación `N` veces. Por defecto es 1.                                                                       |
 | `--statistics`    | Cuando `--runs > 1`, suprime los informes de ejecución individuales y muestra un informe estadístico final con promedios. |
-| `--debug`         | Habilitar el log de depuración detallado. El archivo de log se especifica mediante `logPath` en la configuración YAML. |
-| `--regex-checker` | Después de cada ejecución de la simulación, ejecutar `scripts/invariant_checker.py`.                               |
-| `--help`          | Mostrar el mensaje de ayuda y salir.                                                                          |
+| `--debug`         | Habilitar el log de depuración detallado. El archivo de log se especifica mediante `logPath` en la configuración YAML.    |
+| `--regex-checker` | Después de cada ejecución de la simulación, ejecutar `scripts/invariant_checker.py`.                                      |
+| `--help`          | Mostrar el mensaje de ayuda y salir.                                                                                      |
 
 ### Ejemplos
 *   **Ejecutar tanto el análisis como una única simulación (comportamiento predeterminado):**
@@ -121,7 +121,7 @@ segments:
     transitions: [0, 1, 2, 3]
 
 # Política para elegir qué transición disparar cuando varias están habilitadas.
-# Opciones: random, priority.
+# Opciones: random, priority y priority-probabilistic.
 policy: random
 
 # Mapa de pesos de transición usado por la política "priority". Números más altos implican mayor prioridad.
@@ -131,6 +131,14 @@ transitionWeights:
   1: 1
   2: 1
   3: 1
+
+# Mapa de probabilidades (en enteros de 0 a 100) usado por "priority-probabilistic".
+# Solo es necesario si la política es "priority-probabilistic".
+transitionProbabilities:
+  0: 25
+  1: 25
+  2: 25
+  3: 25
 ```
 
 ## Contribuciones

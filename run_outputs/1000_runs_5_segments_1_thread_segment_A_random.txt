@@ -1,0 +1,3034 @@
+============================= Petri-Sim =============================
+Config:   config_5_segments_1_thread_segment_A_random.json
+Runs:     1000
+Analysis: false | Simulation: true | Debug: false | Statistics: true
+=====================================================================
+
+================== Starting Run 1 of 1000 ==================
+--- Simulation Run Complete (28791 ms) ---
+
+================== Starting Run 2 of 1000 ==================
+--- Simulation Run Complete (25723 ms) ---
+
+================== Starting Run 3 of 1000 ==================
+--- Simulation Run Complete (27553 ms) ---
+
+================== Starting Run 4 of 1000 ==================
+--- Simulation Run Complete (27053 ms) ---
+
+================== Starting Run 5 of 1000 ==================
+--- Simulation Run Complete (27395 ms) ---
+
+================== Starting Run 6 of 1000 ==================
+--- Simulation Run Complete (26357 ms) ---
+
+================== Starting Run 7 of 1000 ==================
+--- Simulation Run Complete (26391 ms) ---
+
+================== Starting Run 8 of 1000 ==================
+--- Simulation Run Complete (26894 ms) ---
+
+================== Starting Run 9 of 1000 ==================
+--- Simulation Run Complete (27191 ms) ---
+
+================== Starting Run 10 of 1000 ==================
+--- Simulation Run Complete (27606 ms) ---
+
+================== Starting Run 11 of 1000 ==================
+--- Simulation Run Complete (27342 ms) ---
+
+================== Starting Run 12 of 1000 ==================
+--- Simulation Run Complete (27747 ms) ---
+
+================== Starting Run 13 of 1000 ==================
+--- Simulation Run Complete (26853 ms) ---
+
+================== Starting Run 14 of 1000 ==================
+--- Simulation Run Complete (27057 ms) ---
+
+================== Starting Run 15 of 1000 ==================
+--- Simulation Run Complete (26923 ms) ---
+
+================== Starting Run 16 of 1000 ==================
+--- Simulation Run Complete (27542 ms) ---
+
+================== Starting Run 17 of 1000 ==================
+--- Simulation Run Complete (26986 ms) ---
+
+================== Starting Run 18 of 1000 ==================
+--- Simulation Run Complete (27411 ms) ---
+
+================== Starting Run 19 of 1000 ==================
+--- Simulation Run Complete (26894 ms) ---
+
+================== Starting Run 20 of 1000 ==================
+--- Simulation Run Complete (27341 ms) ---
+
+================== Starting Run 21 of 1000 ==================
+--- Simulation Run Complete (25975 ms) ---
+
+================== Starting Run 22 of 1000 ==================
+--- Simulation Run Complete (26706 ms) ---
+
+================== Starting Run 23 of 1000 ==================
+--- Simulation Run Complete (26725 ms) ---
+
+================== Starting Run 24 of 1000 ==================
+--- Simulation Run Complete (27010 ms) ---
+
+================== Starting Run 25 of 1000 ==================
+--- Simulation Run Complete (27018 ms) ---
+
+================== Starting Run 26 of 1000 ==================
+--- Simulation Run Complete (27776 ms) ---
+
+================== Starting Run 27 of 1000 ==================
+--- Simulation Run Complete (27711 ms) ---
+
+================== Starting Run 28 of 1000 ==================
+--- Simulation Run Complete (27359 ms) ---
+
+================== Starting Run 29 of 1000 ==================
+--- Simulation Run Complete (27269 ms) ---
+
+================== Starting Run 30 of 1000 ==================
+--- Simulation Run Complete (27451 ms) ---
+
+================== Starting Run 31 of 1000 ==================
+--- Simulation Run Complete (25961 ms) ---
+
+================== Starting Run 32 of 1000 ==================
+--- Simulation Run Complete (28106 ms) ---
+
+================== Starting Run 33 of 1000 ==================
+--- Simulation Run Complete (26923 ms) ---
+
+================== Starting Run 34 of 1000 ==================
+--- Simulation Run Complete (26477 ms) ---
+
+================== Starting Run 35 of 1000 ==================
+--- Simulation Run Complete (26757 ms) ---
+
+================== Starting Run 36 of 1000 ==================
+--- Simulation Run Complete (27147 ms) ---
+
+================== Starting Run 37 of 1000 ==================
+--- Simulation Run Complete (27814 ms) ---
+
+================== Starting Run 38 of 1000 ==================
+--- Simulation Run Complete (27732 ms) ---
+
+================== Starting Run 39 of 1000 ==================
+--- Simulation Run Complete (27661 ms) ---
+
+================== Starting Run 40 of 1000 ==================
+--- Simulation Run Complete (26810 ms) ---
+
+================== Starting Run 41 of 1000 ==================
+--- Simulation Run Complete (27056 ms) ---
+
+================== Starting Run 42 of 1000 ==================
+--- Simulation Run Complete (27228 ms) ---
+
+================== Starting Run 43 of 1000 ==================
+--- Simulation Run Complete (26772 ms) ---
+
+================== Starting Run 44 of 1000 ==================
+--- Simulation Run Complete (26427 ms) ---
+
+================== Starting Run 45 of 1000 ==================
+--- Simulation Run Complete (27261 ms) ---
+
+================== Starting Run 46 of 1000 ==================
+--- Simulation Run Complete (27493 ms) ---
+
+================== Starting Run 47 of 1000 ==================
+--- Simulation Run Complete (26372 ms) ---
+
+================== Starting Run 48 of 1000 ==================
+--- Simulation Run Complete (27905 ms) ---
+
+================== Starting Run 49 of 1000 ==================
+--- Simulation Run Complete (27615 ms) ---
+
+================== Starting Run 50 of 1000 ==================
+--- Simulation Run Complete (27175 ms) ---
+
+================== Starting Run 51 of 1000 ==================
+--- Simulation Run Complete (28293 ms) ---
+
+================== Starting Run 52 of 1000 ==================
+--- Simulation Run Complete (27791 ms) ---
+
+================== Starting Run 53 of 1000 ==================
+--- Simulation Run Complete (27607 ms) ---
+
+================== Starting Run 54 of 1000 ==================
+--- Simulation Run Complete (26721 ms) ---
+
+================== Starting Run 55 of 1000 ==================
+--- Simulation Run Complete (26428 ms) ---
+
+================== Starting Run 56 of 1000 ==================
+--- Simulation Run Complete (27750 ms) ---
+
+================== Starting Run 57 of 1000 ==================
+--- Simulation Run Complete (27151 ms) ---
+
+================== Starting Run 58 of 1000 ==================
+--- Simulation Run Complete (27095 ms) ---
+
+================== Starting Run 59 of 1000 ==================
+--- Simulation Run Complete (27311 ms) ---
+
+================== Starting Run 60 of 1000 ==================
+--- Simulation Run Complete (27339 ms) ---
+
+================== Starting Run 61 of 1000 ==================
+--- Simulation Run Complete (27819 ms) ---
+
+================== Starting Run 62 of 1000 ==================
+--- Simulation Run Complete (26721 ms) ---
+
+================== Starting Run 63 of 1000 ==================
+--- Simulation Run Complete (27938 ms) ---
+
+================== Starting Run 64 of 1000 ==================
+--- Simulation Run Complete (27914 ms) ---
+
+================== Starting Run 65 of 1000 ==================
+--- Simulation Run Complete (27280 ms) ---
+
+================== Starting Run 66 of 1000 ==================
+--- Simulation Run Complete (27398 ms) ---
+
+================== Starting Run 67 of 1000 ==================
+--- Simulation Run Complete (27672 ms) ---
+
+================== Starting Run 68 of 1000 ==================
+--- Simulation Run Complete (27328 ms) ---
+
+================== Starting Run 69 of 1000 ==================
+--- Simulation Run Complete (27333 ms) ---
+
+================== Starting Run 70 of 1000 ==================
+--- Simulation Run Complete (27781 ms) ---
+
+================== Starting Run 71 of 1000 ==================
+--- Simulation Run Complete (27369 ms) ---
+
+================== Starting Run 72 of 1000 ==================
+--- Simulation Run Complete (27420 ms) ---
+
+================== Starting Run 73 of 1000 ==================
+--- Simulation Run Complete (27924 ms) ---
+
+================== Starting Run 74 of 1000 ==================
+--- Simulation Run Complete (27067 ms) ---
+
+================== Starting Run 75 of 1000 ==================
+--- Simulation Run Complete (27359 ms) ---
+
+================== Starting Run 76 of 1000 ==================
+--- Simulation Run Complete (26842 ms) ---
+
+================== Starting Run 77 of 1000 ==================
+--- Simulation Run Complete (26889 ms) ---
+
+================== Starting Run 78 of 1000 ==================
+--- Simulation Run Complete (27839 ms) ---
+
+================== Starting Run 79 of 1000 ==================
+--- Simulation Run Complete (26870 ms) ---
+
+================== Starting Run 80 of 1000 ==================
+--- Simulation Run Complete (28064 ms) ---
+
+================== Starting Run 81 of 1000 ==================
+--- Simulation Run Complete (27206 ms) ---
+
+================== Starting Run 82 of 1000 ==================
+--- Simulation Run Complete (27595 ms) ---
+
+================== Starting Run 83 of 1000 ==================
+--- Simulation Run Complete (27159 ms) ---
+
+================== Starting Run 84 of 1000 ==================
+--- Simulation Run Complete (26580 ms) ---
+
+================== Starting Run 85 of 1000 ==================
+--- Simulation Run Complete (27231 ms) ---
+
+================== Starting Run 86 of 1000 ==================
+--- Simulation Run Complete (26777 ms) ---
+
+================== Starting Run 87 of 1000 ==================
+--- Simulation Run Complete (26612 ms) ---
+
+================== Starting Run 88 of 1000 ==================
+--- Simulation Run Complete (26446 ms) ---
+
+================== Starting Run 89 of 1000 ==================
+--- Simulation Run Complete (26748 ms) ---
+
+================== Starting Run 90 of 1000 ==================
+--- Simulation Run Complete (26909 ms) ---
+
+================== Starting Run 91 of 1000 ==================
+--- Simulation Run Complete (27179 ms) ---
+
+================== Starting Run 92 of 1000 ==================
+--- Simulation Run Complete (27239 ms) ---
+
+================== Starting Run 93 of 1000 ==================
+--- Simulation Run Complete (27219 ms) ---
+
+================== Starting Run 94 of 1000 ==================
+--- Simulation Run Complete (26711 ms) ---
+
+================== Starting Run 95 of 1000 ==================
+--- Simulation Run Complete (26701 ms) ---
+
+================== Starting Run 96 of 1000 ==================
+--- Simulation Run Complete (26974 ms) ---
+
+================== Starting Run 97 of 1000 ==================
+--- Simulation Run Complete (27467 ms) ---
+
+================== Starting Run 98 of 1000 ==================
+--- Simulation Run Complete (26899 ms) ---
+
+================== Starting Run 99 of 1000 ==================
+--- Simulation Run Complete (26750 ms) ---
+
+================== Starting Run 100 of 1000 ==================
+--- Simulation Run Complete (27597 ms) ---
+
+================== Starting Run 101 of 1000 ==================
+--- Simulation Run Complete (28680 ms) ---
+
+================== Starting Run 102 of 1000 ==================
+--- Simulation Run Complete (26926 ms) ---
+
+================== Starting Run 103 of 1000 ==================
+--- Simulation Run Complete (26904 ms) ---
+
+================== Starting Run 104 of 1000 ==================
+--- Simulation Run Complete (27103 ms) ---
+
+================== Starting Run 105 of 1000 ==================
+--- Simulation Run Complete (26951 ms) ---
+
+================== Starting Run 106 of 1000 ==================
+--- Simulation Run Complete (26566 ms) ---
+
+================== Starting Run 107 of 1000 ==================
+--- Simulation Run Complete (26935 ms) ---
+
+================== Starting Run 108 of 1000 ==================
+--- Simulation Run Complete (26874 ms) ---
+
+================== Starting Run 109 of 1000 ==================
+--- Simulation Run Complete (28342 ms) ---
+
+================== Starting Run 110 of 1000 ==================
+--- Simulation Run Complete (27094 ms) ---
+
+================== Starting Run 111 of 1000 ==================
+--- Simulation Run Complete (27016 ms) ---
+
+================== Starting Run 112 of 1000 ==================
+--- Simulation Run Complete (27751 ms) ---
+
+================== Starting Run 113 of 1000 ==================
+--- Simulation Run Complete (27680 ms) ---
+
+================== Starting Run 114 of 1000 ==================
+--- Simulation Run Complete (27048 ms) ---
+
+================== Starting Run 115 of 1000 ==================
+--- Simulation Run Complete (26760 ms) ---
+
+================== Starting Run 116 of 1000 ==================
+--- Simulation Run Complete (26889 ms) ---
+
+================== Starting Run 117 of 1000 ==================
+--- Simulation Run Complete (26624 ms) ---
+
+================== Starting Run 118 of 1000 ==================
+--- Simulation Run Complete (27267 ms) ---
+
+================== Starting Run 119 of 1000 ==================
+--- Simulation Run Complete (27216 ms) ---
+
+================== Starting Run 120 of 1000 ==================
+--- Simulation Run Complete (27525 ms) ---
+
+================== Starting Run 121 of 1000 ==================
+--- Simulation Run Complete (27831 ms) ---
+
+================== Starting Run 122 of 1000 ==================
+--- Simulation Run Complete (27250 ms) ---
+
+================== Starting Run 123 of 1000 ==================
+--- Simulation Run Complete (25956 ms) ---
+
+================== Starting Run 124 of 1000 ==================
+--- Simulation Run Complete (27159 ms) ---
+
+================== Starting Run 125 of 1000 ==================
+--- Simulation Run Complete (26987 ms) ---
+
+================== Starting Run 126 of 1000 ==================
+--- Simulation Run Complete (27100 ms) ---
+
+================== Starting Run 127 of 1000 ==================
+--- Simulation Run Complete (26545 ms) ---
+
+================== Starting Run 128 of 1000 ==================
+--- Simulation Run Complete (27509 ms) ---
+
+================== Starting Run 129 of 1000 ==================
+--- Simulation Run Complete (26872 ms) ---
+
+================== Starting Run 130 of 1000 ==================
+--- Simulation Run Complete (27223 ms) ---
+
+================== Starting Run 131 of 1000 ==================
+--- Simulation Run Complete (27556 ms) ---
+
+================== Starting Run 132 of 1000 ==================
+--- Simulation Run Complete (25334 ms) ---
+
+================== Starting Run 133 of 1000 ==================
+--- Simulation Run Complete (26702 ms) ---
+
+================== Starting Run 134 of 1000 ==================
+--- Simulation Run Complete (27360 ms) ---
+
+================== Starting Run 135 of 1000 ==================
+--- Simulation Run Complete (28224 ms) ---
+
+================== Starting Run 136 of 1000 ==================
+--- Simulation Run Complete (27225 ms) ---
+
+================== Starting Run 137 of 1000 ==================
+--- Simulation Run Complete (27164 ms) ---
+
+================== Starting Run 138 of 1000 ==================
+--- Simulation Run Complete (27327 ms) ---
+
+================== Starting Run 139 of 1000 ==================
+--- Simulation Run Complete (27529 ms) ---
+
+================== Starting Run 140 of 1000 ==================
+--- Simulation Run Complete (27531 ms) ---
+
+================== Starting Run 141 of 1000 ==================
+--- Simulation Run Complete (27651 ms) ---
+
+================== Starting Run 142 of 1000 ==================
+--- Simulation Run Complete (28198 ms) ---
+
+================== Starting Run 143 of 1000 ==================
+--- Simulation Run Complete (27548 ms) ---
+
+================== Starting Run 144 of 1000 ==================
+--- Simulation Run Complete (27036 ms) ---
+
+================== Starting Run 145 of 1000 ==================
+--- Simulation Run Complete (26212 ms) ---
+
+================== Starting Run 146 of 1000 ==================
+--- Simulation Run Complete (27617 ms) ---
+
+================== Starting Run 147 of 1000 ==================
+--- Simulation Run Complete (26982 ms) ---
+
+================== Starting Run 148 of 1000 ==================
+--- Simulation Run Complete (26625 ms) ---
+
+================== Starting Run 149 of 1000 ==================
+--- Simulation Run Complete (26549 ms) ---
+
+================== Starting Run 150 of 1000 ==================
+--- Simulation Run Complete (27349 ms) ---
+
+================== Starting Run 151 of 1000 ==================
+--- Simulation Run Complete (27600 ms) ---
+
+================== Starting Run 152 of 1000 ==================
+--- Simulation Run Complete (27836 ms) ---
+
+================== Starting Run 153 of 1000 ==================
+--- Simulation Run Complete (26686 ms) ---
+
+================== Starting Run 154 of 1000 ==================
+--- Simulation Run Complete (26669 ms) ---
+
+================== Starting Run 155 of 1000 ==================
+--- Simulation Run Complete (28762 ms) ---
+
+================== Starting Run 156 of 1000 ==================
+--- Simulation Run Complete (27099 ms) ---
+
+================== Starting Run 157 of 1000 ==================
+--- Simulation Run Complete (26533 ms) ---
+
+================== Starting Run 158 of 1000 ==================
+--- Simulation Run Complete (26689 ms) ---
+
+================== Starting Run 159 of 1000 ==================
+--- Simulation Run Complete (28006 ms) ---
+
+================== Starting Run 160 of 1000 ==================
+--- Simulation Run Complete (27565 ms) ---
+
+================== Starting Run 161 of 1000 ==================
+--- Simulation Run Complete (27252 ms) ---
+
+================== Starting Run 162 of 1000 ==================
+--- Simulation Run Complete (27656 ms) ---
+
+================== Starting Run 163 of 1000 ==================
+--- Simulation Run Complete (26290 ms) ---
+
+================== Starting Run 164 of 1000 ==================
+--- Simulation Run Complete (26463 ms) ---
+
+================== Starting Run 165 of 1000 ==================
+--- Simulation Run Complete (26368 ms) ---
+
+================== Starting Run 166 of 1000 ==================
+--- Simulation Run Complete (27643 ms) ---
+
+================== Starting Run 167 of 1000 ==================
+--- Simulation Run Complete (27515 ms) ---
+
+================== Starting Run 168 of 1000 ==================
+--- Simulation Run Complete (27591 ms) ---
+
+================== Starting Run 169 of 1000 ==================
+--- Simulation Run Complete (26934 ms) ---
+
+================== Starting Run 170 of 1000 ==================
+--- Simulation Run Complete (26724 ms) ---
+
+================== Starting Run 171 of 1000 ==================
+--- Simulation Run Complete (27346 ms) ---
+
+================== Starting Run 172 of 1000 ==================
+--- Simulation Run Complete (27449 ms) ---
+
+================== Starting Run 173 of 1000 ==================
+--- Simulation Run Complete (27265 ms) ---
+
+================== Starting Run 174 of 1000 ==================
+--- Simulation Run Complete (26063 ms) ---
+
+================== Starting Run 175 of 1000 ==================
+--- Simulation Run Complete (27288 ms) ---
+
+================== Starting Run 176 of 1000 ==================
+--- Simulation Run Complete (27608 ms) ---
+
+================== Starting Run 177 of 1000 ==================
+--- Simulation Run Complete (27082 ms) ---
+
+================== Starting Run 178 of 1000 ==================
+--- Simulation Run Complete (28237 ms) ---
+
+================== Starting Run 179 of 1000 ==================
+--- Simulation Run Complete (27329 ms) ---
+
+================== Starting Run 180 of 1000 ==================
+--- Simulation Run Complete (27329 ms) ---
+
+================== Starting Run 181 of 1000 ==================
+--- Simulation Run Complete (27175 ms) ---
+
+================== Starting Run 182 of 1000 ==================
+--- Simulation Run Complete (27482 ms) ---
+
+================== Starting Run 183 of 1000 ==================
+--- Simulation Run Complete (27490 ms) ---
+
+================== Starting Run 184 of 1000 ==================
+--- Simulation Run Complete (26577 ms) ---
+
+================== Starting Run 185 of 1000 ==================
+--- Simulation Run Complete (27156 ms) ---
+
+================== Starting Run 186 of 1000 ==================
+--- Simulation Run Complete (27111 ms) ---
+
+================== Starting Run 187 of 1000 ==================
+--- Simulation Run Complete (28293 ms) ---
+
+================== Starting Run 188 of 1000 ==================
+--- Simulation Run Complete (26670 ms) ---
+
+================== Starting Run 189 of 1000 ==================
+--- Simulation Run Complete (27491 ms) ---
+
+================== Starting Run 190 of 1000 ==================
+--- Simulation Run Complete (26742 ms) ---
+
+================== Starting Run 191 of 1000 ==================
+--- Simulation Run Complete (26871 ms) ---
+
+================== Starting Run 192 of 1000 ==================
+--- Simulation Run Complete (27121 ms) ---
+
+================== Starting Run 193 of 1000 ==================
+--- Simulation Run Complete (26344 ms) ---
+
+================== Starting Run 194 of 1000 ==================
+--- Simulation Run Complete (28177 ms) ---
+
+================== Starting Run 195 of 1000 ==================
+--- Simulation Run Complete (26782 ms) ---
+
+================== Starting Run 196 of 1000 ==================
+--- Simulation Run Complete (27288 ms) ---
+
+================== Starting Run 197 of 1000 ==================
+--- Simulation Run Complete (27107 ms) ---
+
+================== Starting Run 198 of 1000 ==================
+--- Simulation Run Complete (27227 ms) ---
+
+================== Starting Run 199 of 1000 ==================
+--- Simulation Run Complete (27174 ms) ---
+
+================== Starting Run 200 of 1000 ==================
+--- Simulation Run Complete (27369 ms) ---
+
+================== Starting Run 201 of 1000 ==================
+--- Simulation Run Complete (27094 ms) ---
+
+================== Starting Run 202 of 1000 ==================
+--- Simulation Run Complete (27236 ms) ---
+
+================== Starting Run 203 of 1000 ==================
+--- Simulation Run Complete (26272 ms) ---
+
+================== Starting Run 204 of 1000 ==================
+--- Simulation Run Complete (28081 ms) ---
+
+================== Starting Run 205 of 1000 ==================
+--- Simulation Run Complete (27834 ms) ---
+
+================== Starting Run 206 of 1000 ==================
+--- Simulation Run Complete (26885 ms) ---
+
+================== Starting Run 207 of 1000 ==================
+--- Simulation Run Complete (28283 ms) ---
+
+================== Starting Run 208 of 1000 ==================
+--- Simulation Run Complete (26828 ms) ---
+
+================== Starting Run 209 of 1000 ==================
+--- Simulation Run Complete (26671 ms) ---
+
+================== Starting Run 210 of 1000 ==================
+--- Simulation Run Complete (26892 ms) ---
+
+================== Starting Run 211 of 1000 ==================
+--- Simulation Run Complete (26798 ms) ---
+
+================== Starting Run 212 of 1000 ==================
+--- Simulation Run Complete (26991 ms) ---
+
+================== Starting Run 213 of 1000 ==================
+--- Simulation Run Complete (26592 ms) ---
+
+================== Starting Run 214 of 1000 ==================
+--- Simulation Run Complete (27120 ms) ---
+
+================== Starting Run 215 of 1000 ==================
+--- Simulation Run Complete (27575 ms) ---
+
+================== Starting Run 216 of 1000 ==================
+--- Simulation Run Complete (27123 ms) ---
+
+================== Starting Run 217 of 1000 ==================
+--- Simulation Run Complete (27744 ms) ---
+
+================== Starting Run 218 of 1000 ==================
+--- Simulation Run Complete (26986 ms) ---
+
+================== Starting Run 219 of 1000 ==================
+--- Simulation Run Complete (27964 ms) ---
+
+================== Starting Run 220 of 1000 ==================
+--- Simulation Run Complete (26468 ms) ---
+
+================== Starting Run 221 of 1000 ==================
+--- Simulation Run Complete (27214 ms) ---
+
+================== Starting Run 222 of 1000 ==================
+--- Simulation Run Complete (27096 ms) ---
+
+================== Starting Run 223 of 1000 ==================
+--- Simulation Run Complete (27453 ms) ---
+
+================== Starting Run 224 of 1000 ==================
+--- Simulation Run Complete (27363 ms) ---
+
+================== Starting Run 225 of 1000 ==================
+--- Simulation Run Complete (26919 ms) ---
+
+================== Starting Run 226 of 1000 ==================
+--- Simulation Run Complete (27488 ms) ---
+
+================== Starting Run 227 of 1000 ==================
+--- Simulation Run Complete (28295 ms) ---
+
+================== Starting Run 228 of 1000 ==================
+--- Simulation Run Complete (26344 ms) ---
+
+================== Starting Run 229 of 1000 ==================
+--- Simulation Run Complete (28048 ms) ---
+
+================== Starting Run 230 of 1000 ==================
+--- Simulation Run Complete (27504 ms) ---
+
+================== Starting Run 231 of 1000 ==================
+--- Simulation Run Complete (27020 ms) ---
+
+================== Starting Run 232 of 1000 ==================
+--- Simulation Run Complete (27228 ms) ---
+
+================== Starting Run 233 of 1000 ==================
+--- Simulation Run Complete (26392 ms) ---
+
+================== Starting Run 234 of 1000 ==================
+--- Simulation Run Complete (27129 ms) ---
+
+================== Starting Run 235 of 1000 ==================
+--- Simulation Run Complete (27970 ms) ---
+
+================== Starting Run 236 of 1000 ==================
+--- Simulation Run Complete (26629 ms) ---
+
+================== Starting Run 237 of 1000 ==================
+--- Simulation Run Complete (27109 ms) ---
+
+================== Starting Run 238 of 1000 ==================
+--- Simulation Run Complete (26863 ms) ---
+
+================== Starting Run 239 of 1000 ==================
+--- Simulation Run Complete (28159 ms) ---
+
+================== Starting Run 240 of 1000 ==================
+--- Simulation Run Complete (27871 ms) ---
+
+================== Starting Run 241 of 1000 ==================
+--- Simulation Run Complete (26910 ms) ---
+
+================== Starting Run 242 of 1000 ==================
+--- Simulation Run Complete (27420 ms) ---
+
+================== Starting Run 243 of 1000 ==================
+--- Simulation Run Complete (27646 ms) ---
+
+================== Starting Run 244 of 1000 ==================
+--- Simulation Run Complete (28043 ms) ---
+
+================== Starting Run 245 of 1000 ==================
+--- Simulation Run Complete (26965 ms) ---
+
+================== Starting Run 246 of 1000 ==================
+--- Simulation Run Complete (27497 ms) ---
+
+================== Starting Run 247 of 1000 ==================
+--- Simulation Run Complete (26918 ms) ---
+
+================== Starting Run 248 of 1000 ==================
+--- Simulation Run Complete (27497 ms) ---
+
+================== Starting Run 249 of 1000 ==================
+--- Simulation Run Complete (27802 ms) ---
+
+================== Starting Run 250 of 1000 ==================
+--- Simulation Run Complete (27209 ms) ---
+
+================== Starting Run 251 of 1000 ==================
+--- Simulation Run Complete (26930 ms) ---
+
+================== Starting Run 252 of 1000 ==================
+--- Simulation Run Complete (27293 ms) ---
+
+================== Starting Run 253 of 1000 ==================
+--- Simulation Run Complete (27618 ms) ---
+
+================== Starting Run 254 of 1000 ==================
+--- Simulation Run Complete (26368 ms) ---
+
+================== Starting Run 255 of 1000 ==================
+--- Simulation Run Complete (26530 ms) ---
+
+================== Starting Run 256 of 1000 ==================
+--- Simulation Run Complete (27499 ms) ---
+
+================== Starting Run 257 of 1000 ==================
+--- Simulation Run Complete (27523 ms) ---
+
+================== Starting Run 258 of 1000 ==================
+--- Simulation Run Complete (26885 ms) ---
+
+================== Starting Run 259 of 1000 ==================
+--- Simulation Run Complete (26773 ms) ---
+
+================== Starting Run 260 of 1000 ==================
+--- Simulation Run Complete (27542 ms) ---
+
+================== Starting Run 261 of 1000 ==================
+--- Simulation Run Complete (27771 ms) ---
+
+================== Starting Run 262 of 1000 ==================
+--- Simulation Run Complete (26892 ms) ---
+
+================== Starting Run 263 of 1000 ==================
+--- Simulation Run Complete (27941 ms) ---
+
+================== Starting Run 264 of 1000 ==================
+--- Simulation Run Complete (26754 ms) ---
+
+================== Starting Run 265 of 1000 ==================
+--- Simulation Run Complete (27128 ms) ---
+
+================== Starting Run 266 of 1000 ==================
+--- Simulation Run Complete (26815 ms) ---
+
+================== Starting Run 267 of 1000 ==================
+--- Simulation Run Complete (27448 ms) ---
+
+================== Starting Run 268 of 1000 ==================
+--- Simulation Run Complete (27255 ms) ---
+
+================== Starting Run 269 of 1000 ==================
+--- Simulation Run Complete (26536 ms) ---
+
+================== Starting Run 270 of 1000 ==================
+--- Simulation Run Complete (27039 ms) ---
+
+================== Starting Run 271 of 1000 ==================
+--- Simulation Run Complete (26941 ms) ---
+
+================== Starting Run 272 of 1000 ==================
+--- Simulation Run Complete (26395 ms) ---
+
+================== Starting Run 273 of 1000 ==================
+--- Simulation Run Complete (27294 ms) ---
+
+================== Starting Run 274 of 1000 ==================
+--- Simulation Run Complete (26259 ms) ---
+
+================== Starting Run 275 of 1000 ==================
+--- Simulation Run Complete (25901 ms) ---
+
+================== Starting Run 276 of 1000 ==================
+--- Simulation Run Complete (27039 ms) ---
+
+================== Starting Run 277 of 1000 ==================
+--- Simulation Run Complete (27291 ms) ---
+
+================== Starting Run 278 of 1000 ==================
+--- Simulation Run Complete (27140 ms) ---
+
+================== Starting Run 279 of 1000 ==================
+--- Simulation Run Complete (28065 ms) ---
+
+================== Starting Run 280 of 1000 ==================
+--- Simulation Run Complete (26632 ms) ---
+
+================== Starting Run 281 of 1000 ==================
+--- Simulation Run Complete (27677 ms) ---
+
+================== Starting Run 282 of 1000 ==================
+--- Simulation Run Complete (26383 ms) ---
+
+================== Starting Run 283 of 1000 ==================
+--- Simulation Run Complete (26725 ms) ---
+
+================== Starting Run 284 of 1000 ==================
+--- Simulation Run Complete (27201 ms) ---
+
+================== Starting Run 285 of 1000 ==================
+--- Simulation Run Complete (26944 ms) ---
+
+================== Starting Run 286 of 1000 ==================
+--- Simulation Run Complete (26595 ms) ---
+
+================== Starting Run 287 of 1000 ==================
+--- Simulation Run Complete (26967 ms) ---
+
+================== Starting Run 288 of 1000 ==================
+--- Simulation Run Complete (26731 ms) ---
+
+================== Starting Run 289 of 1000 ==================
+--- Simulation Run Complete (27795 ms) ---
+
+================== Starting Run 290 of 1000 ==================
+--- Simulation Run Complete (27054 ms) ---
+
+================== Starting Run 291 of 1000 ==================
+--- Simulation Run Complete (27851 ms) ---
+
+================== Starting Run 292 of 1000 ==================
+--- Simulation Run Complete (27142 ms) ---
+
+================== Starting Run 293 of 1000 ==================
+--- Simulation Run Complete (27576 ms) ---
+
+================== Starting Run 294 of 1000 ==================
+--- Simulation Run Complete (27436 ms) ---
+
+================== Starting Run 295 of 1000 ==================
+--- Simulation Run Complete (27842 ms) ---
+
+================== Starting Run 296 of 1000 ==================
+--- Simulation Run Complete (27497 ms) ---
+
+================== Starting Run 297 of 1000 ==================
+--- Simulation Run Complete (27614 ms) ---
+
+================== Starting Run 298 of 1000 ==================
+--- Simulation Run Complete (27263 ms) ---
+
+================== Starting Run 299 of 1000 ==================
+--- Simulation Run Complete (27683 ms) ---
+
+================== Starting Run 300 of 1000 ==================
+--- Simulation Run Complete (26479 ms) ---
+
+================== Starting Run 301 of 1000 ==================
+--- Simulation Run Complete (27586 ms) ---
+
+================== Starting Run 302 of 1000 ==================
+--- Simulation Run Complete (27585 ms) ---
+
+================== Starting Run 303 of 1000 ==================
+--- Simulation Run Complete (27312 ms) ---
+
+================== Starting Run 304 of 1000 ==================
+--- Simulation Run Complete (27093 ms) ---
+
+================== Starting Run 305 of 1000 ==================
+--- Simulation Run Complete (27125 ms) ---
+
+================== Starting Run 306 of 1000 ==================
+--- Simulation Run Complete (27907 ms) ---
+
+================== Starting Run 307 of 1000 ==================
+--- Simulation Run Complete (27268 ms) ---
+
+================== Starting Run 308 of 1000 ==================
+--- Simulation Run Complete (27867 ms) ---
+
+================== Starting Run 309 of 1000 ==================
+--- Simulation Run Complete (27743 ms) ---
+
+================== Starting Run 310 of 1000 ==================
+--- Simulation Run Complete (27570 ms) ---
+
+================== Starting Run 311 of 1000 ==================
+--- Simulation Run Complete (26593 ms) ---
+
+================== Starting Run 312 of 1000 ==================
+--- Simulation Run Complete (27655 ms) ---
+
+================== Starting Run 313 of 1000 ==================
+--- Simulation Run Complete (26368 ms) ---
+
+================== Starting Run 314 of 1000 ==================
+--- Simulation Run Complete (27570 ms) ---
+
+================== Starting Run 315 of 1000 ==================
+--- Simulation Run Complete (27481 ms) ---
+
+================== Starting Run 316 of 1000 ==================
+--- Simulation Run Complete (28270 ms) ---
+
+================== Starting Run 317 of 1000 ==================
+--- Simulation Run Complete (27124 ms) ---
+
+================== Starting Run 318 of 1000 ==================
+--- Simulation Run Complete (27285 ms) ---
+
+================== Starting Run 319 of 1000 ==================
+--- Simulation Run Complete (27122 ms) ---
+
+================== Starting Run 320 of 1000 ==================
+--- Simulation Run Complete (27538 ms) ---
+
+================== Starting Run 321 of 1000 ==================
+--- Simulation Run Complete (27637 ms) ---
+
+================== Starting Run 322 of 1000 ==================
+--- Simulation Run Complete (26734 ms) ---
+
+================== Starting Run 323 of 1000 ==================
+--- Simulation Run Complete (26949 ms) ---
+
+================== Starting Run 324 of 1000 ==================
+--- Simulation Run Complete (26743 ms) ---
+
+================== Starting Run 325 of 1000 ==================
+--- Simulation Run Complete (26867 ms) ---
+
+================== Starting Run 326 of 1000 ==================
+--- Simulation Run Complete (26227 ms) ---
+
+================== Starting Run 327 of 1000 ==================
+--- Simulation Run Complete (26422 ms) ---
+
+================== Starting Run 328 of 1000 ==================
+--- Simulation Run Complete (27818 ms) ---
+
+================== Starting Run 329 of 1000 ==================
+--- Simulation Run Complete (27681 ms) ---
+
+================== Starting Run 330 of 1000 ==================
+--- Simulation Run Complete (27933 ms) ---
+
+================== Starting Run 331 of 1000 ==================
+--- Simulation Run Complete (27123 ms) ---
+
+================== Starting Run 332 of 1000 ==================
+--- Simulation Run Complete (27417 ms) ---
+
+================== Starting Run 333 of 1000 ==================
+--- Simulation Run Complete (27982 ms) ---
+
+================== Starting Run 334 of 1000 ==================
+--- Simulation Run Complete (27069 ms) ---
+
+================== Starting Run 335 of 1000 ==================
+--- Simulation Run Complete (26782 ms) ---
+
+================== Starting Run 336 of 1000 ==================
+--- Simulation Run Complete (26663 ms) ---
+
+================== Starting Run 337 of 1000 ==================
+--- Simulation Run Complete (26866 ms) ---
+
+================== Starting Run 338 of 1000 ==================
+--- Simulation Run Complete (26822 ms) ---
+
+================== Starting Run 339 of 1000 ==================
+--- Simulation Run Complete (26763 ms) ---
+
+================== Starting Run 340 of 1000 ==================
+--- Simulation Run Complete (25679 ms) ---
+
+================== Starting Run 341 of 1000 ==================
+--- Simulation Run Complete (27521 ms) ---
+
+================== Starting Run 342 of 1000 ==================
+--- Simulation Run Complete (26981 ms) ---
+
+================== Starting Run 343 of 1000 ==================
+--- Simulation Run Complete (27264 ms) ---
+
+================== Starting Run 344 of 1000 ==================
+--- Simulation Run Complete (27583 ms) ---
+
+================== Starting Run 345 of 1000 ==================
+--- Simulation Run Complete (27933 ms) ---
+
+================== Starting Run 346 of 1000 ==================
+--- Simulation Run Complete (27082 ms) ---
+
+================== Starting Run 347 of 1000 ==================
+--- Simulation Run Complete (26576 ms) ---
+
+================== Starting Run 348 of 1000 ==================
+--- Simulation Run Complete (26928 ms) ---
+
+================== Starting Run 349 of 1000 ==================
+--- Simulation Run Complete (26991 ms) ---
+
+================== Starting Run 350 of 1000 ==================
+--- Simulation Run Complete (27374 ms) ---
+
+================== Starting Run 351 of 1000 ==================
+--- Simulation Run Complete (27426 ms) ---
+
+================== Starting Run 352 of 1000 ==================
+--- Simulation Run Complete (27528 ms) ---
+
+================== Starting Run 353 of 1000 ==================
+--- Simulation Run Complete (26633 ms) ---
+
+================== Starting Run 354 of 1000 ==================
+--- Simulation Run Complete (27407 ms) ---
+
+================== Starting Run 355 of 1000 ==================
+--- Simulation Run Complete (27099 ms) ---
+
+================== Starting Run 356 of 1000 ==================
+--- Simulation Run Complete (27054 ms) ---
+
+================== Starting Run 357 of 1000 ==================
+--- Simulation Run Complete (27133 ms) ---
+
+================== Starting Run 358 of 1000 ==================
+--- Simulation Run Complete (27421 ms) ---
+
+================== Starting Run 359 of 1000 ==================
+--- Simulation Run Complete (26420 ms) ---
+
+================== Starting Run 360 of 1000 ==================
+--- Simulation Run Complete (27149 ms) ---
+
+================== Starting Run 361 of 1000 ==================
+--- Simulation Run Complete (28883 ms) ---
+
+================== Starting Run 362 of 1000 ==================
+--- Simulation Run Complete (27070 ms) ---
+
+================== Starting Run 363 of 1000 ==================
+--- Simulation Run Complete (26837 ms) ---
+
+================== Starting Run 364 of 1000 ==================
+--- Simulation Run Complete (27362 ms) ---
+
+================== Starting Run 365 of 1000 ==================
+--- Simulation Run Complete (26143 ms) ---
+
+================== Starting Run 366 of 1000 ==================
+--- Simulation Run Complete (27460 ms) ---
+
+================== Starting Run 367 of 1000 ==================
+--- Simulation Run Complete (26777 ms) ---
+
+================== Starting Run 368 of 1000 ==================
+--- Simulation Run Complete (26397 ms) ---
+
+================== Starting Run 369 of 1000 ==================
+--- Simulation Run Complete (27788 ms) ---
+
+================== Starting Run 370 of 1000 ==================
+--- Simulation Run Complete (27190 ms) ---
+
+================== Starting Run 371 of 1000 ==================
+--- Simulation Run Complete (26672 ms) ---
+
+================== Starting Run 372 of 1000 ==================
+--- Simulation Run Complete (27047 ms) ---
+
+================== Starting Run 373 of 1000 ==================
+--- Simulation Run Complete (27475 ms) ---
+
+================== Starting Run 374 of 1000 ==================
+--- Simulation Run Complete (27925 ms) ---
+
+================== Starting Run 375 of 1000 ==================
+--- Simulation Run Complete (25669 ms) ---
+
+================== Starting Run 376 of 1000 ==================
+--- Simulation Run Complete (26636 ms) ---
+
+================== Starting Run 377 of 1000 ==================
+--- Simulation Run Complete (26735 ms) ---
+
+================== Starting Run 378 of 1000 ==================
+--- Simulation Run Complete (27434 ms) ---
+
+================== Starting Run 379 of 1000 ==================
+--- Simulation Run Complete (28117 ms) ---
+
+================== Starting Run 380 of 1000 ==================
+--- Simulation Run Complete (27701 ms) ---
+
+================== Starting Run 381 of 1000 ==================
+--- Simulation Run Complete (28084 ms) ---
+
+================== Starting Run 382 of 1000 ==================
+--- Simulation Run Complete (27219 ms) ---
+
+================== Starting Run 383 of 1000 ==================
+--- Simulation Run Complete (26972 ms) ---
+
+================== Starting Run 384 of 1000 ==================
+--- Simulation Run Complete (27864 ms) ---
+
+================== Starting Run 385 of 1000 ==================
+--- Simulation Run Complete (27673 ms) ---
+
+================== Starting Run 386 of 1000 ==================
+--- Simulation Run Complete (25689 ms) ---
+
+================== Starting Run 387 of 1000 ==================
+--- Simulation Run Complete (26831 ms) ---
+
+================== Starting Run 388 of 1000 ==================
+--- Simulation Run Complete (28150 ms) ---
+
+================== Starting Run 389 of 1000 ==================
+--- Simulation Run Complete (28041 ms) ---
+
+================== Starting Run 390 of 1000 ==================
+--- Simulation Run Complete (26663 ms) ---
+
+================== Starting Run 391 of 1000 ==================
+--- Simulation Run Complete (27309 ms) ---
+
+================== Starting Run 392 of 1000 ==================
+--- Simulation Run Complete (27980 ms) ---
+
+================== Starting Run 393 of 1000 ==================
+--- Simulation Run Complete (27394 ms) ---
+
+================== Starting Run 394 of 1000 ==================
+--- Simulation Run Complete (27779 ms) ---
+
+================== Starting Run 395 of 1000 ==================
+--- Simulation Run Complete (27348 ms) ---
+
+================== Starting Run 396 of 1000 ==================
+--- Simulation Run Complete (26537 ms) ---
+
+================== Starting Run 397 of 1000 ==================
+--- Simulation Run Complete (27187 ms) ---
+
+================== Starting Run 398 of 1000 ==================
+--- Simulation Run Complete (27284 ms) ---
+
+================== Starting Run 399 of 1000 ==================
+--- Simulation Run Complete (26493 ms) ---
+
+================== Starting Run 400 of 1000 ==================
+--- Simulation Run Complete (27329 ms) ---
+
+================== Starting Run 401 of 1000 ==================
+--- Simulation Run Complete (27129 ms) ---
+
+================== Starting Run 402 of 1000 ==================
+--- Simulation Run Complete (27476 ms) ---
+
+================== Starting Run 403 of 1000 ==================
+--- Simulation Run Complete (27063 ms) ---
+
+================== Starting Run 404 of 1000 ==================
+--- Simulation Run Complete (27319 ms) ---
+
+================== Starting Run 405 of 1000 ==================
+--- Simulation Run Complete (26781 ms) ---
+
+================== Starting Run 406 of 1000 ==================
+--- Simulation Run Complete (26136 ms) ---
+
+================== Starting Run 407 of 1000 ==================
+--- Simulation Run Complete (27121 ms) ---
+
+================== Starting Run 408 of 1000 ==================
+--- Simulation Run Complete (26576 ms) ---
+
+================== Starting Run 409 of 1000 ==================
+--- Simulation Run Complete (26457 ms) ---
+
+================== Starting Run 410 of 1000 ==================
+--- Simulation Run Complete (27344 ms) ---
+
+================== Starting Run 411 of 1000 ==================
+--- Simulation Run Complete (26839 ms) ---
+
+================== Starting Run 412 of 1000 ==================
+--- Simulation Run Complete (27079 ms) ---
+
+================== Starting Run 413 of 1000 ==================
+--- Simulation Run Complete (26601 ms) ---
+
+================== Starting Run 414 of 1000 ==================
+--- Simulation Run Complete (27358 ms) ---
+
+================== Starting Run 415 of 1000 ==================
+--- Simulation Run Complete (27075 ms) ---
+
+================== Starting Run 416 of 1000 ==================
+--- Simulation Run Complete (26755 ms) ---
+
+================== Starting Run 417 of 1000 ==================
+--- Simulation Run Complete (27581 ms) ---
+
+================== Starting Run 418 of 1000 ==================
+--- Simulation Run Complete (27122 ms) ---
+
+================== Starting Run 419 of 1000 ==================
+--- Simulation Run Complete (26600 ms) ---
+
+================== Starting Run 420 of 1000 ==================
+--- Simulation Run Complete (27530 ms) ---
+
+================== Starting Run 421 of 1000 ==================
+--- Simulation Run Complete (27248 ms) ---
+
+================== Starting Run 422 of 1000 ==================
+--- Simulation Run Complete (28272 ms) ---
+
+================== Starting Run 423 of 1000 ==================
+--- Simulation Run Complete (27340 ms) ---
+
+================== Starting Run 424 of 1000 ==================
+--- Simulation Run Complete (27180 ms) ---
+
+================== Starting Run 425 of 1000 ==================
+--- Simulation Run Complete (27075 ms) ---
+
+================== Starting Run 426 of 1000 ==================
+--- Simulation Run Complete (27783 ms) ---
+
+================== Starting Run 427 of 1000 ==================
+--- Simulation Run Complete (27296 ms) ---
+
+================== Starting Run 428 of 1000 ==================
+--- Simulation Run Complete (26408 ms) ---
+
+================== Starting Run 429 of 1000 ==================
+--- Simulation Run Complete (26991 ms) ---
+
+================== Starting Run 430 of 1000 ==================
+--- Simulation Run Complete (26791 ms) ---
+
+================== Starting Run 431 of 1000 ==================
+--- Simulation Run Complete (27437 ms) ---
+
+================== Starting Run 432 of 1000 ==================
+--- Simulation Run Complete (28314 ms) ---
+
+================== Starting Run 433 of 1000 ==================
+--- Simulation Run Complete (27052 ms) ---
+
+================== Starting Run 434 of 1000 ==================
+--- Simulation Run Complete (26249 ms) ---
+
+================== Starting Run 435 of 1000 ==================
+--- Simulation Run Complete (27703 ms) ---
+
+================== Starting Run 436 of 1000 ==================
+--- Simulation Run Complete (27201 ms) ---
+
+================== Starting Run 437 of 1000 ==================
+--- Simulation Run Complete (28309 ms) ---
+
+================== Starting Run 438 of 1000 ==================
+--- Simulation Run Complete (27411 ms) ---
+
+================== Starting Run 439 of 1000 ==================
+--- Simulation Run Complete (26879 ms) ---
+
+================== Starting Run 440 of 1000 ==================
+--- Simulation Run Complete (27818 ms) ---
+
+================== Starting Run 441 of 1000 ==================
+--- Simulation Run Complete (27246 ms) ---
+
+================== Starting Run 442 of 1000 ==================
+--- Simulation Run Complete (27542 ms) ---
+
+================== Starting Run 443 of 1000 ==================
+--- Simulation Run Complete (26672 ms) ---
+
+================== Starting Run 444 of 1000 ==================
+--- Simulation Run Complete (27440 ms) ---
+
+================== Starting Run 445 of 1000 ==================
+--- Simulation Run Complete (27562 ms) ---
+
+================== Starting Run 446 of 1000 ==================
+--- Simulation Run Complete (26643 ms) ---
+
+================== Starting Run 447 of 1000 ==================
+--- Simulation Run Complete (27519 ms) ---
+
+================== Starting Run 448 of 1000 ==================
+--- Simulation Run Complete (27771 ms) ---
+
+================== Starting Run 449 of 1000 ==================
+--- Simulation Run Complete (26686 ms) ---
+
+================== Starting Run 450 of 1000 ==================
+--- Simulation Run Complete (27272 ms) ---
+
+================== Starting Run 451 of 1000 ==================
+--- Simulation Run Complete (27551 ms) ---
+
+================== Starting Run 452 of 1000 ==================
+--- Simulation Run Complete (27532 ms) ---
+
+================== Starting Run 453 of 1000 ==================
+--- Simulation Run Complete (26571 ms) ---
+
+================== Starting Run 454 of 1000 ==================
+--- Simulation Run Complete (28034 ms) ---
+
+================== Starting Run 455 of 1000 ==================
+--- Simulation Run Complete (27782 ms) ---
+
+================== Starting Run 456 of 1000 ==================
+--- Simulation Run Complete (27413 ms) ---
+
+================== Starting Run 457 of 1000 ==================
+--- Simulation Run Complete (27371 ms) ---
+
+================== Starting Run 458 of 1000 ==================
+--- Simulation Run Complete (26940 ms) ---
+
+================== Starting Run 459 of 1000 ==================
+--- Simulation Run Complete (26674 ms) ---
+
+================== Starting Run 460 of 1000 ==================
+--- Simulation Run Complete (26482 ms) ---
+
+================== Starting Run 461 of 1000 ==================
+--- Simulation Run Complete (27069 ms) ---
+
+================== Starting Run 462 of 1000 ==================
+--- Simulation Run Complete (25960 ms) ---
+
+================== Starting Run 463 of 1000 ==================
+--- Simulation Run Complete (28053 ms) ---
+
+================== Starting Run 464 of 1000 ==================
+--- Simulation Run Complete (26946 ms) ---
+
+================== Starting Run 465 of 1000 ==================
+--- Simulation Run Complete (26962 ms) ---
+
+================== Starting Run 466 of 1000 ==================
+--- Simulation Run Complete (27017 ms) ---
+
+================== Starting Run 467 of 1000 ==================
+--- Simulation Run Complete (27907 ms) ---
+
+================== Starting Run 468 of 1000 ==================
+--- Simulation Run Complete (26467 ms) ---
+
+================== Starting Run 469 of 1000 ==================
+--- Simulation Run Complete (26964 ms) ---
+
+================== Starting Run 470 of 1000 ==================
+--- Simulation Run Complete (27493 ms) ---
+
+================== Starting Run 471 of 1000 ==================
+--- Simulation Run Complete (28011 ms) ---
+
+================== Starting Run 472 of 1000 ==================
+--- Simulation Run Complete (26620 ms) ---
+
+================== Starting Run 473 of 1000 ==================
+--- Simulation Run Complete (26588 ms) ---
+
+================== Starting Run 474 of 1000 ==================
+--- Simulation Run Complete (27099 ms) ---
+
+================== Starting Run 475 of 1000 ==================
+--- Simulation Run Complete (26928 ms) ---
+
+================== Starting Run 476 of 1000 ==================
+--- Simulation Run Complete (28004 ms) ---
+
+================== Starting Run 477 of 1000 ==================
+--- Simulation Run Complete (27532 ms) ---
+
+================== Starting Run 478 of 1000 ==================
+--- Simulation Run Complete (27421 ms) ---
+
+================== Starting Run 479 of 1000 ==================
+--- Simulation Run Complete (27403 ms) ---
+
+================== Starting Run 480 of 1000 ==================
+--- Simulation Run Complete (26756 ms) ---
+
+================== Starting Run 481 of 1000 ==================
+--- Simulation Run Complete (27306 ms) ---
+
+================== Starting Run 482 of 1000 ==================
+--- Simulation Run Complete (26754 ms) ---
+
+================== Starting Run 483 of 1000 ==================
+--- Simulation Run Complete (27008 ms) ---
+
+================== Starting Run 484 of 1000 ==================
+--- Simulation Run Complete (26441 ms) ---
+
+================== Starting Run 485 of 1000 ==================
+--- Simulation Run Complete (26968 ms) ---
+
+================== Starting Run 486 of 1000 ==================
+--- Simulation Run Complete (26414 ms) ---
+
+================== Starting Run 487 of 1000 ==================
+--- Simulation Run Complete (27225 ms) ---
+
+================== Starting Run 488 of 1000 ==================
+--- Simulation Run Complete (27857 ms) ---
+
+================== Starting Run 489 of 1000 ==================
+--- Simulation Run Complete (26419 ms) ---
+
+================== Starting Run 490 of 1000 ==================
+--- Simulation Run Complete (27151 ms) ---
+
+================== Starting Run 491 of 1000 ==================
+--- Simulation Run Complete (27156 ms) ---
+
+================== Starting Run 492 of 1000 ==================
+--- Simulation Run Complete (26695 ms) ---
+
+================== Starting Run 493 of 1000 ==================
+--- Simulation Run Complete (26180 ms) ---
+
+================== Starting Run 494 of 1000 ==================
+--- Simulation Run Complete (27992 ms) ---
+
+================== Starting Run 495 of 1000 ==================
+--- Simulation Run Complete (27619 ms) ---
+
+================== Starting Run 496 of 1000 ==================
+--- Simulation Run Complete (26234 ms) ---
+
+================== Starting Run 497 of 1000 ==================
+--- Simulation Run Complete (27485 ms) ---
+
+================== Starting Run 498 of 1000 ==================
+--- Simulation Run Complete (27336 ms) ---
+
+================== Starting Run 499 of 1000 ==================
+--- Simulation Run Complete (28048 ms) ---
+
+================== Starting Run 500 of 1000 ==================
+--- Simulation Run Complete (26703 ms) ---
+
+================== Starting Run 501 of 1000 ==================
+--- Simulation Run Complete (26710 ms) ---
+
+================== Starting Run 502 of 1000 ==================
+--- Simulation Run Complete (27036 ms) ---
+
+================== Starting Run 503 of 1000 ==================
+--- Simulation Run Complete (27134 ms) ---
+
+================== Starting Run 504 of 1000 ==================
+--- Simulation Run Complete (27028 ms) ---
+
+================== Starting Run 505 of 1000 ==================
+--- Simulation Run Complete (26418 ms) ---
+
+================== Starting Run 506 of 1000 ==================
+--- Simulation Run Complete (27557 ms) ---
+
+================== Starting Run 507 of 1000 ==================
+--- Simulation Run Complete (26670 ms) ---
+
+================== Starting Run 508 of 1000 ==================
+--- Simulation Run Complete (27330 ms) ---
+
+================== Starting Run 509 of 1000 ==================
+--- Simulation Run Complete (26589 ms) ---
+
+================== Starting Run 510 of 1000 ==================
+--- Simulation Run Complete (27626 ms) ---
+
+================== Starting Run 511 of 1000 ==================
+--- Simulation Run Complete (26589 ms) ---
+
+================== Starting Run 512 of 1000 ==================
+--- Simulation Run Complete (26311 ms) ---
+
+================== Starting Run 513 of 1000 ==================
+--- Simulation Run Complete (27964 ms) ---
+
+================== Starting Run 514 of 1000 ==================
+--- Simulation Run Complete (26843 ms) ---
+
+================== Starting Run 515 of 1000 ==================
+--- Simulation Run Complete (27326 ms) ---
+
+================== Starting Run 516 of 1000 ==================
+--- Simulation Run Complete (27754 ms) ---
+
+================== Starting Run 517 of 1000 ==================
+--- Simulation Run Complete (26504 ms) ---
+
+================== Starting Run 518 of 1000 ==================
+--- Simulation Run Complete (26507 ms) ---
+
+================== Starting Run 519 of 1000 ==================
+--- Simulation Run Complete (27148 ms) ---
+
+================== Starting Run 520 of 1000 ==================
+--- Simulation Run Complete (27694 ms) ---
+
+================== Starting Run 521 of 1000 ==================
+--- Simulation Run Complete (27316 ms) ---
+
+================== Starting Run 522 of 1000 ==================
+--- Simulation Run Complete (26742 ms) ---
+
+================== Starting Run 523 of 1000 ==================
+--- Simulation Run Complete (26585 ms) ---
+
+================== Starting Run 524 of 1000 ==================
+--- Simulation Run Complete (26293 ms) ---
+
+================== Starting Run 525 of 1000 ==================
+--- Simulation Run Complete (26641 ms) ---
+
+================== Starting Run 526 of 1000 ==================
+--- Simulation Run Complete (27096 ms) ---
+
+================== Starting Run 527 of 1000 ==================
+--- Simulation Run Complete (26839 ms) ---
+
+================== Starting Run 528 of 1000 ==================
+--- Simulation Run Complete (26756 ms) ---
+
+================== Starting Run 529 of 1000 ==================
+--- Simulation Run Complete (26746 ms) ---
+
+================== Starting Run 530 of 1000 ==================
+--- Simulation Run Complete (26958 ms) ---
+
+================== Starting Run 531 of 1000 ==================
+--- Simulation Run Complete (26880 ms) ---
+
+================== Starting Run 532 of 1000 ==================
+--- Simulation Run Complete (26748 ms) ---
+
+================== Starting Run 533 of 1000 ==================
+--- Simulation Run Complete (27083 ms) ---
+
+================== Starting Run 534 of 1000 ==================
+--- Simulation Run Complete (27191 ms) ---
+
+================== Starting Run 535 of 1000 ==================
+--- Simulation Run Complete (27837 ms) ---
+
+================== Starting Run 536 of 1000 ==================
+--- Simulation Run Complete (28304 ms) ---
+
+================== Starting Run 537 of 1000 ==================
+--- Simulation Run Complete (27458 ms) ---
+
+================== Starting Run 538 of 1000 ==================
+--- Simulation Run Complete (27742 ms) ---
+
+================== Starting Run 539 of 1000 ==================
+--- Simulation Run Complete (27086 ms) ---
+
+================== Starting Run 540 of 1000 ==================
+--- Simulation Run Complete (27245 ms) ---
+
+================== Starting Run 541 of 1000 ==================
+--- Simulation Run Complete (26041 ms) ---
+
+================== Starting Run 542 of 1000 ==================
+--- Simulation Run Complete (27426 ms) ---
+
+================== Starting Run 543 of 1000 ==================
+--- Simulation Run Complete (28092 ms) ---
+
+================== Starting Run 544 of 1000 ==================
+--- Simulation Run Complete (26643 ms) ---
+
+================== Starting Run 545 of 1000 ==================
+--- Simulation Run Complete (26531 ms) ---
+
+================== Starting Run 546 of 1000 ==================
+--- Simulation Run Complete (27025 ms) ---
+
+================== Starting Run 547 of 1000 ==================
+--- Simulation Run Complete (27673 ms) ---
+
+================== Starting Run 548 of 1000 ==================
+--- Simulation Run Complete (27911 ms) ---
+
+================== Starting Run 549 of 1000 ==================
+--- Simulation Run Complete (27380 ms) ---
+
+================== Starting Run 550 of 1000 ==================
+--- Simulation Run Complete (26757 ms) ---
+
+================== Starting Run 551 of 1000 ==================
+--- Simulation Run Complete (26622 ms) ---
+
+================== Starting Run 552 of 1000 ==================
+--- Simulation Run Complete (26629 ms) ---
+
+================== Starting Run 553 of 1000 ==================
+--- Simulation Run Complete (26558 ms) ---
+
+================== Starting Run 554 of 1000 ==================
+--- Simulation Run Complete (27771 ms) ---
+
+================== Starting Run 555 of 1000 ==================
+--- Simulation Run Complete (26861 ms) ---
+
+================== Starting Run 556 of 1000 ==================
+--- Simulation Run Complete (28335 ms) ---
+
+================== Starting Run 557 of 1000 ==================
+--- Simulation Run Complete (26577 ms) ---
+
+================== Starting Run 558 of 1000 ==================
+--- Simulation Run Complete (26541 ms) ---
+
+================== Starting Run 559 of 1000 ==================
+--- Simulation Run Complete (27870 ms) ---
+
+================== Starting Run 560 of 1000 ==================
+--- Simulation Run Complete (27467 ms) ---
+
+================== Starting Run 561 of 1000 ==================
+--- Simulation Run Complete (27219 ms) ---
+
+================== Starting Run 562 of 1000 ==================
+--- Simulation Run Complete (27489 ms) ---
+
+================== Starting Run 563 of 1000 ==================
+--- Simulation Run Complete (26938 ms) ---
+
+================== Starting Run 564 of 1000 ==================
+--- Simulation Run Complete (27611 ms) ---
+
+================== Starting Run 565 of 1000 ==================
+--- Simulation Run Complete (26827 ms) ---
+
+================== Starting Run 566 of 1000 ==================
+--- Simulation Run Complete (25976 ms) ---
+
+================== Starting Run 567 of 1000 ==================
+--- Simulation Run Complete (27123 ms) ---
+
+================== Starting Run 568 of 1000 ==================
+--- Simulation Run Complete (26721 ms) ---
+
+================== Starting Run 569 of 1000 ==================
+--- Simulation Run Complete (26794 ms) ---
+
+================== Starting Run 570 of 1000 ==================
+--- Simulation Run Complete (27487 ms) ---
+
+================== Starting Run 571 of 1000 ==================
+--- Simulation Run Complete (26972 ms) ---
+
+================== Starting Run 572 of 1000 ==================
+--- Simulation Run Complete (26300 ms) ---
+
+================== Starting Run 573 of 1000 ==================
+--- Simulation Run Complete (26368 ms) ---
+
+================== Starting Run 574 of 1000 ==================
+--- Simulation Run Complete (27245 ms) ---
+
+================== Starting Run 575 of 1000 ==================
+--- Simulation Run Complete (27218 ms) ---
+
+================== Starting Run 576 of 1000 ==================
+--- Simulation Run Complete (27044 ms) ---
+
+================== Starting Run 577 of 1000 ==================
+--- Simulation Run Complete (26745 ms) ---
+
+================== Starting Run 578 of 1000 ==================
+--- Simulation Run Complete (27351 ms) ---
+
+================== Starting Run 579 of 1000 ==================
+--- Simulation Run Complete (28145 ms) ---
+
+================== Starting Run 580 of 1000 ==================
+--- Simulation Run Complete (26487 ms) ---
+
+================== Starting Run 581 of 1000 ==================
+--- Simulation Run Complete (27653 ms) ---
+
+================== Starting Run 582 of 1000 ==================
+--- Simulation Run Complete (27465 ms) ---
+
+================== Starting Run 583 of 1000 ==================
+--- Simulation Run Complete (27331 ms) ---
+
+================== Starting Run 584 of 1000 ==================
+--- Simulation Run Complete (27772 ms) ---
+
+================== Starting Run 585 of 1000 ==================
+--- Simulation Run Complete (27222 ms) ---
+
+================== Starting Run 586 of 1000 ==================
+--- Simulation Run Complete (26919 ms) ---
+
+================== Starting Run 587 of 1000 ==================
+--- Simulation Run Complete (27608 ms) ---
+
+================== Starting Run 588 of 1000 ==================
+--- Simulation Run Complete (27179 ms) ---
+
+================== Starting Run 589 of 1000 ==================
+--- Simulation Run Complete (27443 ms) ---
+
+================== Starting Run 590 of 1000 ==================
+--- Simulation Run Complete (26184 ms) ---
+
+================== Starting Run 591 of 1000 ==================
+--- Simulation Run Complete (27952 ms) ---
+
+================== Starting Run 592 of 1000 ==================
+--- Simulation Run Complete (26841 ms) ---
+
+================== Starting Run 593 of 1000 ==================
+--- Simulation Run Complete (27869 ms) ---
+
+================== Starting Run 594 of 1000 ==================
+--- Simulation Run Complete (26708 ms) ---
+
+================== Starting Run 595 of 1000 ==================
+--- Simulation Run Complete (26471 ms) ---
+
+================== Starting Run 596 of 1000 ==================
+--- Simulation Run Complete (26435 ms) ---
+
+================== Starting Run 597 of 1000 ==================
+--- Simulation Run Complete (26855 ms) ---
+
+================== Starting Run 598 of 1000 ==================
+--- Simulation Run Complete (26976 ms) ---
+
+================== Starting Run 599 of 1000 ==================
+--- Simulation Run Complete (27622 ms) ---
+
+================== Starting Run 600 of 1000 ==================
+--- Simulation Run Complete (26744 ms) ---
+
+================== Starting Run 601 of 1000 ==================
+--- Simulation Run Complete (26802 ms) ---
+
+================== Starting Run 602 of 1000 ==================
+--- Simulation Run Complete (27323 ms) ---
+
+================== Starting Run 603 of 1000 ==================
+--- Simulation Run Complete (25904 ms) ---
+
+================== Starting Run 604 of 1000 ==================
+--- Simulation Run Complete (27378 ms) ---
+
+================== Starting Run 605 of 1000 ==================
+--- Simulation Run Complete (27042 ms) ---
+
+================== Starting Run 606 of 1000 ==================
+--- Simulation Run Complete (26581 ms) ---
+
+================== Starting Run 607 of 1000 ==================
+--- Simulation Run Complete (26998 ms) ---
+
+================== Starting Run 608 of 1000 ==================
+--- Simulation Run Complete (26508 ms) ---
+
+================== Starting Run 609 of 1000 ==================
+--- Simulation Run Complete (27331 ms) ---
+
+================== Starting Run 610 of 1000 ==================
+--- Simulation Run Complete (27517 ms) ---
+
+================== Starting Run 611 of 1000 ==================
+--- Simulation Run Complete (27482 ms) ---
+
+================== Starting Run 612 of 1000 ==================
+--- Simulation Run Complete (26398 ms) ---
+
+================== Starting Run 613 of 1000 ==================
+--- Simulation Run Complete (27245 ms) ---
+
+================== Starting Run 614 of 1000 ==================
+--- Simulation Run Complete (27324 ms) ---
+
+================== Starting Run 615 of 1000 ==================
+--- Simulation Run Complete (26886 ms) ---
+
+================== Starting Run 616 of 1000 ==================
+--- Simulation Run Complete (27112 ms) ---
+
+================== Starting Run 617 of 1000 ==================
+--- Simulation Run Complete (27199 ms) ---
+
+================== Starting Run 618 of 1000 ==================
+--- Simulation Run Complete (27048 ms) ---
+
+================== Starting Run 619 of 1000 ==================
+--- Simulation Run Complete (26515 ms) ---
+
+================== Starting Run 620 of 1000 ==================
+--- Simulation Run Complete (27433 ms) ---
+
+================== Starting Run 621 of 1000 ==================
+--- Simulation Run Complete (26796 ms) ---
+
+================== Starting Run 622 of 1000 ==================
+--- Simulation Run Complete (27515 ms) ---
+
+================== Starting Run 623 of 1000 ==================
+--- Simulation Run Complete (27673 ms) ---
+
+================== Starting Run 624 of 1000 ==================
+--- Simulation Run Complete (26721 ms) ---
+
+================== Starting Run 625 of 1000 ==================
+--- Simulation Run Complete (27163 ms) ---
+
+================== Starting Run 626 of 1000 ==================
+--- Simulation Run Complete (27047 ms) ---
+
+================== Starting Run 627 of 1000 ==================
+--- Simulation Run Complete (26933 ms) ---
+
+================== Starting Run 628 of 1000 ==================
+--- Simulation Run Complete (27154 ms) ---
+
+================== Starting Run 629 of 1000 ==================
+--- Simulation Run Complete (27216 ms) ---
+
+================== Starting Run 630 of 1000 ==================
+--- Simulation Run Complete (27175 ms) ---
+
+================== Starting Run 631 of 1000 ==================
+--- Simulation Run Complete (26800 ms) ---
+
+================== Starting Run 632 of 1000 ==================
+--- Simulation Run Complete (26553 ms) ---
+
+================== Starting Run 633 of 1000 ==================
+--- Simulation Run Complete (27786 ms) ---
+
+================== Starting Run 634 of 1000 ==================
+--- Simulation Run Complete (27325 ms) ---
+
+================== Starting Run 635 of 1000 ==================
+--- Simulation Run Complete (26998 ms) ---
+
+================== Starting Run 636 of 1000 ==================
+--- Simulation Run Complete (27427 ms) ---
+
+================== Starting Run 637 of 1000 ==================
+--- Simulation Run Complete (27430 ms) ---
+
+================== Starting Run 638 of 1000 ==================
+--- Simulation Run Complete (27581 ms) ---
+
+================== Starting Run 639 of 1000 ==================
+--- Simulation Run Complete (27182 ms) ---
+
+================== Starting Run 640 of 1000 ==================
+--- Simulation Run Complete (26738 ms) ---
+
+================== Starting Run 641 of 1000 ==================
+--- Simulation Run Complete (27325 ms) ---
+
+================== Starting Run 642 of 1000 ==================
+--- Simulation Run Complete (26659 ms) ---
+
+================== Starting Run 643 of 1000 ==================
+--- Simulation Run Complete (26439 ms) ---
+
+================== Starting Run 644 of 1000 ==================
+--- Simulation Run Complete (26380 ms) ---
+
+================== Starting Run 645 of 1000 ==================
+--- Simulation Run Complete (27319 ms) ---
+
+================== Starting Run 646 of 1000 ==================
+--- Simulation Run Complete (26680 ms) ---
+
+================== Starting Run 647 of 1000 ==================
+--- Simulation Run Complete (26876 ms) ---
+
+================== Starting Run 648 of 1000 ==================
+--- Simulation Run Complete (27905 ms) ---
+
+================== Starting Run 649 of 1000 ==================
+--- Simulation Run Complete (27109 ms) ---
+
+================== Starting Run 650 of 1000 ==================
+--- Simulation Run Complete (26470 ms) ---
+
+================== Starting Run 651 of 1000 ==================
+--- Simulation Run Complete (27058 ms) ---
+
+================== Starting Run 652 of 1000 ==================
+--- Simulation Run Complete (26634 ms) ---
+
+================== Starting Run 653 of 1000 ==================
+--- Simulation Run Complete (27076 ms) ---
+
+================== Starting Run 654 of 1000 ==================
+--- Simulation Run Complete (26515 ms) ---
+
+================== Starting Run 655 of 1000 ==================
+--- Simulation Run Complete (26409 ms) ---
+
+================== Starting Run 656 of 1000 ==================
+--- Simulation Run Complete (27493 ms) ---
+
+================== Starting Run 657 of 1000 ==================
+--- Simulation Run Complete (26205 ms) ---
+
+================== Starting Run 658 of 1000 ==================
+--- Simulation Run Complete (27038 ms) ---
+
+================== Starting Run 659 of 1000 ==================
+--- Simulation Run Complete (26994 ms) ---
+
+================== Starting Run 660 of 1000 ==================
+--- Simulation Run Complete (27125 ms) ---
+
+================== Starting Run 661 of 1000 ==================
+--- Simulation Run Complete (26904 ms) ---
+
+================== Starting Run 662 of 1000 ==================
+--- Simulation Run Complete (27136 ms) ---
+
+================== Starting Run 663 of 1000 ==================
+--- Simulation Run Complete (27205 ms) ---
+
+================== Starting Run 664 of 1000 ==================
+--- Simulation Run Complete (27021 ms) ---
+
+================== Starting Run 665 of 1000 ==================
+--- Simulation Run Complete (26346 ms) ---
+
+================== Starting Run 666 of 1000 ==================
+--- Simulation Run Complete (26922 ms) ---
+
+================== Starting Run 667 of 1000 ==================
+--- Simulation Run Complete (27859 ms) ---
+
+================== Starting Run 668 of 1000 ==================
+--- Simulation Run Complete (27495 ms) ---
+
+================== Starting Run 669 of 1000 ==================
+--- Simulation Run Complete (27468 ms) ---
+
+================== Starting Run 670 of 1000 ==================
+--- Simulation Run Complete (27225 ms) ---
+
+================== Starting Run 671 of 1000 ==================
+--- Simulation Run Complete (27075 ms) ---
+
+================== Starting Run 672 of 1000 ==================
+--- Simulation Run Complete (27324 ms) ---
+
+================== Starting Run 673 of 1000 ==================
+--- Simulation Run Complete (27930 ms) ---
+
+================== Starting Run 674 of 1000 ==================
+--- Simulation Run Complete (27848 ms) ---
+
+================== Starting Run 675 of 1000 ==================
+--- Simulation Run Complete (27759 ms) ---
+
+================== Starting Run 676 of 1000 ==================
+--- Simulation Run Complete (27302 ms) ---
+
+================== Starting Run 677 of 1000 ==================
+--- Simulation Run Complete (26502 ms) ---
+
+================== Starting Run 678 of 1000 ==================
+--- Simulation Run Complete (27520 ms) ---
+
+================== Starting Run 679 of 1000 ==================
+--- Simulation Run Complete (27594 ms) ---
+
+================== Starting Run 680 of 1000 ==================
+--- Simulation Run Complete (26760 ms) ---
+
+================== Starting Run 681 of 1000 ==================
+--- Simulation Run Complete (27620 ms) ---
+
+================== Starting Run 682 of 1000 ==================
+--- Simulation Run Complete (26303 ms) ---
+
+================== Starting Run 683 of 1000 ==================
+--- Simulation Run Complete (26441 ms) ---
+
+================== Starting Run 684 of 1000 ==================
+--- Simulation Run Complete (27332 ms) ---
+
+================== Starting Run 685 of 1000 ==================
+--- Simulation Run Complete (26519 ms) ---
+
+================== Starting Run 686 of 1000 ==================
+--- Simulation Run Complete (26847 ms) ---
+
+================== Starting Run 687 of 1000 ==================
+--- Simulation Run Complete (27709 ms) ---
+
+================== Starting Run 688 of 1000 ==================
+--- Simulation Run Complete (26851 ms) ---
+
+================== Starting Run 689 of 1000 ==================
+--- Simulation Run Complete (27491 ms) ---
+
+================== Starting Run 690 of 1000 ==================
+--- Simulation Run Complete (26847 ms) ---
+
+================== Starting Run 691 of 1000 ==================
+--- Simulation Run Complete (28068 ms) ---
+
+================== Starting Run 692 of 1000 ==================
+--- Simulation Run Complete (27746 ms) ---
+
+================== Starting Run 693 of 1000 ==================
+--- Simulation Run Complete (27248 ms) ---
+
+================== Starting Run 694 of 1000 ==================
+--- Simulation Run Complete (27645 ms) ---
+
+================== Starting Run 695 of 1000 ==================
+--- Simulation Run Complete (26625 ms) ---
+
+================== Starting Run 696 of 1000 ==================
+--- Simulation Run Complete (27335 ms) ---
+
+================== Starting Run 697 of 1000 ==================
+--- Simulation Run Complete (27178 ms) ---
+
+================== Starting Run 698 of 1000 ==================
+--- Simulation Run Complete (27987 ms) ---
+
+================== Starting Run 699 of 1000 ==================
+--- Simulation Run Complete (27296 ms) ---
+
+================== Starting Run 700 of 1000 ==================
+--- Simulation Run Complete (27430 ms) ---
+
+================== Starting Run 701 of 1000 ==================
+--- Simulation Run Complete (28099 ms) ---
+
+================== Starting Run 702 of 1000 ==================
+--- Simulation Run Complete (27352 ms) ---
+
+================== Starting Run 703 of 1000 ==================
+--- Simulation Run Complete (27103 ms) ---
+
+================== Starting Run 704 of 1000 ==================
+--- Simulation Run Complete (27425 ms) ---
+
+================== Starting Run 705 of 1000 ==================
+--- Simulation Run Complete (26593 ms) ---
+
+================== Starting Run 706 of 1000 ==================
+--- Simulation Run Complete (26532 ms) ---
+
+================== Starting Run 707 of 1000 ==================
+--- Simulation Run Complete (26904 ms) ---
+
+================== Starting Run 708 of 1000 ==================
+--- Simulation Run Complete (26778 ms) ---
+
+================== Starting Run 709 of 1000 ==================
+--- Simulation Run Complete (27424 ms) ---
+
+================== Starting Run 710 of 1000 ==================
+--- Simulation Run Complete (27127 ms) ---
+
+================== Starting Run 711 of 1000 ==================
+--- Simulation Run Complete (27201 ms) ---
+
+================== Starting Run 712 of 1000 ==================
+--- Simulation Run Complete (27160 ms) ---
+
+================== Starting Run 713 of 1000 ==================
+--- Simulation Run Complete (28303 ms) ---
+
+================== Starting Run 714 of 1000 ==================
+--- Simulation Run Complete (26978 ms) ---
+
+================== Starting Run 715 of 1000 ==================
+--- Simulation Run Complete (27784 ms) ---
+
+================== Starting Run 716 of 1000 ==================
+--- Simulation Run Complete (26546 ms) ---
+
+================== Starting Run 717 of 1000 ==================
+--- Simulation Run Complete (27864 ms) ---
+
+================== Starting Run 718 of 1000 ==================
+--- Simulation Run Complete (26909 ms) ---
+
+================== Starting Run 719 of 1000 ==================
+--- Simulation Run Complete (26573 ms) ---
+
+================== Starting Run 720 of 1000 ==================
+--- Simulation Run Complete (26957 ms) ---
+
+================== Starting Run 721 of 1000 ==================
+--- Simulation Run Complete (27809 ms) ---
+
+================== Starting Run 722 of 1000 ==================
+--- Simulation Run Complete (27802 ms) ---
+
+================== Starting Run 723 of 1000 ==================
+--- Simulation Run Complete (27881 ms) ---
+
+================== Starting Run 724 of 1000 ==================
+--- Simulation Run Complete (27088 ms) ---
+
+================== Starting Run 725 of 1000 ==================
+--- Simulation Run Complete (27930 ms) ---
+
+================== Starting Run 726 of 1000 ==================
+--- Simulation Run Complete (27373 ms) ---
+
+================== Starting Run 727 of 1000 ==================
+--- Simulation Run Complete (26909 ms) ---
+
+================== Starting Run 728 of 1000 ==================
+--- Simulation Run Complete (27342 ms) ---
+
+================== Starting Run 729 of 1000 ==================
+--- Simulation Run Complete (27391 ms) ---
+
+================== Starting Run 730 of 1000 ==================
+--- Simulation Run Complete (27311 ms) ---
+
+================== Starting Run 731 of 1000 ==================
+--- Simulation Run Complete (27396 ms) ---
+
+================== Starting Run 732 of 1000 ==================
+--- Simulation Run Complete (26530 ms) ---
+
+================== Starting Run 733 of 1000 ==================
+--- Simulation Run Complete (26188 ms) ---
+
+================== Starting Run 734 of 1000 ==================
+--- Simulation Run Complete (26368 ms) ---
+
+================== Starting Run 735 of 1000 ==================
+--- Simulation Run Complete (27514 ms) ---
+
+================== Starting Run 736 of 1000 ==================
+--- Simulation Run Complete (26751 ms) ---
+
+================== Starting Run 737 of 1000 ==================
+--- Simulation Run Complete (26965 ms) ---
+
+================== Starting Run 738 of 1000 ==================
+--- Simulation Run Complete (26719 ms) ---
+
+================== Starting Run 739 of 1000 ==================
+--- Simulation Run Complete (27123 ms) ---
+
+================== Starting Run 740 of 1000 ==================
+--- Simulation Run Complete (27679 ms) ---
+
+================== Starting Run 741 of 1000 ==================
+--- Simulation Run Complete (26893 ms) ---
+
+================== Starting Run 742 of 1000 ==================
+--- Simulation Run Complete (27446 ms) ---
+
+================== Starting Run 743 of 1000 ==================
+--- Simulation Run Complete (26901 ms) ---
+
+================== Starting Run 744 of 1000 ==================
+--- Simulation Run Complete (26823 ms) ---
+
+================== Starting Run 745 of 1000 ==================
+--- Simulation Run Complete (27036 ms) ---
+
+================== Starting Run 746 of 1000 ==================
+--- Simulation Run Complete (28043 ms) ---
+
+================== Starting Run 747 of 1000 ==================
+--- Simulation Run Complete (27209 ms) ---
+
+================== Starting Run 748 of 1000 ==================
+--- Simulation Run Complete (27067 ms) ---
+
+================== Starting Run 749 of 1000 ==================
+--- Simulation Run Complete (27694 ms) ---
+
+================== Starting Run 750 of 1000 ==================
+--- Simulation Run Complete (26948 ms) ---
+
+================== Starting Run 751 of 1000 ==================
+--- Simulation Run Complete (26916 ms) ---
+
+================== Starting Run 752 of 1000 ==================
+--- Simulation Run Complete (27855 ms) ---
+
+================== Starting Run 753 of 1000 ==================
+--- Simulation Run Complete (27125 ms) ---
+
+================== Starting Run 754 of 1000 ==================
+--- Simulation Run Complete (26888 ms) ---
+
+================== Starting Run 755 of 1000 ==================
+--- Simulation Run Complete (27059 ms) ---
+
+================== Starting Run 756 of 1000 ==================
+--- Simulation Run Complete (26661 ms) ---
+
+================== Starting Run 757 of 1000 ==================
+--- Simulation Run Complete (27076 ms) ---
+
+================== Starting Run 758 of 1000 ==================
+--- Simulation Run Complete (26920 ms) ---
+
+================== Starting Run 759 of 1000 ==================
+--- Simulation Run Complete (27787 ms) ---
+
+================== Starting Run 760 of 1000 ==================
+--- Simulation Run Complete (27662 ms) ---
+
+================== Starting Run 761 of 1000 ==================
+--- Simulation Run Complete (27828 ms) ---
+
+================== Starting Run 762 of 1000 ==================
+--- Simulation Run Complete (27240 ms) ---
+
+================== Starting Run 763 of 1000 ==================
+--- Simulation Run Complete (27617 ms) ---
+
+================== Starting Run 764 of 1000 ==================
+--- Simulation Run Complete (26779 ms) ---
+
+================== Starting Run 765 of 1000 ==================
+--- Simulation Run Complete (26094 ms) ---
+
+================== Starting Run 766 of 1000 ==================
+--- Simulation Run Complete (27103 ms) ---
+
+================== Starting Run 767 of 1000 ==================
+--- Simulation Run Complete (26726 ms) ---
+
+================== Starting Run 768 of 1000 ==================
+--- Simulation Run Complete (26781 ms) ---
+
+================== Starting Run 769 of 1000 ==================
+--- Simulation Run Complete (27113 ms) ---
+
+================== Starting Run 770 of 1000 ==================
+--- Simulation Run Complete (27324 ms) ---
+
+================== Starting Run 771 of 1000 ==================
+--- Simulation Run Complete (27597 ms) ---
+
+================== Starting Run 772 of 1000 ==================
+--- Simulation Run Complete (27426 ms) ---
+
+================== Starting Run 773 of 1000 ==================
+--- Simulation Run Complete (27001 ms) ---
+
+================== Starting Run 774 of 1000 ==================
+--- Simulation Run Complete (27401 ms) ---
+
+================== Starting Run 775 of 1000 ==================
+--- Simulation Run Complete (27017 ms) ---
+
+================== Starting Run 776 of 1000 ==================
+--- Simulation Run Complete (27038 ms) ---
+
+================== Starting Run 777 of 1000 ==================
+--- Simulation Run Complete (26368 ms) ---
+
+================== Starting Run 778 of 1000 ==================
+--- Simulation Run Complete (28346 ms) ---
+
+================== Starting Run 779 of 1000 ==================
+--- Simulation Run Complete (27394 ms) ---
+
+================== Starting Run 780 of 1000 ==================
+--- Simulation Run Complete (27112 ms) ---
+
+================== Starting Run 781 of 1000 ==================
+--- Simulation Run Complete (26936 ms) ---
+
+================== Starting Run 782 of 1000 ==================
+--- Simulation Run Complete (27044 ms) ---
+
+================== Starting Run 783 of 1000 ==================
+--- Simulation Run Complete (27237 ms) ---
+
+================== Starting Run 784 of 1000 ==================
+--- Simulation Run Complete (26919 ms) ---
+
+================== Starting Run 785 of 1000 ==================
+--- Simulation Run Complete (27021 ms) ---
+
+================== Starting Run 786 of 1000 ==================
+--- Simulation Run Complete (27605 ms) ---
+
+================== Starting Run 787 of 1000 ==================
+--- Simulation Run Complete (26754 ms) ---
+
+================== Starting Run 788 of 1000 ==================
+--- Simulation Run Complete (28107 ms) ---
+
+================== Starting Run 789 of 1000 ==================
+--- Simulation Run Complete (27317 ms) ---
+
+================== Starting Run 790 of 1000 ==================
+--- Simulation Run Complete (26865 ms) ---
+
+================== Starting Run 791 of 1000 ==================
+--- Simulation Run Complete (26694 ms) ---
+
+================== Starting Run 792 of 1000 ==================
+--- Simulation Run Complete (26266 ms) ---
+
+================== Starting Run 793 of 1000 ==================
+--- Simulation Run Complete (27963 ms) ---
+
+================== Starting Run 794 of 1000 ==================
+--- Simulation Run Complete (27483 ms) ---
+
+================== Starting Run 795 of 1000 ==================
+--- Simulation Run Complete (26657 ms) ---
+
+================== Starting Run 796 of 1000 ==================
+--- Simulation Run Complete (27366 ms) ---
+
+================== Starting Run 797 of 1000 ==================
+--- Simulation Run Complete (26856 ms) ---
+
+================== Starting Run 798 of 1000 ==================
+--- Simulation Run Complete (27525 ms) ---
+
+================== Starting Run 799 of 1000 ==================
+--- Simulation Run Complete (26756 ms) ---
+
+================== Starting Run 800 of 1000 ==================
+--- Simulation Run Complete (27275 ms) ---
+
+================== Starting Run 801 of 1000 ==================
+--- Simulation Run Complete (27519 ms) ---
+
+================== Starting Run 802 of 1000 ==================
+--- Simulation Run Complete (27409 ms) ---
+
+================== Starting Run 803 of 1000 ==================
+--- Simulation Run Complete (26969 ms) ---
+
+================== Starting Run 804 of 1000 ==================
+--- Simulation Run Complete (26529 ms) ---
+
+================== Starting Run 805 of 1000 ==================
+--- Simulation Run Complete (27772 ms) ---
+
+================== Starting Run 806 of 1000 ==================
+--- Simulation Run Complete (27892 ms) ---
+
+================== Starting Run 807 of 1000 ==================
+--- Simulation Run Complete (27000 ms) ---
+
+================== Starting Run 808 of 1000 ==================
+--- Simulation Run Complete (27038 ms) ---
+
+================== Starting Run 809 of 1000 ==================
+--- Simulation Run Complete (26471 ms) ---
+
+================== Starting Run 810 of 1000 ==================
+--- Simulation Run Complete (28125 ms) ---
+
+================== Starting Run 811 of 1000 ==================
+--- Simulation Run Complete (27315 ms) ---
+
+================== Starting Run 812 of 1000 ==================
+--- Simulation Run Complete (26712 ms) ---
+
+================== Starting Run 813 of 1000 ==================
+--- Simulation Run Complete (26870 ms) ---
+
+================== Starting Run 814 of 1000 ==================
+--- Simulation Run Complete (26810 ms) ---
+
+================== Starting Run 815 of 1000 ==================
+--- Simulation Run Complete (27236 ms) ---
+
+================== Starting Run 816 of 1000 ==================
+--- Simulation Run Complete (26744 ms) ---
+
+================== Starting Run 817 of 1000 ==================
+--- Simulation Run Complete (26637 ms) ---
+
+================== Starting Run 818 of 1000 ==================
+--- Simulation Run Complete (27309 ms) ---
+
+================== Starting Run 819 of 1000 ==================
+--- Simulation Run Complete (27658 ms) ---
+
+================== Starting Run 820 of 1000 ==================
+--- Simulation Run Complete (27152 ms) ---
+
+================== Starting Run 821 of 1000 ==================
+--- Simulation Run Complete (27709 ms) ---
+
+================== Starting Run 822 of 1000 ==================
+--- Simulation Run Complete (27341 ms) ---
+
+================== Starting Run 823 of 1000 ==================
+--- Simulation Run Complete (27017 ms) ---
+
+================== Starting Run 824 of 1000 ==================
+--- Simulation Run Complete (27318 ms) ---
+
+================== Starting Run 825 of 1000 ==================
+--- Simulation Run Complete (26912 ms) ---
+
+================== Starting Run 826 of 1000 ==================
+--- Simulation Run Complete (27094 ms) ---
+
+================== Starting Run 827 of 1000 ==================
+--- Simulation Run Complete (26920 ms) ---
+
+================== Starting Run 828 of 1000 ==================
+--- Simulation Run Complete (27187 ms) ---
+
+================== Starting Run 829 of 1000 ==================
+--- Simulation Run Complete (27389 ms) ---
+
+================== Starting Run 830 of 1000 ==================
+--- Simulation Run Complete (27838 ms) ---
+
+================== Starting Run 831 of 1000 ==================
+--- Simulation Run Complete (26545 ms) ---
+
+================== Starting Run 832 of 1000 ==================
+--- Simulation Run Complete (27245 ms) ---
+
+================== Starting Run 833 of 1000 ==================
+--- Simulation Run Complete (26673 ms) ---
+
+================== Starting Run 834 of 1000 ==================
+--- Simulation Run Complete (26597 ms) ---
+
+================== Starting Run 835 of 1000 ==================
+--- Simulation Run Complete (27876 ms) ---
+
+================== Starting Run 836 of 1000 ==================
+--- Simulation Run Complete (27624 ms) ---
+
+================== Starting Run 837 of 1000 ==================
+--- Simulation Run Complete (26910 ms) ---
+
+================== Starting Run 838 of 1000 ==================
+--- Simulation Run Complete (26767 ms) ---
+
+================== Starting Run 839 of 1000 ==================
+--- Simulation Run Complete (26607 ms) ---
+
+================== Starting Run 840 of 1000 ==================
+--- Simulation Run Complete (27122 ms) ---
+
+================== Starting Run 841 of 1000 ==================
+--- Simulation Run Complete (26502 ms) ---
+
+================== Starting Run 842 of 1000 ==================
+--- Simulation Run Complete (26878 ms) ---
+
+================== Starting Run 843 of 1000 ==================
+--- Simulation Run Complete (26849 ms) ---
+
+================== Starting Run 844 of 1000 ==================
+--- Simulation Run Complete (27029 ms) ---
+
+================== Starting Run 845 of 1000 ==================
+--- Simulation Run Complete (26305 ms) ---
+
+================== Starting Run 846 of 1000 ==================
+--- Simulation Run Complete (28437 ms) ---
+
+================== Starting Run 847 of 1000 ==================
+--- Simulation Run Complete (27099 ms) ---
+
+================== Starting Run 848 of 1000 ==================
+--- Simulation Run Complete (27274 ms) ---
+
+================== Starting Run 849 of 1000 ==================
+--- Simulation Run Complete (27612 ms) ---
+
+================== Starting Run 850 of 1000 ==================
+--- Simulation Run Complete (27541 ms) ---
+
+================== Starting Run 851 of 1000 ==================
+--- Simulation Run Complete (26728 ms) ---
+
+================== Starting Run 852 of 1000 ==================
+--- Simulation Run Complete (27359 ms) ---
+
+================== Starting Run 853 of 1000 ==================
+--- Simulation Run Complete (26765 ms) ---
+
+================== Starting Run 854 of 1000 ==================
+--- Simulation Run Complete (27772 ms) ---
+
+================== Starting Run 855 of 1000 ==================
+--- Simulation Run Complete (26099 ms) ---
+
+================== Starting Run 856 of 1000 ==================
+--- Simulation Run Complete (27023 ms) ---
+
+================== Starting Run 857 of 1000 ==================
+--- Simulation Run Complete (26834 ms) ---
+
+================== Starting Run 858 of 1000 ==================
+--- Simulation Run Complete (27723 ms) ---
+
+================== Starting Run 859 of 1000 ==================
+--- Simulation Run Complete (27486 ms) ---
+
+================== Starting Run 860 of 1000 ==================
+--- Simulation Run Complete (27362 ms) ---
+
+================== Starting Run 861 of 1000 ==================
+--- Simulation Run Complete (26992 ms) ---
+
+================== Starting Run 862 of 1000 ==================
+--- Simulation Run Complete (27122 ms) ---
+
+================== Starting Run 863 of 1000 ==================
+--- Simulation Run Complete (27662 ms) ---
+
+================== Starting Run 864 of 1000 ==================
+--- Simulation Run Complete (27410 ms) ---
+
+================== Starting Run 865 of 1000 ==================
+--- Simulation Run Complete (27031 ms) ---
+
+================== Starting Run 866 of 1000 ==================
+--- Simulation Run Complete (27509 ms) ---
+
+================== Starting Run 867 of 1000 ==================
+--- Simulation Run Complete (27296 ms) ---
+
+================== Starting Run 868 of 1000 ==================
+--- Simulation Run Complete (27372 ms) ---
+
+================== Starting Run 869 of 1000 ==================
+--- Simulation Run Complete (25958 ms) ---
+
+================== Starting Run 870 of 1000 ==================
+--- Simulation Run Complete (26615 ms) ---
+
+================== Starting Run 871 of 1000 ==================
+--- Simulation Run Complete (26904 ms) ---
+
+================== Starting Run 872 of 1000 ==================
+--- Simulation Run Complete (26538 ms) ---
+
+================== Starting Run 873 of 1000 ==================
+--- Simulation Run Complete (27091 ms) ---
+
+================== Starting Run 874 of 1000 ==================
+--- Simulation Run Complete (28488 ms) ---
+
+================== Starting Run 875 of 1000 ==================
+--- Simulation Run Complete (27626 ms) ---
+
+================== Starting Run 876 of 1000 ==================
+--- Simulation Run Complete (26458 ms) ---
+
+================== Starting Run 877 of 1000 ==================
+--- Simulation Run Complete (26702 ms) ---
+
+================== Starting Run 878 of 1000 ==================
+--- Simulation Run Complete (26912 ms) ---
+
+================== Starting Run 879 of 1000 ==================
+--- Simulation Run Complete (27459 ms) ---
+
+================== Starting Run 880 of 1000 ==================
+--- Simulation Run Complete (27178 ms) ---
+
+================== Starting Run 881 of 1000 ==================
+--- Simulation Run Complete (26926 ms) ---
+
+================== Starting Run 882 of 1000 ==================
+--- Simulation Run Complete (26952 ms) ---
+
+================== Starting Run 883 of 1000 ==================
+--- Simulation Run Complete (26243 ms) ---
+
+================== Starting Run 884 of 1000 ==================
+--- Simulation Run Complete (27170 ms) ---
+
+================== Starting Run 885 of 1000 ==================
+--- Simulation Run Complete (27367 ms) ---
+
+================== Starting Run 886 of 1000 ==================
+--- Simulation Run Complete (27340 ms) ---
+
+================== Starting Run 887 of 1000 ==================
+--- Simulation Run Complete (27097 ms) ---
+
+================== Starting Run 888 of 1000 ==================
+--- Simulation Run Complete (27555 ms) ---
+
+================== Starting Run 889 of 1000 ==================
+--- Simulation Run Complete (26474 ms) ---
+
+================== Starting Run 890 of 1000 ==================
+--- Simulation Run Complete (27540 ms) ---
+
+================== Starting Run 891 of 1000 ==================
+--- Simulation Run Complete (27155 ms) ---
+
+================== Starting Run 892 of 1000 ==================
+--- Simulation Run Complete (27832 ms) ---
+
+================== Starting Run 893 of 1000 ==================
+--- Simulation Run Complete (26548 ms) ---
+
+================== Starting Run 894 of 1000 ==================
+--- Simulation Run Complete (27078 ms) ---
+
+================== Starting Run 895 of 1000 ==================
+--- Simulation Run Complete (27681 ms) ---
+
+================== Starting Run 896 of 1000 ==================
+--- Simulation Run Complete (27295 ms) ---
+
+================== Starting Run 897 of 1000 ==================
+--- Simulation Run Complete (26081 ms) ---
+
+================== Starting Run 898 of 1000 ==================
+--- Simulation Run Complete (26967 ms) ---
+
+================== Starting Run 899 of 1000 ==================
+--- Simulation Run Complete (26739 ms) ---
+
+================== Starting Run 900 of 1000 ==================
+--- Simulation Run Complete (27188 ms) ---
+
+================== Starting Run 901 of 1000 ==================
+--- Simulation Run Complete (26800 ms) ---
+
+================== Starting Run 902 of 1000 ==================
+--- Simulation Run Complete (26877 ms) ---
+
+================== Starting Run 903 of 1000 ==================
+--- Simulation Run Complete (26711 ms) ---
+
+================== Starting Run 904 of 1000 ==================
+--- Simulation Run Complete (27749 ms) ---
+
+================== Starting Run 905 of 1000 ==================
+--- Simulation Run Complete (26646 ms) ---
+
+================== Starting Run 906 of 1000 ==================
+--- Simulation Run Complete (27337 ms) ---
+
+================== Starting Run 907 of 1000 ==================
+--- Simulation Run Complete (27229 ms) ---
+
+================== Starting Run 908 of 1000 ==================
+--- Simulation Run Complete (26617 ms) ---
+
+================== Starting Run 909 of 1000 ==================
+--- Simulation Run Complete (26913 ms) ---
+
+================== Starting Run 910 of 1000 ==================
+--- Simulation Run Complete (27591 ms) ---
+
+================== Starting Run 911 of 1000 ==================
+--- Simulation Run Complete (27733 ms) ---
+
+================== Starting Run 912 of 1000 ==================
+--- Simulation Run Complete (27674 ms) ---
+
+================== Starting Run 913 of 1000 ==================
+--- Simulation Run Complete (26548 ms) ---
+
+================== Starting Run 914 of 1000 ==================
+--- Simulation Run Complete (27456 ms) ---
+
+================== Starting Run 915 of 1000 ==================
+--- Simulation Run Complete (27595 ms) ---
+
+================== Starting Run 916 of 1000 ==================
+--- Simulation Run Complete (27220 ms) ---
+
+================== Starting Run 917 of 1000 ==================
+--- Simulation Run Complete (26606 ms) ---
+
+================== Starting Run 918 of 1000 ==================
+--- Simulation Run Complete (26970 ms) ---
+
+================== Starting Run 919 of 1000 ==================
+--- Simulation Run Complete (27802 ms) ---
+
+================== Starting Run 920 of 1000 ==================
+--- Simulation Run Complete (27010 ms) ---
+
+================== Starting Run 921 of 1000 ==================
+--- Simulation Run Complete (26774 ms) ---
+
+================== Starting Run 922 of 1000 ==================
+--- Simulation Run Complete (26525 ms) ---
+
+================== Starting Run 923 of 1000 ==================
+--- Simulation Run Complete (26521 ms) ---
+
+================== Starting Run 924 of 1000 ==================
+--- Simulation Run Complete (27570 ms) ---
+
+================== Starting Run 925 of 1000 ==================
+--- Simulation Run Complete (27070 ms) ---
+
+================== Starting Run 926 of 1000 ==================
+--- Simulation Run Complete (28045 ms) ---
+
+================== Starting Run 927 of 1000 ==================
+--- Simulation Run Complete (26886 ms) ---
+
+================== Starting Run 928 of 1000 ==================
+--- Simulation Run Complete (27182 ms) ---
+
+================== Starting Run 929 of 1000 ==================
+--- Simulation Run Complete (27205 ms) ---
+
+================== Starting Run 930 of 1000 ==================
+--- Simulation Run Complete (26611 ms) ---
+
+================== Starting Run 931 of 1000 ==================
+--- Simulation Run Complete (27029 ms) ---
+
+================== Starting Run 932 of 1000 ==================
+--- Simulation Run Complete (26999 ms) ---
+
+================== Starting Run 933 of 1000 ==================
+--- Simulation Run Complete (27243 ms) ---
+
+================== Starting Run 934 of 1000 ==================
+--- Simulation Run Complete (26938 ms) ---
+
+================== Starting Run 935 of 1000 ==================
+--- Simulation Run Complete (26813 ms) ---
+
+================== Starting Run 936 of 1000 ==================
+--- Simulation Run Complete (26837 ms) ---
+
+================== Starting Run 937 of 1000 ==================
+--- Simulation Run Complete (27537 ms) ---
+
+================== Starting Run 938 of 1000 ==================
+--- Simulation Run Complete (26691 ms) ---
+
+================== Starting Run 939 of 1000 ==================
+--- Simulation Run Complete (27388 ms) ---
+
+================== Starting Run 940 of 1000 ==================
+--- Simulation Run Complete (27985 ms) ---
+
+================== Starting Run 941 of 1000 ==================
+--- Simulation Run Complete (27214 ms) ---
+
+================== Starting Run 942 of 1000 ==================
+--- Simulation Run Complete (26370 ms) ---
+
+================== Starting Run 943 of 1000 ==================
+--- Simulation Run Complete (26592 ms) ---
+
+================== Starting Run 944 of 1000 ==================
+--- Simulation Run Complete (27556 ms) ---
+
+================== Starting Run 945 of 1000 ==================
+--- Simulation Run Complete (27932 ms) ---
+
+================== Starting Run 946 of 1000 ==================
+--- Simulation Run Complete (26213 ms) ---
+
+================== Starting Run 947 of 1000 ==================
+--- Simulation Run Complete (27216 ms) ---
+
+================== Starting Run 948 of 1000 ==================
+--- Simulation Run Complete (27337 ms) ---
+
+================== Starting Run 949 of 1000 ==================
+--- Simulation Run Complete (27313 ms) ---
+
+================== Starting Run 950 of 1000 ==================
+--- Simulation Run Complete (27717 ms) ---
+
+================== Starting Run 951 of 1000 ==================
+--- Simulation Run Complete (27123 ms) ---
+
+================== Starting Run 952 of 1000 ==================
+--- Simulation Run Complete (27383 ms) ---
+
+================== Starting Run 953 of 1000 ==================
+--- Simulation Run Complete (26547 ms) ---
+
+================== Starting Run 954 of 1000 ==================
+--- Simulation Run Complete (27145 ms) ---
+
+================== Starting Run 955 of 1000 ==================
+--- Simulation Run Complete (27189 ms) ---
+
+================== Starting Run 956 of 1000 ==================
+--- Simulation Run Complete (27556 ms) ---
+
+================== Starting Run 957 of 1000 ==================
+--- Simulation Run Complete (27961 ms) ---
+
+================== Starting Run 958 of 1000 ==================
+--- Simulation Run Complete (27775 ms) ---
+
+================== Starting Run 959 of 1000 ==================
+--- Simulation Run Complete (27583 ms) ---
+
+================== Starting Run 960 of 1000 ==================
+--- Simulation Run Complete (28244 ms) ---
+
+================== Starting Run 961 of 1000 ==================
+--- Simulation Run Complete (27719 ms) ---
+
+================== Starting Run 962 of 1000 ==================
+--- Simulation Run Complete (26878 ms) ---
+
+================== Starting Run 963 of 1000 ==================
+--- Simulation Run Complete (26963 ms) ---
+
+================== Starting Run 964 of 1000 ==================
+--- Simulation Run Complete (26639 ms) ---
+
+================== Starting Run 965 of 1000 ==================
+--- Simulation Run Complete (27146 ms) ---
+
+================== Starting Run 966 of 1000 ==================
+--- Simulation Run Complete (26475 ms) ---
+
+================== Starting Run 967 of 1000 ==================
+--- Simulation Run Complete (27465 ms) ---
+
+================== Starting Run 968 of 1000 ==================
+--- Simulation Run Complete (27934 ms) ---
+
+================== Starting Run 969 of 1000 ==================
+--- Simulation Run Complete (26874 ms) ---
+
+================== Starting Run 970 of 1000 ==================
+--- Simulation Run Complete (27331 ms) ---
+
+================== Starting Run 971 of 1000 ==================
+--- Simulation Run Complete (26818 ms) ---
+
+================== Starting Run 972 of 1000 ==================
+--- Simulation Run Complete (27045 ms) ---
+
+================== Starting Run 973 of 1000 ==================
+--- Simulation Run Complete (26603 ms) ---
+
+================== Starting Run 974 of 1000 ==================
+--- Simulation Run Complete (27650 ms) ---
+
+================== Starting Run 975 of 1000 ==================
+--- Simulation Run Complete (27669 ms) ---
+
+================== Starting Run 976 of 1000 ==================
+--- Simulation Run Complete (26857 ms) ---
+
+================== Starting Run 977 of 1000 ==================
+--- Simulation Run Complete (26856 ms) ---
+
+================== Starting Run 978 of 1000 ==================
+--- Simulation Run Complete (27546 ms) ---
+
+================== Starting Run 979 of 1000 ==================
+--- Simulation Run Complete (27133 ms) ---
+
+================== Starting Run 980 of 1000 ==================
+--- Simulation Run Complete (27298 ms) ---
+
+================== Starting Run 981 of 1000 ==================
+--- Simulation Run Complete (27477 ms) ---
+
+================== Starting Run 982 of 1000 ==================
+--- Simulation Run Complete (26881 ms) ---
+
+================== Starting Run 983 of 1000 ==================
+--- Simulation Run Complete (27843 ms) ---
+
+================== Starting Run 984 of 1000 ==================
+--- Simulation Run Complete (27152 ms) ---
+
+================== Starting Run 985 of 1000 ==================
+--- Simulation Run Complete (26954 ms) ---
+
+================== Starting Run 986 of 1000 ==================
+--- Simulation Run Complete (27534 ms) ---
+
+================== Starting Run 987 of 1000 ==================
+--- Simulation Run Complete (27863 ms) ---
+
+================== Starting Run 988 of 1000 ==================
+--- Simulation Run Complete (27692 ms) ---
+
+================== Starting Run 989 of 1000 ==================
+--- Simulation Run Complete (26374 ms) ---
+
+================== Starting Run 990 of 1000 ==================
+--- Simulation Run Complete (27735 ms) ---
+
+================== Starting Run 991 of 1000 ==================
+--- Simulation Run Complete (26981 ms) ---
+
+================== Starting Run 992 of 1000 ==================
+--- Simulation Run Complete (26174 ms) ---
+
+================== Starting Run 993 of 1000 ==================
+--- Simulation Run Complete (26780 ms) ---
+
+================== Starting Run 994 of 1000 ==================
+--- Simulation Run Complete (27138 ms) ---
+
+================== Starting Run 995 of 1000 ==================
+--- Simulation Run Complete (27239 ms) ---
+
+================== Starting Run 996 of 1000 ==================
+--- Simulation Run Complete (26692 ms) ---
+
+================== Starting Run 997 of 1000 ==================
+--- Simulation Run Complete (27241 ms) ---
+
+================== Starting Run 998 of 1000 ==================
+--- Simulation Run Complete (26883 ms) ---
+
+================== Starting Run 999 of 1000 ==================
+--- Simulation Run Complete (27408 ms) ---
+
+================== Starting Run 1000 of 1000 ==================
+--- Simulation Run Complete (26571 ms) ---
+
+--- Statistical Simulation Report ---
+Date: 2025-12-04 05:27:31
+Configuration File Name: config_5_segments_1_thread_segment_A_random.json
+Policy Used: random
+Number of runs: 1000
+Average simulation time: 27158.85 ms.
+
+Average Transition Fire Counts:
+ - T0: 202.00 times.
+ - T1: 201.69 times.
+ - T2: 66.86 times.
+ - T3: 66.63 times.
+ - T4: 66.63 times.
+ - T5: 67.02 times.
+ - T6: 66.83 times.
+ - T7: 66.79 times.
+ - T8: 66.55 times.
+ - T9: 66.55 times.
+ - T10: 66.55 times.
+ - T11: 200.00 times.
+
+Average Invariant Completion Counts:
+ - Invariant 1 {T0, T1, T2, T3, T4, T11}: 66.63 times.
+ - Invariant 2 {T0, T1, T5, T6, T11}: 66.83 times.
+ - Invariant 3 {T0, T1, T7, T8, T9, T10, T11}: 66.55 times.
+
+--- End of Statistical Report ---
+=====================================================================

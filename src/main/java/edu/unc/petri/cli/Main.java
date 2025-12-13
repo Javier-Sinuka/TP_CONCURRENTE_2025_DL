@@ -13,6 +13,7 @@ import edu.unc.petri.monitor.ConditionQueues;
 import edu.unc.petri.monitor.Monitor;
 import edu.unc.petri.policy.PolicyInterface;
 import edu.unc.petri.policy.PriorityPolicy;
+import edu.unc.petri.policy.ProbabilisticPriorityPolicy;
 import edu.unc.petri.policy.RandomPolicy;
 import edu.unc.petri.simulation.InvariantTracker;
 import edu.unc.petri.simulation.SimulationManager;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
@@ -151,8 +153,8 @@ public final class Main {
 
     // Default: run both if neither explicitly requested
     if (!analysis && !simulation) {
-      analysis = true;
-      simulation = true;
+      simulation = true; // Run simulation by default
+      regexChecker = true; // Enable regex checker by default with simulation
     }
 
     if (statistics && runs == 1) {
@@ -373,7 +375,8 @@ public final class Main {
 
   /** Resolves the configuration file path from the command-line argument or defaults. */
   private static Path resolveConfigPath(String arg) {
-    String file = (arg != null) ? arg : "config_default.yaml";
+    String file =
+        (arg != null) ? arg : "simulation_configs/config_5_segments_1_thread_segment_A_random.json";
     return Paths.get(file).toAbsolutePath().normalize();
   }
 
@@ -382,6 +385,8 @@ public final class Main {
     String raw = (cfg.policy == null) ? "random" : cfg.policy;
     String name = raw.trim().toLowerCase(java.util.Locale.ROOT);
     switch (name) {
+      case "priority-probabilistic":
+        return new ProbabilisticPriorityPolicy(cfg.transitionProbabilities);
       case "priority":
         return new PriorityPolicy(cfg.transitionWeights);
       case "random":
@@ -552,6 +557,67 @@ public final class Main {
                   "Config.transitionWeights contains an invalid transition index (%d). Valid"
                       + " indices are 0-%d.",
                   transition, numTransitions - 1));
+        }
+      }
+    }
+
+    if ("priority-probabilistic".equalsIgnoreCase(cfg.policy)) {
+      if (cfg.transitionProbabilities == null || cfg.transitionProbabilities.isEmpty()) {
+        throw new IllegalArgumentException(
+            "Config.transitionProbabilities is required for the 'priority-probabilistic' policy.");
+      }
+      for (Map.Entry<Integer, Integer> entry : cfg.transitionProbabilities.entrySet()) {
+        Integer transition = entry.getKey();
+        Integer probability = entry.getValue();
+        if (transition < 0 || transition >= numTransitions) {
+          throw new IllegalArgumentException(
+              String.format(
+                  "Config.transitionProbabilities contains an invalid transition index (%d). Valid"
+                      + " indices are 0-%d.",
+                  transition, numTransitions - 1));
+        }
+        if (probability == null || probability <= 0) {
+          throw new IllegalArgumentException(
+              String.format(
+                  "Config.transitionProbabilities for transition %d must be a positive integer.",
+                  transition));
+        }
+      }
+
+      // Validate that each structural conflict group sums to 100%.
+      IncidenceMatrix incidenceMatrix = new IncidenceMatrix(cfg.incidence);
+      ConflictAnalyzer conflictAnalyzer = new ConflictAnalyzer(incidenceMatrix);
+      Map<Integer, List<Integer>> conflicts = conflictAnalyzer.getConflicts();
+
+      for (Map.Entry<Integer, List<Integer>> conflict : conflicts.entrySet()) {
+        int place = conflict.getKey();
+        List<Integer> transitionsInConflict = conflict.getValue();
+
+        int sum = 0;
+        for (int t : transitionsInConflict) {
+          Integer probability = cfg.transitionProbabilities.get(t);
+          if (probability == null) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Missing transitionProbabilities entry for transition %d in conflict group at"
+                        + " place %d.",
+                    t, place));
+          }
+          if (probability <= 0) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "transitionProbabilities for transition %d in conflict group at place %d must"
+                        + " be positive.",
+                    t, place));
+          }
+          sum += probability;
+        }
+
+        if (sum != 100) {
+          throw new IllegalArgumentException(
+              String.format(
+                  "Probabilities for conflict group at place %d must sum to 100 but sum to %d.",
+                  place, sum));
         }
       }
     }

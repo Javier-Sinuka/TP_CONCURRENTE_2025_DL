@@ -22,6 +22,9 @@ public class EnableVector {
   /** The times in nanoseconds when each transition was enabled token wise. */
   private long[] transitionTokenEnablementTimes;
 
+  /** The id of the threads that are waiting for each transition. -1 means no thread is waiting. */
+  private long[] waitingThreadsIds;
+
   /** The TimeRangeMatrix associated with this EnableVector. */
   private TimeRangeMatrix timeRangeMatrix;
 
@@ -44,10 +47,12 @@ public class EnableVector {
 
     this.tokenEnabledTransitions = new boolean[numberOfTransitions];
     this.transitionTokenEnablementTimes = new long[numberOfTransitions];
+    this.waitingThreadsIds = new long[numberOfTransitions];
 
     for (int i = 0; i < numberOfTransitions; i++) {
       tokenEnabledTransitions[i] = false;
       transitionTokenEnablementTimes[i] = 0;
+      waitingThreadsIds[i] = -1L;
     }
 
     this.timeRangeMatrix = timeRangeMatrix;
@@ -117,27 +122,50 @@ public class EnableVector {
 
     // If the transition is not token-wise enabled, return false immediately
     if (!isTokenEnabled) {
+      if (isThereThreadWaitingForTransition(transitionIndex)) {
+        if (getWaitingThreadId(transitionIndex) == Thread.currentThread().getId()) {
+          clearWaitingThreadId(transitionIndex);
+        }
+      }
       return false;
     }
+
+    long currentTime = System.nanoTime();
 
     // If the transition is token-wise enabled, check the time range
     boolean isTimeEnabled =
         timeRangeMatrix.isInsideTimeRange(
-            transitionIndex, transitionTokenEnablementTimes[transitionIndex]);
+            transitionIndex, transitionTokenEnablementTimes[transitionIndex], currentTime);
 
     if (!isTimeEnabled) {
       if (timeRangeMatrix.isBeforeTimeRange(
-          transitionIndex, transitionTokenEnablementTimes[transitionIndex])) {
+          transitionIndex, transitionTokenEnablementTimes[transitionIndex], currentTime)) {
+        if (!isThereThreadWaitingForTransition(transitionIndex)) {
+          registerId(transitionIndex);
+        } else {
+          if (getWaitingThreadId(transitionIndex) != Thread.currentThread().getId()) {
+            return false; // Another thread is already waiting for this transition
+          }
+        }
+
         long sleepNanos =
             timeRangeMatrix.getSleepTimeToFire(
                 transitionIndex, transitionTokenEnablementTimes[transitionIndex]);
-        throw new TransitionTimeNotReachedException(sleepNanos);
+        throw new TransitionTimeNotReachedException(
+            sleepNanos); // Transition is not yet enabled time-wise
       } else {
         return false; // Transition has passed its time range
       }
     }
 
-    return true; // Transition is both token-wise and time-wise enabled
+    if (isThereThreadWaitingForTransition(transitionIndex)) {
+      if (getWaitingThreadId(transitionIndex) != Thread.currentThread().getId()) {
+        return false; // Another thread is waiting for this transition
+      }
+    }
+
+    // The transition is enabled both by tokens and timing, and no other thread is currently waiting
+    return true;
   }
 
   /**
@@ -155,6 +183,73 @@ public class EnableVector {
   }
 
   /**
+   * Checks if any thread is currently waiting for the specified transition.
+   *
+   * @param transitionIndex the index of the transition to check
+   * @return {@code true} if at least one thread is waiting for the transition; {@code false}
+   *     otherwise
+   * @throws IndexOutOfBoundsException if the transition index is out of bounds
+   */
+  public boolean isThereThreadWaitingForTransition(int transitionIndex) {
+    if (transitionIndex < 0 || transitionIndex >= waitingThreadsIds.length) {
+      throw new IndexOutOfBoundsException("Transition index out of bounds");
+    }
+
+    return waitingThreadsIds[transitionIndex] != -1L;
+  }
+
+  /**
+   * Returns the ID of the thread that is currently waiting for the specified transition.
+   *
+   * @param transitionIndex the index of the transition to query
+   * @return the ID of the waiting thread for the given transition
+   * @throws IndexOutOfBoundsException if the transition index is out of bounds
+   */
+  public long getWaitingThreadId(int transitionIndex) {
+    if (transitionIndex < 0 || transitionIndex >= waitingThreadsIds.length) {
+      throw new IndexOutOfBoundsException("Transition index out of bounds");
+    }
+
+    return waitingThreadsIds[transitionIndex];
+  }
+
+  /**
+   * Clears the waiting thread ID for the specified transition index.
+   *
+   * <p>Sets the thread ID at the given index in the {@code waitingThreadsIds} array to {@code -1L},
+   * indicating that no thread is waiting for this transition.
+   *
+   * @param transitionIndex the index of the transition whose waiting thread ID should be cleared
+   * @throws IndexOutOfBoundsException if {@code transitionIndex} is less than 0 or greater than or
+   *     equal to the length of {@code waitingThreadsIds}
+   */
+  public void clearWaitingThreadId(int transitionIndex) {
+    if (transitionIndex < 0 || transitionIndex >= waitingThreadsIds.length) {
+      throw new IndexOutOfBoundsException("Transition index out of bounds");
+    }
+    if (waitingThreadsIds[transitionIndex] != Thread.currentThread().getId()) {
+      throw new IllegalStateException("Current thread is not the one waiting for this transition");
+    }
+
+    waitingThreadsIds[transitionIndex] = -1L;
+  }
+
+  /**
+   * Resets all waiting thread IDs.
+   *
+   * <p>This method iterates through the {@code waitingThreadsIds} array and sets each element to
+   * {@code -1L}, effectively clearing any thread IDs that may have been stored. After calling this
+   * method, no thread will be marked as waiting for any transition.
+   *
+   * @throws NullPointerException if {@code waitingThreadsIds} is {@code null}
+   */
+  public void resetWaitingThreads() {
+    for (int i = 0; i < waitingThreadsIds.length; i++) {
+      waitingThreadsIds[i] = -1L;
+    }
+  }
+
+  /**
    * Checks if the given marking is valid, meaning all places have non-negative tokens.
    *
    * @param marking The marking to check.
@@ -168,5 +263,17 @@ public class EnableVector {
       }
     }
     return true;
+  }
+
+  /**
+   * Registers the ID of the current thread at the specified transition index.
+   *
+   * @param transitionIndex The index where the thread ID is to be registered.
+   */
+  private void registerId(int transitionIndex) {
+    waitingThreadsIds[transitionIndex] =
+        Thread.currentThread()
+            .getId(); // if there is not a thread waiting for the transition, set the current
+    // thread as waiting
   }
 }
