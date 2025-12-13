@@ -1,5 +1,4 @@
-# Scenario: 6 segments, random policy, 6 total threads, invariant limit 200.
-# Segment layout: Segment-1(1), Segment-2(1), Segment-3(1), Segment-4(1), Segment-5(1), Segment-6(1).
+# TP 2024 configuration.
 
 logPath: log_config_tp_2024.txt
 

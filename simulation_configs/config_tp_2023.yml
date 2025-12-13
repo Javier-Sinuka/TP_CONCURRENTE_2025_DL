@@ -1,5 +1,4 @@
-# Scenario: 7 segments, random policy, 7 total threads, invariant limit 20.
-# Segment layout: Segment-1(1), Segment-2(1), Segment-3(1), Segment-4(1), Segment-5(1), Segment-6(1), Segment-7(1).
+# TP 2023 configuration.
 
 logPath: log_config_tp_2023.txt
 

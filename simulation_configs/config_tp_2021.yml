@@ -1,5 +1,4 @@
-# Scenario: 5 segments, random policy, 6 total threads, invariant limit 1000.
-# Segment layout: Segment-A(1), Segment-B(1), Segment-C(1), Segment-D(1), Segment-E(2).
+# TP 2021 configuration.
 
 logPath: log_config_tp_2021.txt
 
