@@ -329,7 +329,7 @@ public final class Main {
     System.out.println("                           in the JSON configuration.");
     System.out.println(
         "  --regex-checker          After each simulation run, execute"
-            + " scripts/invariant_checker.py");
+            + " invariant_checker/invariant_checker.py");
     System.out.println("                           on transition_log.txt and print its results.");
     System.out.println("  --help                   Display this help message and exit.");
     System.out.println();
@@ -393,7 +393,7 @@ public final class Main {
   }
 
   private static void runInvariantChecker(String transitionLogPath) {
-    String scriptPath = Paths.get("scripts", "invariant_checker.py").toString();
+    String scriptPath = Paths.get("invariant_checker", "invariant_checker.py").toString();
     String[] interpreters = new String[] {"python3", "python", "py"};
 
     for (String py : interpreters) {
