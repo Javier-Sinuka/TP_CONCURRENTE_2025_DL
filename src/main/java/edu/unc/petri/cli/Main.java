@@ -154,6 +154,7 @@ public final class Main {
     // Default: run both if neither explicitly requested
     if (!analysis && !simulation) {
       simulation = true; // Run simulation by default
+      regexChecker = true; // Enable regex checker by default with simulation
     }
 
     if (statistics && runs == 1) {
