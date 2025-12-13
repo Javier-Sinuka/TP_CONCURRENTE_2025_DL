@@ -35,7 +35,7 @@ INVARIANT_DEFINITIONS = {
 class InvariantCheckResult:
     """Result of checking invariants on a transition log."""
 
-    fully_consumed: bool
+    was_fully_consumed: bool
     leftover_transitions: str
     invariant_counts: BranchCounts
     log_length: int
@@ -110,10 +110,10 @@ def check_invariants(transition_log: str) -> InvariantCheckResult:
 
     leftover_transitions = remaining_log.strip()
 
-    fully_consumed = leftover_transitions == ""
+    was_fully_consumed = leftover_transitions == ""
 
     return InvariantCheckResult(
-        fully_consumed=fully_consumed,
+        was_fully_consumed=was_fully_consumed,
         leftover_transitions=leftover_transitions,
         invariant_counts=(invariant_1_count, invariant_2_count, invariant_3_count),
         log_length=transition_log_length,

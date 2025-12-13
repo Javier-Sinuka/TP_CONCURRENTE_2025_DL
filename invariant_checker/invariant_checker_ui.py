@@ -10,7 +10,7 @@ import sys
 from dataclasses import dataclass
 from typing import Iterable, TextIO, Tuple
 
-from .invariant_checker_core import InvariantCheckResult, INVARIANT_DEFINITIONS
+from .invariant_checker_core import INVARIANT_DEFINITIONS, InvariantCheckResult
 
 VERSION = "1.3.0"
 
@@ -198,7 +198,7 @@ def render_leftover_preview(
 
 def render_status(ui: UI, result: InvariantCheckResult) -> Iterable[str]:
     """Return either a success line or a leftover preview."""
-    if result.fully_consumed:
+    if result.was_fully_consumed:
         msg = "No leftover transitions."
         if ui.decorations_enabled:
             msg += " ✨"
