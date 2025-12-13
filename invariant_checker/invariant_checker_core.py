@@ -52,9 +52,9 @@ def _detect_invariant(match: re.Match[str]) -> int:
     return 0  # should not happen
 
 
-def _collect_preserved_gaps(match: re.Match[str]) -> str:
+def _collect_unmatched_groups(match: re.Match[str]) -> str:
     """
-    Collects and concatenates all preserved gap groups from a regex match object.
+    Collects and concatenates all unmatched groups from a regex match object.
 
     Returns:
       str: A string formed by joining all non-None preserved gap groups.
@@ -73,12 +73,14 @@ def consume_one_invariant(transition_log: str) -> Tuple[str, int, bool]:
     if not match:
         return transition_log, 0, False
 
-    matched_branch = _detect_invariant(match)
-    preserved_gaps = _collect_preserved_gaps(match)
+    matched_invariant = _detect_invariant(match)
+    unmatched_groups = _collect_unmatched_groups(match)
     remaining_log = (
-        transition_log[: match.start()] + preserved_gaps + transition_log[match.end() :]
+        transition_log[: match.start()]
+        + unmatched_groups
+        + transition_log[match.end() :]
     )
-    return remaining_log, matched_branch, True
+    return remaining_log, matched_invariant, True
 
 
 def check_invariants(transition_log: str) -> InvariantCheckResult:
@@ -94,16 +96,16 @@ def check_invariants(transition_log: str) -> InvariantCheckResult:
     remaining_log = transition_log
 
     while True:
-        remaining_log, matched_branch, did_consume = consume_one_invariant(
+        remaining_log, matched_invariant, did_consume = consume_one_invariant(
             remaining_log
         )
         if not did_consume:
             break
-        if matched_branch == 1:
+        if matched_invariant == 1:
             invariant_1_count += 1
-        elif matched_branch == 2:
+        elif matched_invariant == 2:
             invariant_2_count += 1
-        elif matched_branch == 3:
+        elif matched_invariant == 3:
             invariant_3_count += 1
 
     leftover_transitions = remaining_log.strip()
