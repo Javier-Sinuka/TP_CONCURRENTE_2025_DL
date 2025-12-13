@@ -81,12 +81,12 @@ loop true
     activate Monitor
     deactivate PetriNet
     |||
-    Monitor -> ConditionQueue: areThereWaitingThread()
+    Monitor -> ConditionQueue: areThereWaitingThreads()
     |||
     ConditionQueue --> Monitor: [boolean] waitingThreads
     |||
-    activate PetriNet
     Monitor -> PetriNet: getTokenEnabledTransitions()
+    activate PetriNet
     |||
     PetriNet --> Monitor: [boolean] enableTransitions
     deactivate PetriNet
@@ -103,7 +103,8 @@ loop true
         Monitor -> Monitor: holdsMutex = false
         |||
         Monitor --> Worker: true
-    else else
+        |||
+    else transitionThatCouldBeFired.size() <= 0
     |||
     Monitor -> Monitor: break
     end
