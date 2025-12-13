@@ -340,13 +340,13 @@ public final class Main {
     System.out.println(
         "  config_file_path         Optional. The path to the YAML configuration file.");
     System.out.println(
-        "                           Defaults to 'config_default.yaml' if not provided.");
+        "                           Defaults to 'config_default.yml' if not provided.");
     System.out.println();
     System.out.println("Examples:");
     System.out.println("  java -jar petri-sim.jar");
-    System.out.println("  java -jar petri-sim.jar --analysis my_config.yaml");
+    System.out.println("  java -jar petri-sim.jar --analysis my_config.yml");
     System.out.println(
-        "  java -jar petri-sim.jar --simulation --runs 10 --statistics --debug my_config.yaml");
+        "  java -jar petri-sim.jar --simulation --runs 10 --statistics --debug my_config.yml");
   }
 
   // --- Setup and Construction Helpers ---
@@ -375,8 +375,7 @@ public final class Main {
 
   /** Resolves the configuration file path from the command-line argument or defaults. */
   private static Path resolveConfigPath(String arg) {
-    String file =
-        (arg != null) ? arg : "simulation_configs/config_5_segments_1_thread_segment_A_random.json";
+    String file = (arg != null) ? arg : "config_default.yml";
     return Paths.get(file).toAbsolutePath().normalize();
   }
 

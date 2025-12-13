@@ -111,13 +111,13 @@ def main() -> None:
     # CLI
     if len(sys.argv) >= 2 and sys.argv[1] == "--init-source":
         if len(sys.argv) != 3:
-            print(f"Usage: {sys.argv[0]} --init-source <source.yaml>")
+            print(f"Usage: {sys.argv[0]} --init-source <source.yml>")
             sys.exit(1)
         write_default_source(sys.argv[2])
         sys.exit(0)
 
     if len(sys.argv) != 3:
-        print(f"Usage: {sys.argv[0]} <source.yaml> <log_file>")
+        print(f"Usage: {sys.argv[0]} <source.yml> <log_file>")
         sys.exit(1)
 
     source_path = sys.argv[1]

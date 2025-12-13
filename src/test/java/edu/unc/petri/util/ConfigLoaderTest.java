@@ -20,7 +20,7 @@ class ConfigLoaderTest {
   @Test
   public void load_validConfigFile_returnsPetriNetConfig() throws IOException {
     // Given
-    File configFile = new File(tempDir, "config.yaml");
+    File configFile = new File(tempDir, "config.yml");
 
     String yaml =
         "logPath: test.log\n"
@@ -53,7 +53,7 @@ class ConfigLoaderTest {
   @Test
   void load_nonExistentFile_throwsIoException() {
     // Given
-    Path nonExistentPath = Paths.get(tempDir.getAbsolutePath(), "nonexistent.yaml");
+    Path nonExistentPath = Paths.get(tempDir.getAbsolutePath(), "nonexistent.yml");
 
     // When & Then
     assertThrows(IOException.class, () -> ConfigLoader.load(nonExistentPath));

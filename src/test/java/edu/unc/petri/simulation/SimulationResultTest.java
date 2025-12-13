@@ -24,7 +24,7 @@ class SimulationResultTest {
 
   private static final long DURATION = 1000L;
   private static final String POLICY = "TestPolicy";
-  private static final Path CONFIG_PATH = Paths.get("test/config.yaml");
+  private static final Path CONFIG_PATH = Paths.get("test/config.yml");
 
   @Mock private InvariantTracker invariantTracker;
   private PetriNetConfig config;

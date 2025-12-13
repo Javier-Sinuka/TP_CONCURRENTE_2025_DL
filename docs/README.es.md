@@ -50,7 +50,7 @@ El proyecto enfatiza una clara separación de responsabilidades, con un motor de
     Un mensaje de `BUILD SUCCESS` indica que el simulador está listo.
 
 ## Uso
-El simulador se ejecuta desde la línea de comandos y se controla con flags. Por defecto, ejecuta tanto un análisis estático como una única simulación utilizando `config_default.yaml` si no se especifica ningún archivo de configuración.
+El simulador se ejecuta desde la línea de comandos y se controla con flags. Por defecto, ejecuta tanto un análisis estático como una única simulación utilizando `config_default.yml` si no se especifica ningún archivo de configuración.
 
 ### Sintaxis Básica
 ```bash
@@ -77,7 +77,7 @@ java -jar target/petri-sim-1.0.jar [opciones] [ruta_del_archivo_de_configuració
 
 *   **Ejecutar solo el análisis usando una configuración específica:**
     ```bash
-    java -jar target/petri-sim-1.0.jar --analysis simulation_configs/config_tp_2024.yaml
+    java -jar target/petri-sim-1.0.jar --analysis simulation_configs/config_tp_2024.yml
     ```
 
 *   **Ejecutar 10 simulaciones con informes estadísticos y registro de depuración:**

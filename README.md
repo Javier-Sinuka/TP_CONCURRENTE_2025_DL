@@ -50,7 +50,7 @@ The project emphasizes a clean separation of concerns, with a core Petri Net eng
     A `BUILD SUCCESS` message indicates the simulator is ready.
 
 ## Usage
-The simulator is run from the command line and controlled with flags. By default, it runs both a static analysis and a single simulation using `config_default.yaml` if no configuration file is specified.
+The simulator is run from the command line and controlled with flags. By default, it runs both a static analysis and a single simulation using `config_default.yml` if no configuration file is specified.
 
 ### Basic Syntax
 ```bash
@@ -77,7 +77,7 @@ java -jar target/petri-sim-1.0.jar [options] [config_file_path]
 
 *   **Run analysis only using a specific configuration:**
     ```bash
-    java -jar target/petri-sim-1.0.jar --analysis simulation_configs/config_tp_2024.yaml
+    java -jar target/petri-sim-1.0.jar --analysis simulation_configs/config_tp_2024.yml
     ```
 
 *   **Run 10 simulations with statistical reporting and debug logging:**
