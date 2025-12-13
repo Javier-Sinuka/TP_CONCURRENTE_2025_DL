@@ -1,5 +1,5 @@
 @startuml
-title Monitor - Disparo temporal de transición (según diagrama)
+title Monitor - Disparo temporal de transición COMPLETO
 
 participant Monitor
 participant PetriNet
