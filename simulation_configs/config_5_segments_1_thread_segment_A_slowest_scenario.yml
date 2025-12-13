@@ -1,0 +1,51 @@
+# Scenario: 3 segments, random policy, 3 total threads, invariant limit 200.
+# Segment layout: Segment-A(1), Segment-D(1), Segment-E(1).
+
+logPath: log_5_segments_1_thread_segment_A_slowest_scenario.txt
+
+invariantLimit: 200
+
+initialMarking: [3, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+
+incidence:
+  - [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+  - [1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  - [-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  - [0, 1, -1, 0, 0, -1, 0, -1, 0, 0, 0, 0]
+  - [0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0]
+  - [0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0]
+  - [0, 0, -1, 0, 1, -1, 1, -1, 0, 0, 1, 0]
+  - [0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0]
+  - [0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0]
+  - [0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0]
+  - [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0]
+  - [0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, -1]
+
+timeRanges:
+  - [0, 0]
+  - [100, 100]
+  - [0, 0]
+  - [0, 0]
+  - [0, 0]
+  - [0, 0]
+  - [0, 0]
+  - [0, 0]
+  - [60, 60]
+  - [70, 70]
+  - [70, 70]
+  - [0, 0]
+
+segments:
+  - name: Segment-A
+    threadQuantity: 1
+    transitions: [0, 1]
+
+  - name: Segment-B
+    threadQuantity: 1
+    transitions: [7, 8, 9, 10]
+
+  - name: Segment-E
+    threadQuantity: 1
+    transitions: [11]
+
+policy: random
