@@ -68,6 +68,7 @@ public class SimulationManager {
     }
 
     interruptAll(workers); // Interrupt remaining workers to signal shutdown
+    joinAll(workers); // Ensure workers have fully terminated before collecting results
 
     long endTime = System.currentTimeMillis();
 
@@ -180,6 +181,19 @@ public class SimulationManager {
   private void interruptAll(List<Thread> threads) {
     for (Thread t : threads) {
       t.interrupt();
+    }
+  }
+
+  /** Joins all threads in the provided list. */
+  private void joinAll(List<Thread> threads) {
+    for (Thread t : threads) {
+      try {
+        t.join();
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        System.err.println("Thread was interrupted while joining worker threads.");
+        return;
+      }
     }
   }
 }
