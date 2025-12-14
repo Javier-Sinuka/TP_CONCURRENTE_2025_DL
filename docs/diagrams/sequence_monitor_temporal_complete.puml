@@ -117,7 +117,7 @@ opt [!isTimeEnabled]
 end
 
 
-' ==== isThereThreadWaitinForTransition ====
+' ==== isThereThreadWaitingForTransition ====
 |||
 EnableVector -> EnableVector: isThereThreadWaitingForTransition (int transitionIndex) : boolean
 |||

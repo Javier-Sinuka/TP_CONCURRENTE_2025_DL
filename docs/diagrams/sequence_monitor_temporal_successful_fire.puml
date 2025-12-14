@@ -81,10 +81,12 @@ loop true
     activate Monitor
     deactivate PetriNet
     |||
-    Monitor -> ConditionQueue: areThereWaitingThreads()
+    Monitor -> ConditionQueues: areThereWaitingThreads()
     |||
-    ConditionQueue --> Monitor: [boolean] waitingThreads
+    activate ConditionQueues
+    ConditionQueues --> Monitor: boolean[] waitingThreads
     |||
+    deactivate ConditionQueues
     Monitor -> PetriNet: getTokenEnabledTransitions()
     activate PetriNet
     |||
@@ -96,9 +98,13 @@ loop true
         |||
         Monitor -> Policy: choose(ArrayList<Integer> transitionThatCouldBeFired)
         |||
+        activate Policy
         Policy --> Monitor: transition
         |||
-        Monitor -> ConditionQueue: wakeUpThread (int transition)
+        deactivate Policy
+        Monitor -> ConditionQueues: wakeUpThread (int transition)
+        activate ConditionQueues
+        deactivate ConditionQueues
         |||
         Monitor -> Monitor: holdsMutex = false
         |||
