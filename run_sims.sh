@@ -5,7 +5,7 @@ set -euo pipefail
 #   ./run_sims.sh --runs 300 config1.json config2.json ...
 #
 # For each config:
-#   systemd-inhibit --what=sleep java -jar target/petri-sim-1.0.jar <config> --simulation --runs <runs> --statistics
+#   systemd-inhibit --what=sleep java -jar target/clipetri.jar <config> --simulation --runs <runs> --statistics
 # Output:
 #   run_outputs/<runs>_runs_<config_name>.txt
 #   where <config_name> is the config filename without "config_" prefix and without extension.
@@ -46,7 +46,7 @@ for cfg in "$@"; do
     echo "============================================================"
 
     systemd-inhibit --what=sleep \
-        java -jar target/petri-sim-1.0.jar \
+        java -jar target/clipetri.jar \
         "$cfg" \
         --simulation \
         --runs "$RUNS" \

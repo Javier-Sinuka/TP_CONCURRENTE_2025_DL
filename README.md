@@ -1,9 +1,9 @@
-# Petri Net Simulator
+# clipetri
 
 [![es](https://img.shields.io/badge/lang-es-yellow.svg)](./docs/README.es.md)
 
 ## Introduction
-Petri Net Simulator is a concurrent, configurable simulation framework written in Java. It provides a robust environment for modeling, simulating, and analyzing systems with concurrent and parallel processes using Petri Nets.
+clipetri is a concurrent, configurable simulation framework written in Java. It provides a robust environment for modeling, simulating, and analyzing systems with concurrent and parallel processes using Petri Nets.
 
 The project emphasizes a clean separation of concerns, with a core Petri Net engine, a monitor-based synchronization layer for handling concurrency, and a pluggable policy system for defining transition firing logic in case of conflicts. The entire simulation, including the net's structure, timing, and threading model, is defined through external JSON configuration files. Additionally, it features a static analysis toolkit to compute and report on structural properties of the net.
 
@@ -54,7 +54,7 @@ The simulator is run from the command line and controlled with flags. By default
 
 ### Basic Syntax
 ```bash
-java -jar target/petri-sim-1.0.jar [options] [config_file_path]
+java -jar target/clipetri.jar [options] [config_file_path]
 ```
 
 ### Command-Line Options
@@ -72,17 +72,17 @@ java -jar target/petri-sim-1.0.jar [options] [config_file_path]
 ### Examples
 *   **Run both analysis and a single simulation (default behavior):**
     ```bash
-    java -jar target/petri-sim-1.0.jar
+    java -jar target/clipetri.jar
     ```
 
 *   **Run analysis only using a specific configuration:**
     ```bash
-    java -jar target/petri-sim-1.0.jar --analysis simulation_configs/config_tp_2024.json
+    java -jar target/clipetri.jar --analysis simulation_configs/config_tp_2024.json
     ```
 
 *   **Run 10 simulations with statistical reporting and debug logging:**
     ```bash
-    java -jar target/petri-sim-1.0.jar --simulation --runs 10 --statistics --debug
+    java -jar target/clipetri.jar --simulation --runs 10 --statistics --debug
     ```
 
 ## Configuration File Explained
