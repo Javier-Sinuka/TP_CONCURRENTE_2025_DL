@@ -55,9 +55,9 @@ public class SimulationManager {
    */
   public SimulationResult execute(
       Path configPath, PetriNetConfig config, CountDownLatch firstDoneSignal) {
-    long startTime = System.currentTimeMillis();
-
     startAll(workers);
+
+    long startTime = System.currentTimeMillis();
 
     try {
       firstDoneSignal.await(); // Wait for the first worker to signal completion
@@ -67,12 +67,11 @@ public class SimulationManager {
       System.err.println("Thread was interrupted while waiting for workers to complete.");
     }
 
+    long endTime = System.currentTimeMillis();
+    long duration = endTime - startTime;
+
     interruptAll(workers); // Interrupt remaining workers to signal shutdown
     joinAll(workers); // Ensure workers have fully terminated before collecting results
-
-    long endTime = System.currentTimeMillis();
-
-    long duration = endTime - startTime;
 
     // Ensure duration is non-negative in case of system clock quirks
     System.out.println("--- Simulation Run Complete (" + duration + " ms) ---");
