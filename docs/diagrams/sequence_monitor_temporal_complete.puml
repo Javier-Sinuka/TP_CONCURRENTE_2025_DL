@@ -93,8 +93,9 @@ opt [!isTimeEnabled]
     TimeRangeMatrix --> EnableVector: long sleepNanos
     deactivate TimeRangeMatrix
     |||
-    EnableVector -> EnableVector: throw new TransitionTimeNotReachedException (long sleepNanos)
     break TransitionTimeNotReachedException (long sleepNanos)
+      |||
+      EnableVector -> EnableVector: throw new TransitionTimeNotReachedException (long sleepNanos)
       |||
       activate Monitor
       Monitor -> Monitor: mutex.release()
