@@ -1,5 +1,5 @@
 @startuml
-title Monitor - Disparo temporal de transición con Politica
+title Monitor - Temporary transition trigger with Politics
 
 actor Worker
 participant Monitor
@@ -10,12 +10,12 @@ participant TimeRangeMatrix
 participant StateEquationUtils
 participant PetriNetAnalyzer
 participant CurrentMarking
-participant ConditionQueue
+participant ConditionQueues
 participant Policy
 
 
 
-' ===== !isTokenEnable CONTROL ======='
+' ===== !isTokenEnabled CONTROL ======='
 activate Worker
 Worker -> Monitor: fireTransition (int t)
 activate Monitor
@@ -30,16 +30,16 @@ loop true
     deactivate Monitor
     activate PetriNet
 
-    PetriNet -> EnableVector: isTransitionEnabled int transitionIndex)
+    PetriNet -> EnableVector: isTransitionEnabled (int transitionIndex)
     |||
     activate EnableVector
 
-    EnableVector -> EnableVector: tokenEnabledTransition [int transitionIndex] : true
+    EnableVector -> EnableVector: tokenEnabledTransition [transitionIndex] : true
 
     |||
     EnableVector -> EnableVector: currentTime : System.nanoTime()
     |||
-    EnableVector -> TimeRangeMatrix: isInsideTimeRange (int transition, long enabledTime, long currentTime)
+    EnableVector -> TimeRangeMatrix: isInsideTimeRange (int transitionIndex, long enabledTime, long currentTime)
     activate TimeRangeMatrix
     TimeRangeMatrix --> EnableVector: true
     deactivate TimeRangeMatrix
@@ -67,7 +67,7 @@ loop true
     deactivate PetriNetAnalyzer
 
 
-    ' ==== isThereThrearWaitingForTrasition CONTROL ====
+    ' ==== isThereThreadWaitingForTrasition CONTROL ====
     |||
     PetriNet -> EnableVector: isThereThreadWaitingForTransition (int transition)
     activate EnableVector
@@ -88,13 +88,13 @@ loop true
     Monitor -> PetriNet: getTokenEnabledTransitions()
     activate PetriNet
     |||
-    PetriNet --> Monitor: [boolean] enableTransitions
+    PetriNet --> Monitor: boolean[] enableTransitions
     deactivate PetriNet
-    Monitor -> Monitor: getTransitionThatCouldBeFired (boolen[] waitingThreads, boolean[] enableTransitions) : transitionThatCouldBeFired
+    Monitor -> Monitor: getTransitionThatCouldBeFired (boolean[] waitingThreads, boolean[] enableTransitions) : transitionThatCouldBeFired
     |||
     alt transitionThatCouldBeFired.size() > 0
         |||
-        Monitor -> Policy: choose(Arraylist<Integer> transitionThatCouldBeFired)
+        Monitor -> Policy: choose(ArrayList<Integer> transitionThatCouldBeFired)
         |||
         Policy --> Monitor: transition
         |||
