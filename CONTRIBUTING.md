@@ -1,6 +1,6 @@
 # Contributing Guide – Petri-Net Simulator
 
-Welcome 👋 and thanks for helping us build the Petri-net CLI!  
+Welcome 👋 and thanks for helping us build clipetri!  
 Please read this short guide **before** opening a pull-request.
 
 ---
@@ -140,7 +140,7 @@ Follow this 9-step loop to stay in sync, keep history clean, and minimise merge 
 ## 6 . Contact
 
 Questions or blockers?
-Open a GitHub Discussion or send a message through the `#prog-concurrente` channel on Discord.
+Feel free to open a new discussion on GitHub to share your thoughts or ask questions!
 
 ---
 
