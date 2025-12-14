@@ -63,12 +63,9 @@ public class SimulationManager {
       firstDoneSignal.await(); // Wait for the first worker to signal completion
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      // Handle the exception, e.g., log or rethrow
-      System.err.println("Thread was interrupted while waiting for workers to complete.");
     }
 
-    long endTime = System.currentTimeMillis();
-    long duration = endTime - startTime;
+    long duration = System.currentTimeMillis() - startTime;
 
     interruptAll(workers); // Interrupt remaining workers to signal shutdown
     joinAll(workers); // Ensure workers have fully terminated before collecting results
