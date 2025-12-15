@@ -49,6 +49,17 @@ public final class Main {
 
   private Main() {} // No instances
 
+  private static final String BANNER =
+      ""
+          + "                                                                     \n"
+          + "               ▀▀█      ▀                    ▄             ▀         \n"
+          + "         ▄▄▄     █    ▄▄▄    ▄▄▄▄    ▄▄▄   ▄▄█▄▄   ▄ ▄▄  ▄▄▄         \n"
+          + "        █▀  ▀    █      █    █▀ ▀█  █▀  █    █     █▀  ▀   █         \n"
+          + "        █        █      █    █   █  █▀▀▀▀    █     █       █         \n"
+          + "        ▀█▄▄▀    ▀▄▄  ▄▄█▄▄  ██▄█▀  ▀█▄▄▀    ▀▄▄   █     ▄▄█▄▄       \n"
+          + "                             █                                v0.1.1 \n"
+          + "                             ▀                                       \n";
+
   // ---- CLI parsing helpers ----
   private static final Set<String> KNOWN_FLAGS =
       new HashSet<>(
@@ -188,7 +199,9 @@ public final class Main {
       validateConfig(config);
 
       // Banner for traceability
-      System.out.println("============================= Petri-Sim =============================");
+      System.out.println(BANNER);
+      System.out.println("========================= Simulation Overview =========================");
+      System.out.println();
       System.out.println("Config:   " + configPath.getFileName());
       System.out.println("Runs:     " + cli.runs);
       System.out.println(
@@ -200,7 +213,8 @@ public final class Main {
               + cli.debug
               + " | Statistics: "
               + cli.statistics);
-      System.out.println("=====================================================================");
+      System.out.println();
+      System.out.println("=======================================================================");
 
       PetriNetAnalyzer analyzer = setupAnalyzer(config);
 
@@ -232,11 +246,11 @@ public final class Main {
         for (int i = 0; i < cli.runs; i++) {
           if (cli.runs > 1) {
             System.out.println(
-                "\n================== Starting Run "
+                "\n======================== Starting Run "
                     + (i + 1)
                     + " of "
                     + cli.runs
-                    + " ==================");
+                    + " =========================");
           }
 
           try {
@@ -291,7 +305,8 @@ public final class Main {
           System.err.println("\nCompleted with " + failedRuns + " failed run(s).");
         }
 
-        System.out.println("=====================================================================");
+        System.out.println(
+            "=======================================================================");
 
         // If Log has a close(), you can call it here; otherwise it’s a no-op object by design.
       }
@@ -332,7 +347,7 @@ public final class Main {
     System.out.println("                           in the JSON configuration.");
     System.out.println(
         "  --regex-checker          After each simulation run, execute"
-            + " scripts/invariant_checker.py");
+            + " invariant_checker/invariant_checker.py");
     System.out.println("                           on transition_log.txt and print its results.");
     System.out.println("  --help                   Display this help message and exit.");
     System.out.println();
@@ -398,7 +413,7 @@ public final class Main {
   }
 
   private static void runInvariantChecker(String transitionLogPath) {
-    String scriptPath = Paths.get("scripts", "invariant_checker.py").toString();
+    String scriptPath = Paths.get("invariant_checker", "invariant_checker.py").toString();
     String[] interpreters = new String[] {"python3", "python", "py"};
 
     for (String py : interpreters) {

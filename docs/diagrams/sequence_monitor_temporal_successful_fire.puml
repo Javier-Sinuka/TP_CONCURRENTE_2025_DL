@@ -1,0 +1,135 @@
+@startuml
+title Monitor - Temporary transition trigger with Politics
+
+actor Worker
+participant Monitor
+participant Semaphore as "Semaphore: mutex"
+participant PetriNet
+participant EnableVector
+participant TimeRangeMatrix
+participant StateEquationUtils
+participant PetriNetAnalyzer
+participant CurrentMarking
+participant ConditionQueues
+participant Policy
+
+
+
+' ===== !isTokenEnabled CONTROL ======='
+activate Worker
+Worker -> Monitor: fireTransition (int t)
+activate Monitor
+Monitor -> Monitor: holdsMutex = false
+|||
+Monitor -> Semaphore: acquire()
+activate Semaphore
+deactivate Semaphore
+|||
+Monitor -> Monitor: holdsMutex = true
+|||
+loop true
+    Monitor -> PetriNet: fire (int transitionIndex)
+    deactivate Monitor
+    activate PetriNet
+
+    PetriNet -> EnableVector: isTransitionEnabled (int transitionIndex)
+    |||
+    activate EnableVector
+
+    EnableVector -> EnableVector: tokenEnabledTransition [transitionIndex] : true
+
+    |||
+    EnableVector -> EnableVector: currentTime : System.nanoTime()
+    |||
+    EnableVector -> TimeRangeMatrix: isInsideTimeRange (int transitionIndex, long enabledTime, long currentTime)
+    activate TimeRangeMatrix
+    TimeRangeMatrix --> EnableVector: true
+    deactivate TimeRangeMatrix
+
+    |||
+    EnableVector -> EnableVector: isThereThreadWaitingForTransition (int transitionIndex) : false
+    EnableVector -> PetriNet: true
+    deactivate EnableVector
+
+    ' ===== calculateStateEquation ========='
+    |||
+    PetriNet -> StateEquationUtils: calculateStateEquation (int transitionIndex, IncidenceMatrix im, CurrentMarking cm)
+    activate StateEquationUtils
+    StateEquationUtils --> PetriNet: nextMarking
+    |||
+    deactivate StateEquationUtils
+
+    PetriNet -> CurrentMarking: setMarking(int[] nextMarking)
+    activate CurrentMarking
+    deactivate CurrentMarking
+    |||
+
+    PetriNet -> PetriNetAnalyzer: checkPlaceInvariants (int[] marking)
+    activate PetriNetAnalyzer
+    deactivate PetriNetAnalyzer
+
+
+    ' ==== isThereThreadWaitingForTrasition CONTROL ====
+    |||
+    PetriNet -> EnableVector: isThereThreadWaitingForTransition (int transition)
+    activate EnableVector
+    EnableVector --> PetriNet: false
+    deactivate EnableVector
+    |||
+    PetriNet -> EnableVector: updateEnableVector(IncidenceMatrix incidenceMatrix, CurrentMarking currentMarking)
+    activate EnableVector
+    deactivate EnableVector
+    PetriNet --> Monitor: true
+    activate Monitor
+    deactivate PetriNet
+    |||
+    Monitor -> ConditionQueues: areThereWaitingThreads()
+    |||
+    activate ConditionQueues
+    ConditionQueues --> Monitor: boolean[] waitingThreads
+    |||
+    deactivate ConditionQueues
+    Monitor -> PetriNet: getTokenEnabledTransitions()
+    activate PetriNet
+    |||
+    PetriNet --> Monitor: boolean[] enableTransitions
+    deactivate PetriNet
+    |||
+    Monitor -> Monitor: getTransitionThatCouldBeFired (boolean[] waitingThreads, boolean[] enableTransitions) : transitionThatCouldBeFired
+    |||
+    alt transitionThatCouldBeFired.size() > 0
+        |||
+        Monitor -> Policy: choose(ArrayList<Integer> transitionThatCouldBeFired)
+        |||
+        activate Policy
+        Policy --> Monitor: transition
+        |||
+        deactivate Policy
+        Monitor -> ConditionQueues: wakeUpThread (int transition)
+        activate ConditionQueues
+        deactivate ConditionQueues
+        |||
+        Monitor -> Monitor: holdsMutex = false
+        |||
+        Monitor --> Worker: true
+        |||
+    else transitionThatCouldBeFired.size() <= 0
+    |||
+    Monitor -> Monitor: break
+    |||
+    end
+    |||
+end
+|||
+   Monitor -> Monitor: holdsMutex = false
+   |||
+   Monitor -> Semaphore: release()
+   activate Semaphore
+   deactivate Semaphore
+   Monitor --> Worker: true
+   |||
+deactivate Monitor
+
+
+
+@enduml

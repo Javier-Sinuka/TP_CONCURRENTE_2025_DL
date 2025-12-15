@@ -94,7 +94,8 @@ public class StatisticsAggregator {
       return;
     }
 
-    System.out.println("\n--- Statistical Simulation Report ---");
+    System.out.println("\n-------------------- Statistical Simulation Report --------------------");
+    System.out.println();
     printReportHeader();
     System.out.println("Number of runs: " + runCount);
 
@@ -131,7 +132,8 @@ public class StatisticsAggregator {
               });
     }
 
-    System.out.println("\n--- End of Statistical Report ---");
+    System.out.println("\n---------------------- End of Statistical Report ----------------------");
+    System.out.println();
   }
 
   /** Prints the header information for the report. */

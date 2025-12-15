@@ -68,7 +68,8 @@ public class AnalysisManager {
    * purposes.
    */
   public void printAnalysisReport() {
-    System.out.println("--- Petri Net Analysis Report ---");
+    System.out.println();
+    System.out.println("---------------------- Petri Net Analysis Report ----------------------");
 
     // Print T-Invariants
     System.out.println("\nCalculating T-Invariants...");
@@ -154,7 +155,7 @@ public class AnalysisManager {
       }
     }
 
-    System.out.println("\n--- End of Analysis Report ---");
+    System.out.println("\n---------------------- End of Analysis Report -------------------------");
   }
 
   /**

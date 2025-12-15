@@ -1,0 +1,207 @@
+@startuml
+title Monitor - Full Transition Time Trigger
+
+participant Monitor
+participant PetriNet
+participant EnableVector
+participant TimeRangeMatrix
+participant StateEquationUtils
+participant PetriNetAnalyzer
+participant CurrentMarking
+
+
+' ===== !isTokenEnabled CONTROL ======='
+activate Monitor
+Monitor -> PetriNet: fire (int transitionIndex)
+deactivate Monitor
+activate PetriNet
+
+PetriNet -> EnableVector: isTransitionEnabled (int transitionIndex)
+|||
+activate EnableVector
+
+EnableVector -> EnableVector: tokenEnabledTransition [transitionIndex] : isTokenEnable
+opt [!isTokenEnable]
+  EnableVector -> EnableVector: isThereThreadWaitingForTransition (int transitionIndex) : boolean
+  |||
+  opt boolean == true
+    |||
+    EnableVector -> EnableVector: getWaitingThreadId (int transitionIndex) == Thread.currentThread().getId() : boolean1
+    |||
+    opt boolean1 == true
+      |||
+      EnableVector -> EnableVector: clearWaitingThreadId (int transitionIndex)
+      |||
+    end
+    |||
+  end
+  EnableVector --> PetriNet: [false]
+  PetriNet --> Monitor: [false]
+  |||
+  activate Monitor
+end
+deactivate PetriNet
+deactivate Monitor
+
+
+' ===== isInsideTimeRange CONTROL ======='
+|||
+EnableVector -> EnableVector: currentTime : System.nanoTime()
+|||
+EnableVector -> TimeRangeMatrix: isInsideTimeRange (int transitionIndex, long transitionTokenEnablementTimes[transitionIndex], long currentTime)
+activate TimeRangeMatrix
+TimeRangeMatrix --> EnableVector: isTimeEnabled
+deactivate TimeRangeMatrix
+|||
+
+
+' ===== !isTimeEnabled CONTROL ======='
+opt [!isTimeEnabled]
+  |||
+  EnableVector -> TimeRangeMatrix: isBeforeTimeRange (int transitionIndex, long transitionTokenEnablementTimes[transitionIndex], long currentTime)
+  activate TimeRangeMatrix
+  TimeRangeMatrix --> EnableVector: boolean
+  deactivate TimeRangeMatrix
+  |||
+
+  alt boolean == true
+    |||
+    EnableVector -> EnableVector: isThereThreadWaitingForTransition (int transitionIndex) : boolean1
+    |||
+    alt boolean1 == false
+      |||
+      EnableVector -> EnableVector: registerId (int transitionIndex)
+      |||
+    else boolean1 == true
+      EnableVector -> EnableVector: getWaitingThreadId (int transitionIndex) != Thread.currentThread().getId() : boolean2
+      |||
+      opt boolean2 == true
+
+        EnableVector --> PetriNet: false
+        activate PetriNet
+        PetriNet --> Monitor: false
+        activate Monitor
+        deactivate PetriNet
+        deactivate Monitor
+      end
+      |||
+    end
+    |||
+
+    EnableVector -> TimeRangeMatrix: getSleepTimeToFire (int transition, long enabledTime)
+    activate TimeRangeMatrix
+    TimeRangeMatrix --> EnableVector: long sleepNanos
+    deactivate TimeRangeMatrix
+    |||
+    break TransitionTimeNotReachedException (long sleepNanos)
+      |||
+      EnableVector -> EnableVector: throw new TransitionTimeNotReachedException (long sleepNanos)
+      |||
+      activate Monitor
+      Monitor -> Monitor: mutex.release()
+      Monitor -> Monitor: Thread.sleep(long millis, int nanos)
+      |||
+    end
+    |||
+    deactivate Monitor
+
+  |||
+  else boolean == false
+    EnableVector --> PetriNet: false
+    activate PetriNet
+    PetriNet -> Monitor: false
+    activate Monitor
+    deactivate PetriNet
+    deactivate Monitor
+  end
+  |||
+end
+
+
+' ==== isThereThreadWaitingForTransition ====
+|||
+EnableVector -> EnableVector: isThereThreadWaitingForTransition (int transitionIndex) : boolean
+|||
+opt boolean == true
+    |||
+    EnableVector -> EnableVector: getWaitingThreadId (int transitionIndex) == Thread.currentThread().getId() :  boolean1
+    |||
+    opt boolean1 == false
+    EnableVector -> PetriNet: false
+    activate PetriNet
+    PetriNet -> Monitor: false
+    |||
+    activate Monitor
+    deactivate PetriNet
+    deactivate Monitor
+    end
+    |||
+end
+EnableVector -> PetriNet: true
+deactivate EnableVector
+activate PetriNet
+
+' ===== calculateStateEquation ========='
+|||
+PetriNet -> StateEquationUtils: calculateStateEquation (int transitionIndex, IncidenceMatrix im, CurrentMarking cm)
+activate StateEquationUtils
+StateEquationUtils --> PetriNet: nextMarking
+|||
+deactivate StateEquationUtils
+
+PetriNet -> CurrentMarking: setMarking(int[] nextMarking)
+|||
+activate CurrentMarking
+deactivate CurrentMarking
+
+PetriNet -> PetriNetAnalyzer: checkPlaceInvariants (int[] marking)
+activate PetriNetAnalyzer
+|||
+break [NotEqualToPlaceInvariantEquationException]
+  PetriNetAnalyzer --> PetriNet: NotEqualToPlaceInvariantEquationException
+  deactivate PetriNetAnalyzer
+  |||
+  PetriNet --> Monitor: NotEqualToPlaceInvariantEquationException
+  activate Monitor
+  deactivate Monitor
+  |||
+end
+
+
+' ==== isThereThreadWaitingForTrasition CONTROL ====
+|||
+PetriNet -> EnableVector: isThereThreadWaitingForTransition (int transitionIndex)
+activate EnableVector
+EnableVector --> PetriNet: boolean
+deactivate EnableVector
+|||
+opt boolean == true
+    |||
+    PetriNet -> EnableVector: getWaitingThreadId (int transitionIndex)
+    activate EnableVector
+    EnableVector --> PetriNet: long threadId
+    deactivate EnableVector
+    PetriNet -> PetriNet: threadId == Thread.currentThread().getId() : boolean1
+    alt boolean1 == true
+        PetriNet -> EnableVector: clearWaitingThreadId (int transitionIndex)
+        activate EnableVector
+        deactivate EnableVector
+        |||
+    else false
+        |||
+        break IllegalStateException
+        PetriNet --> Monitor: IllegalStateException
+        |||
+        end
+        |||
+    end
+    |||
+end
+
+PetriNet -> EnableVector: updateEnableVector(IncidenceMatrix incidenceMatrix, CurrentMarking currentMarking)
+activate EnableVector
+deactivate EnableVector
+PetriNet --> Monitor: true
+deactivate PetriNet
+
+@enduml

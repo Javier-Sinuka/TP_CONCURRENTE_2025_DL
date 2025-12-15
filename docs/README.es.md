@@ -1,9 +1,9 @@
-# Petri Net Simulator
+# clipetri
 
 [![en](https://img.shields.io/badge/lang-en-red.svg)](../README.md)
 
 ## Introducción
-Petri Net Simulator es un framework de simulación concurrente y configurable escrito en Java. Proporciona un entorno robusto para modelar, simular y analizar sistemas con procesos concurrentes y paralelos utilizando Redes de Petri.
+clipetri es un framework de simulación concurrente y configurable escrito en Java. Proporciona un entorno robusto para modelar, simular y analizar sistemas con procesos concurrentes y paralelos utilizando Redes de Petri.
 
 El proyecto enfatiza una clara separación de responsabilidades, con un motor de Red de Petri central, una capa de sincronización basada en un monitor para manejar la concurrencia y un sistema de políticas intercambiables para definir la lógica de disparo de transiciones ante un conflicto. Toda la simulación, incluida la estructura de la red, la temporización y el modelo de hilos, se define a través de archivos de configuración JSON externos. Además, cuenta con un conjunto de herramientas de análisis estático para calcular e informar sobre las propiedades estructurales de la red.
 
@@ -54,7 +54,7 @@ El simulador se ejecuta desde la línea de comandos y se controla con flags. Por
 
 ### Sintaxis Básica
 ```bash
-java -jar target/petri-sim-1.0.jar [opciones] [ruta_del_archivo_de_configuración]
+java -jar target/clipetri.jar [opciones] [ruta_del_archivo_de_configuración]
 ```
 
 ### Opciones de Línea de Comandos
@@ -66,29 +66,29 @@ java -jar target/petri-sim-1.0.jar [opciones] [ruta_del_archivo_de_configuració
 | `--runs <N>`      | Ejecutar la simulación `N` veces. Por defecto es 1.                                                           |
 | `--statistics`    | Cuando `--runs > 1`, suprime los informes de ejecución individuales y muestra un informe estadístico final con promedios. |
 | `--debug`         | Habilitar el log de depuración detallado. El archivo de log se especifica mediante `logPath` en la configuración JSON. |
-| `--regex-checker` | Después de cada ejecución de la simulación, ejecutar `scripts/invariant_checker.py`.                               |
+| `--regex-checker` | Después de cada ejecución de la simulación, ejecutar `invariant_checker/invariant_checker.py`.                    |
 | `--help`          | Mostrar el mensaje de ayuda y salir.                                                                          |
 
 ### Ejemplos
 *   **Ejecutar tanto el análisis como una única simulación (comportamiento predeterminado):**
     ```bash
-    java -jar target/petri-sim-1.0.jar
+    java -jar target/clipetri.jar
     ```
 
 *   **Ejecutar solo el análisis usando una configuración específica:**
     ```bash
-    java -jar target/petri-sim-1.0.jar --analysis simulation_configs/config_tp_2024.json
+    java -jar target/clipetri.jar --analysis simulation_configs/config_tp_2024.json
     ```
 
 *   **Ejecutar 10 simulaciones con informes estadísticos y registro de depuración:**
     ```bash
-    java -jar target/petri-sim-1.0.jar --simulation --runs 10 --statistics --debug
+    java -jar target/clipetri.jar --simulation --runs 10 --statistics --debug
     ```
 
 ## Archivo de Configuración
 El comportamiento de la simulación está completamente controlado por un archivo JSON. A continuación se muestra un desglose de su estructura.
 
-```json
+```jsonc
 {
   // Ruta para el archivo de log de depuración.
   "logPath": "log_default.txt",
