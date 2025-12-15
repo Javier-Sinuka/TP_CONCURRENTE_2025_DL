@@ -70,7 +70,9 @@ public class SimulationManager {
     interruptAll(workers);
     joinAll(workers);
 
-    System.out.println("--- Simulation Run Complete (" + duration + " ms) ---");
+    System.out.println();
+    System.out.println(
+        "- - - - - - - - -  Simulation Run Complete (" + duration + " ms)  - - - - - - - - -");
 
     Map<Integer, Integer> transitionCounts = readTransitionCountsFromLog();
 
@@ -114,7 +116,8 @@ public class SimulationManager {
    * @param result The result object from the completed simulation.
    */
   public void generateReport(SimulationResult result) {
-    System.out.println("\n--- Simulation Report ---");
+    System.out.println("\n-------------------------- Simulation Report --------------------------");
+    System.out.println();
     printReportHeader(result);
     System.out.println("Total simulation time: " + result.getDuration() + " ms.");
     System.out.println(
@@ -157,7 +160,8 @@ public class SimulationManager {
                 + " times.");
       }
     }
-    System.out.println("\n--- End of Simulation Report ---");
+    System.out.println("\n---------------------- End of Simulation Report -----------------------");
+    System.out.println();
   }
 
   /** Prints the header section of the simulation report. */
