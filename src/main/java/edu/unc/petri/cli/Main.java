@@ -49,6 +49,17 @@ public final class Main {
 
   private Main() {} // No instances
 
+  private static final String BANNER =
+      ""
+          + "                                                             \n"
+          + "             ▀▀█      ▀                    ▄             ▀   \n"
+          + "       ▄▄▄     █    ▄▄▄    ▄▄▄▄    ▄▄▄   ▄▄█▄▄   ▄ ▄▄  ▄▄▄   \n"
+          + "      █▀  ▀    █      █    █▀ ▀█  █▀  █    █     █▀  ▀   █   \n"
+          + "      █        █      █    █   █  █▀▀▀▀    █     █       █   \n"
+          + "      ▀█▄▄▀    ▀▄▄  ▄▄█▄▄  ██▄█▀  ▀█▄▄▀    ▀▄▄   █     ▄▄█▄▄ \n"
+          + "                           █                                 \n"
+          + "                           ▀                                 \n";
+
   // ---- CLI parsing helpers ----
   private static final Set<String> KNOWN_FLAGS =
       new HashSet<>(
@@ -188,6 +199,7 @@ public final class Main {
       validateConfig(config);
 
       // Banner for traceability
+      System.out.println(BANNER);
       System.out.println("============================= Petri-Sim =============================");
       System.out.println("Config:   " + configPath.getFileName());
       System.out.println("Runs:     " + cli.runs);
