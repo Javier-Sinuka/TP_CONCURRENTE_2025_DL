@@ -1,6 +1,6 @@
 # Contributing Guide – Petri-Net Simulator
 
-Welcome 👋 and thanks for helping us build the Petri-net CLI!  
+Welcome 👋 and thanks for helping us build clipetri!  
 Please read this short guide **before** opening a pull-request.
 
 ---
@@ -40,7 +40,7 @@ git clone https://github.com/Javier-Sinuka/TP_CONCURRENTE_2025_DL.git
 cd TP_CONCURRENTE_2025_DL
 ./mvnw spotless:apply                     # auto-format to Google Java Style
 ./mvnw clean install                      # compile, test, and package the application
-java -jar target/petri-sim-1.0.jar --help # run the application
+java -jar target/clipetri.jar --help # run the application
 ````
 
 ### Windows (Command Prompt or PowerShell)
@@ -50,7 +50,7 @@ git clone https://github.com/Javier-Sinuka/TP_CONCURRENTE_2025_DL.git
 cd TP_CONCURRENTE_2025_DL
 .\mvnw.cmd spotless:apply
 .\mvnw.cmd clean install
-java -jar target/petri-sim-1.0.jar --help
+java -jar target/clipetri.jar --help
 ```
 
 *Requires JDK 8 (set `JAVA_HOME`) — no separate Maven install needed.*
@@ -140,7 +140,7 @@ Follow this 9-step loop to stay in sync, keep history clean, and minimise merge 
 ## 6 . Contact
 
 Questions or blockers?
-Open a GitHub Discussion or send a message through the `#prog-concurrente` channel on Discord.
+Feel free to open a new discussion on GitHub to share your thoughts or ask questions!
 
 ---
 
