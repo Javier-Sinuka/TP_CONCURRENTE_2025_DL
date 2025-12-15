@@ -8,13 +8,20 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Represents the result of a Petri net simulation, encapsulating key metrics and configuration
- * details.
+ * Represents the result of a Petri net simulation.
  *
- * <p>This class stores information about the simulation duration, transition firing counts,
- * invariant completion statistics, the original invariants, the configuration file path, the policy
- * used, the timestamp of the result, and the Petri net configuration. It is typically constructed
- * after a simulation run and provides access to all relevant data for analysis or reporting.
+ * <p>Holds simulation results and related metadata.
+ *
+ * <ul>
+ *   <li>Simulation duration
+ *   <li>Transition firing counts
+ *   <li>Invariant completion statistics
+ *   <li>Original invariants
+ *   <li>Configuration file path
+ *   <li>Policy used
+ *   <li>Result timestamp
+ *   <li>Petri net configuration
+ * </ul>
  *
  * @author Der Landsknecht
  * @version 1.0

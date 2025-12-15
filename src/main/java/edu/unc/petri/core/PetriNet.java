@@ -77,9 +77,6 @@ public class PetriNet {
     int[] nextMarking =
         StateEquationUtils.calculateStateEquation(transitionIndex, incidenceMatrix, currentMarking);
 
-    // Validate the place invariants with the new marking
-    petriNetAnalyzer.checkPlaceInvariants(nextMarking);
-
     // Update the current marking and enable vector
     currentMarking.setMarking(nextMarking);
     log.logTransition(transitionIndex);

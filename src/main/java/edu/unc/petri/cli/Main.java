@@ -49,6 +49,17 @@ public final class Main {
 
   private Main() {} // No instances
 
+  private static final String BANNER =
+      ""
+          + "                                                                     \n"
+          + "               ▀▀█      ▀                    ▄             ▀         \n"
+          + "         ▄▄▄     █    ▄▄▄    ▄▄▄▄    ▄▄▄   ▄▄█▄▄   ▄ ▄▄  ▄▄▄         \n"
+          + "        █▀  ▀    █      █    █▀ ▀█  █▀  █    █     █▀  ▀   █         \n"
+          + "        █        █      █    █   █  █▀▀▀▀    █     █       █         \n"
+          + "        ▀█▄▄▀    ▀▄▄  ▄▄█▄▄  ██▄█▀  ▀█▄▄▀    ▀▄▄   █     ▄▄█▄▄       \n"
+          + "                             █                                v0.1.1 \n"
+          + "                             ▀                                       \n";
+
   // ---- CLI parsing helpers ----
   private static final Set<String> KNOWN_FLAGS =
       new HashSet<>(
@@ -188,7 +199,9 @@ public final class Main {
       validateConfig(config);
 
       // Banner for traceability
-      System.out.println("============================= Petri-Sim =============================");
+      System.out.println(BANNER);
+      System.out.println("========================= Simulation Overview =========================");
+      System.out.println();
       System.out.println("Config:   " + configPath.getFileName());
       System.out.println("Runs:     " + cli.runs);
       System.out.println(
@@ -200,7 +213,8 @@ public final class Main {
               + cli.debug
               + " | Statistics: "
               + cli.statistics);
-      System.out.println("=====================================================================");
+      System.out.println();
+      System.out.println("=======================================================================");
 
       PetriNetAnalyzer analyzer = setupAnalyzer(config);
 
@@ -232,11 +246,11 @@ public final class Main {
         for (int i = 0; i < cli.runs; i++) {
           if (cli.runs > 1) {
             System.out.println(
-                "\n================== Starting Run "
+                "\n======================== Starting Run "
                     + (i + 1)
                     + " of "
                     + cli.runs
-                    + " ==================");
+                    + " =========================");
           }
 
           try {
@@ -291,7 +305,8 @@ public final class Main {
           System.err.println("\nCompleted with " + failedRuns + " failed run(s).");
         }
 
-        System.out.println("=====================================================================");
+        System.out.println(
+            "=======================================================================");
 
         // If Log has a close(), you can call it here; otherwise it’s a no-op object by design.
       }

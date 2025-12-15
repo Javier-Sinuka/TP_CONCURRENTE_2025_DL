@@ -55,29 +55,27 @@ public class SimulationManager {
    */
   public SimulationResult execute(
       Path configPath, PetriNetConfig config, CountDownLatch firstDoneSignal) {
-    long startTime = System.currentTimeMillis();
-
     startAll(workers);
+
+    long startTime = System.currentTimeMillis();
 
     try {
       firstDoneSignal.await(); // Wait for the first worker to signal completion
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      // Handle the exception, e.g., log or rethrow
-      System.err.println("Thread was interrupted while waiting for workers to complete.");
     }
 
-    interruptAll(workers); // Interrupt remaining workers to signal shutdown
+    long duration = System.currentTimeMillis() - startTime;
 
-    long endTime = System.currentTimeMillis();
+    interruptAll(workers);
+    joinAll(workers);
 
-    long duration = endTime - startTime;
+    System.out.println();
+    System.out.println(
+        "- - - - - - - - -  Simulation Run Complete (" + duration + " ms)  - - - - - - - - -");
 
-    // Ensure duration is non-negative in case of system clock quirks
-    System.out.println("--- Simulation Run Complete (" + duration + " ms) ---");
-
-    // Gather results
     Map<Integer, Integer> transitionCounts = readTransitionCountsFromLog();
+
     return new SimulationResult(duration, transitionCounts, invariantTracker, configPath, config);
   }
 
@@ -90,7 +88,9 @@ public class SimulationManager {
     if (this.transitionLog == null || this.transitionLog.getFilePath() == null) {
       return new HashMap<>(); // Return empty map if logging is disabled
     }
+
     Map<Integer, Integer> counts = new HashMap<>();
+
     Pattern pattern = Pattern.compile("T(\\d+)"); // Regex to find "T" followed by digits
 
     try (BufferedReader reader =
@@ -106,6 +106,7 @@ public class SimulationManager {
     } catch (IOException e) {
       System.err.println("Error reading transition log for report: " + e.getMessage());
     }
+
     return counts;
   }
 
@@ -115,7 +116,8 @@ public class SimulationManager {
    * @param result The result object from the completed simulation.
    */
   public void generateReport(SimulationResult result) {
-    System.out.println("\n--- Simulation Report ---");
+    System.out.println("\n-------------------------- Simulation Report --------------------------");
+    System.out.println();
     printReportHeader(result);
     System.out.println("Total simulation time: " + result.getDuration() + " ms.");
     System.out.println(
@@ -158,7 +160,8 @@ public class SimulationManager {
                 + " times.");
       }
     }
-    System.out.println("\n--- End of Simulation Report ---");
+    System.out.println("\n---------------------- End of Simulation Report -----------------------");
+    System.out.println();
   }
 
   /** Prints the header section of the simulation report. */
@@ -180,6 +183,19 @@ public class SimulationManager {
   private void interruptAll(List<Thread> threads) {
     for (Thread t : threads) {
       t.interrupt();
+    }
+  }
+
+  /** Joins all threads in the provided list. */
+  private void joinAll(List<Thread> threads) {
+    for (Thread t : threads) {
+      try {
+        t.join();
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        System.err.println("Thread was interrupted while joining worker threads.");
+        return;
+      }
     }
   }
 }
