@@ -10,7 +10,13 @@ import sys
 try:
     # Preferred path when executed as a module/package.
     from .invariant_checker_core import check_invariants
-    from .invariant_checker_ui import UI, VERSION, print_report, supports_color
+    from .invariant_checker_ui import (
+        UI,
+        VERSION,
+        print_report,
+        supports_color,
+        supports_unicode,
+    )
 except ImportError:  # pragma: no cover
     # Fallback for direct execution: `python invariant_checker/invariant_checker.py ...`
     # pylint: disable=import-error,wrong-import-position
@@ -26,6 +32,7 @@ except ImportError:  # pragma: no cover
     VERSION = _ui.VERSION
     print_report = _ui.print_report
     supports_color = _ui.supports_color
+    supports_unicode = _ui.supports_unicode
 
 
 def _create_parser() -> argparse.ArgumentParser:
@@ -93,13 +100,15 @@ def main():
         print(f"invariant_checker v{VERSION}")
         return
 
-    use_color = (not args.no_color) and supports_color(sys.stdout)
-    decorations_enabled = (not args.no_fun) and use_color
+    stream = sys.stdout
+    use_color = (not args.no_color) and supports_color(stream)
+    decorations_enabled = (not args.no_fun) and supports_unicode(stream)
     ui = UI(
         color=use_color,
         decorations_enabled=decorations_enabled,
         quiet=args.quiet,
         verbose=args.verbose,
+        stream=stream,
     )
 
     try:
