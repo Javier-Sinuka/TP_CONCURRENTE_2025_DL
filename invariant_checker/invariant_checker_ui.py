@@ -16,6 +16,7 @@ VERSION = "1.3.0"
 
 _TOKEN_RE = re.compile(r"T\d+")
 _TOKEN_CAPTURE_RE = re.compile(r"(T\d+)")
+_UNICODE_DECORATION_SAMPLE = "█①②③✨┌─┐│└┘…‑"
 
 
 class Colors:  # pylint: disable=too-few-public-methods
@@ -41,6 +42,21 @@ def supports_color(stream) -> bool:
     return True
 
 
+def supports_unicode(stream) -> bool:
+    """Return True when `stream` likely supports the Unicode glyphs we print."""
+    encoding = getattr(stream, "encoding", None)
+    if not encoding:
+        return True
+    normalized = encoding.lower().replace("_", "-")
+    if normalized in {"utf-8", "utf-8-sig", "utf-16", "utf-16-le", "utf-16-be"}:
+        return True
+    try:
+        _UNICODE_DECORATION_SAMPLE.encode(encoding)
+    except (UnicodeEncodeError, LookupError):
+        return False
+    return True
+
+
 @dataclass
 class UI:  # pylint: disable=missing-function-docstring
     """Small console UI facade used by the CLI renderer."""
@@ -50,6 +66,33 @@ class UI:  # pylint: disable=missing-function-docstring
     quiet: bool = False
     verbose: bool = False
     stream: TextIO = sys.stdout
+
+    def _safe_write_line(self, text: str) -> None:
+        try:
+            self.stream.write(f"{text}\n")
+        except UnicodeEncodeError:
+            cleaned = (
+                text.replace("█", "#")
+                .replace("…", "...")
+                .replace("‑", "-")
+                .replace("①", "1")
+                .replace("②", "2")
+                .replace("③", "3")
+                .replace("✨", "*")
+                .replace("┌", "+")
+                .replace("┐", "+")
+                .replace("└", "+")
+                .replace("┘", "+")
+                .replace("─", "-")
+                .replace("│", "|")
+            )
+            try:
+                self.stream.write(f"{cleaned}\n")
+            except UnicodeEncodeError:
+                safe_ascii = (text + "\n").encode("ascii", errors="backslashreplace").decode(
+                    "ascii"
+                )
+                self.stream.write(safe_ascii)
 
     def style(self, text: str, color_code: str) -> str:
         if self.color:
@@ -76,22 +119,22 @@ class UI:  # pylint: disable=missing-function-docstring
 
     def info(self, text: str = "") -> None:
         if not self.quiet:
-            self.stream.write(f"{text}\n")
+            self._safe_write_line(text)
 
     def debug(self, text: str) -> None:
         if self.verbose and not self.quiet:
-            self.stream.write(f"{self.dim(text)}\n")
+            self._safe_write_line(self.dim(text))
 
     def warn(self, text: str) -> None:
         if not self.quiet:
-            self.stream.write(f"{self.yellow(text)}\n")
+            self._safe_write_line(self.yellow(text))
 
 
-def _render_bar(n: int, total: int, width: int, color_fn) -> str:
+def _render_bar(n: int, total: int, width: int, color_fn, *, fill: str = "█") -> str:
     """Render a proportional bar with optional coloring."""
     filled = int(round((n / total) * width)) if total else 0
     empty = width - filled
-    return color_fn("█" * filled) + ("." * empty)
+    return color_fn(fill * filled) + ("." * empty)
 
 
 def _count_tokens(text: str) -> int:
@@ -130,7 +173,9 @@ def render_counts(ui: UI, counts: Tuple[int, int, int], width: int) -> Iterable[
     lines: list[str] = ["", ui.bold("Counts:")]
     for label, n in zip(labels, counts):
         pct = (n * 100.0 / total) if total else 0.0
-        invariant_bar = _render_bar(n, total, width, ui.green)
+        invariant_bar = _render_bar(
+            n, total, width, ui.green, fill=("█" if ui.decorations_enabled else "#")
+        )
         lines.append(
             fmt.format(
                 label, invariant_bar=invariant_bar, count=ui.green(str(n)), pct=pct
@@ -181,7 +226,8 @@ def render_leftover_preview(
     else:
         head = leftover[: max(1, limit // 2)]
         tail = leftover[-max(1, limit - len(head)) :]
-        preview = head + " … " + tail
+        separator = " … " if ui.decorations_enabled else " ... "
+        preview = head + separator + tail
 
     if ui.color:
         preview = _TOKEN_CAPTURE_RE.sub(lambda m: ui.bold(ui.red(m.group(1))), preview)
