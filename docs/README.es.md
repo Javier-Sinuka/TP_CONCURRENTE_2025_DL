@@ -88,7 +88,7 @@ java -jar target/clipetri.jar [opciones] [ruta_del_archivo_de_configuración]
 ## Archivo de Configuración
 El comportamiento de la simulación está completamente controlado por un archivo JSON. A continuación se muestra un desglose de su estructura.
 
-```json
+```jsonc
 {
   // Ruta para el archivo de log de depuración.
   "logPath": "log_default.txt",

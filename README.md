@@ -88,7 +88,7 @@ java -jar target/clipetri.jar [options] [config_file_path]
 ## Configuration File Explained
 The simulation's behavior is entirely controlled by a JSON file. Below is a breakdown of its structure.
 
-```json
+```jsonc
 {
   // Path for the debug output log file.
   "logPath": "log_default.txt",
