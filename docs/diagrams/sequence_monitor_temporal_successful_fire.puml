@@ -22,6 +22,8 @@ activate Monitor
 Monitor -> Monitor: holdsMutex = false
 |||
 Monitor -> Semaphore: acquire()
+activate Semaphore
+deactivate Semaphore
 |||
 Monitor -> Monitor: holdsMutex = true
 |||
@@ -92,6 +94,7 @@ loop true
     |||
     PetriNet --> Monitor: boolean[] enableTransitions
     deactivate PetriNet
+    |||
     Monitor -> Monitor: getTransitionThatCouldBeFired (boolean[] waitingThreads, boolean[] enableTransitions) : transitionThatCouldBeFired
     |||
     alt transitionThatCouldBeFired.size() > 0
@@ -113,11 +116,13 @@ loop true
     else transitionThatCouldBeFired.size() <= 0
     |||
     Monitor -> Monitor: break
+    |||
     end
     |||
 end
 |||
    Monitor -> Monitor: holdsMutex = false
+   |||
    Monitor -> Semaphore: release()
    activate Semaphore
    deactivate Semaphore
